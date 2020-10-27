@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace ConsoleGame
+﻿namespace ConsoleGame
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static Engine _engine;
+
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            _engine = new Engine();
         }
     }
 }
