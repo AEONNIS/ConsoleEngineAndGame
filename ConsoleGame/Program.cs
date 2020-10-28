@@ -1,12 +1,14 @@
-﻿namespace ConsoleGame
+﻿using ConsoleGame.EngineSystems;
+
+namespace ConsoleGame
 {
     public class Program
     {
-        private static Engine _engine;
+        private static readonly Engine _engine = new Engine();
 
         public static void Main(string[] args)
         {
-            _engine = new Engine();
+            _engine.Start();
         }
     }
 }
