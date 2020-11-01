@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleGame.EngineSystems
+namespace ConsoleGame.ConsoleEngine
 {
     public partial class Engine
     {

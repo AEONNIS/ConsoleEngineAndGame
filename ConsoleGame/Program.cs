@@ -1,6 +1,4 @@
-﻿using ConsoleGame.EngineSystems;
-
-namespace ConsoleGame
+﻿namespace ConsoleGame
 {
     public class Program
     {
