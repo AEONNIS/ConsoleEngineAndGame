@@ -1,7 +1,8 @@
-﻿using ConsoleGame.ConsoleEngine;
+﻿using ConsoleEngine.Core;
+using ConsoleEngine.Input;
 using System;
 
-namespace ConsoleGame.Editors
+namespace ConsoleEngine.Editors
 {
     public partial class Editor
     {
@@ -51,13 +52,13 @@ namespace ConsoleGame.Editors
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
 
-            if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Pixel))
+            if (KeysService.CompareWithoutChar(key, Keys.Pixel))
                 SetMode(Mode.Pixel);
-            else if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Tile))
+            else if (KeysService.CompareWithoutChar(key, Keys.Tile))
                 SetMode(Mode.Tile);
-            else if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Map))
+            else if (KeysService.CompareWithoutChar(key, Keys.Map))
                 SetMode(Mode.Map);
-            else if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Exit))
+            else if (KeysService.CompareWithoutChar(key, Keys.Exit))
                 SetMode(Mode.Exit);
 
         }

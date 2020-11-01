@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ConsoleGame
+namespace ConsoleEngine.Input
 {
-    public static class Keys
+    public static class KeysService
     {
         public static bool CompareWithoutChar(ConsoleKeyInfo keyA, ConsoleKeyInfo keyB)
         {

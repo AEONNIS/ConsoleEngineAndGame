@@ -1,4 +1,4 @@
-﻿namespace ConsoleGame.Editors
+﻿namespace ConsoleEngine.Editors
 {
     public partial class Editor
     {

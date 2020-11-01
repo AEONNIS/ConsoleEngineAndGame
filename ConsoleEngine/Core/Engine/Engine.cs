@@ -1,12 +1,13 @@
-﻿using ConsoleGame.Editors;
+﻿using ConsoleEngine.Editors;
+using ConsoleEngine.Input;
 using System;
 
-namespace ConsoleGame.ConsoleEngine
+namespace ConsoleEngine.Core
 {
     public partial class Engine
     {
-        public const string AssetsPath = "d:/Work/Dev/ConsoleGame/ConsoleGame/Assets/Editor/";
-        private const string _mainTitle = "Engine.Main";
+        public const string AssetsPath = "d:/Work/Dev/ConsoleGame/ConsoleEngine/Assets/";
+        private const string _coreTitle = "Engine.Core";
         private readonly Editor _editor;
         private Mode _currentMode;
 
@@ -42,7 +43,7 @@ namespace ConsoleGame.ConsoleEngine
 
             if (mode == Mode.Main)
             {
-                Console.Title = _mainTitle;
+                Console.Title = _coreTitle;
                 Console.ResetColor();
                 Console.Clear();
             }
@@ -56,11 +57,11 @@ namespace ConsoleGame.ConsoleEngine
         {
             ConsoleKeyInfo key = Console.ReadKey(true);
 
-            if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Game))
+            if (KeysService.CompareWithoutChar(key, Keys.Game))
                 SetMode(Mode.Game);
-            else if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Editor))
+            else if (KeysService.CompareWithoutChar(key, Keys.Editor))
                 SetMode(Mode.Editor);
-            else if (ConsoleGame.Keys.CompareWithoutChar(key, Keys.Exit))
+            else if (KeysService.CompareWithoutChar(key, Keys.Exit))
                 SetMode(Mode.Exit);
         }
     }

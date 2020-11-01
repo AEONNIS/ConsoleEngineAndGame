@@ -1,6 +1,6 @@
 ﻿using ConsoleEngine.Maths;
 
-namespace ConsoleEngine.Display
+namespace ConsoleEngine.Graphics
 {
     public interface IDisplayable
     {

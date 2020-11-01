@@ -1,7 +1,7 @@
 ﻿using ConsoleEngine.Maths;
 using System;
 
-namespace ConsoleEngine.Display
+namespace ConsoleEngine.Graphics
 {
     public struct Texture : IDisplayable
     {
