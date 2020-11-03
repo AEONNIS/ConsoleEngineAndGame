@@ -14,6 +14,7 @@ namespace ConsoleEngine.Core.DisplaySystem
               : this(backgroundColor, new PixelForeground(foregroundColor, foregroundSymbol))
         { }
 
+        public static Pixel Empty => new Pixel(null, PixelForeground.Empty);
         public static Pixel Black => new Pixel(ConsoleColor.Black, PixelForeground.Black);
 
         public ConsoleColor? BackgroundColor { get; set; }
@@ -27,7 +28,7 @@ namespace ConsoleEngine.Core.DisplaySystem
             }
             else
             {
-                ConsoleColor? color = Screen.GetPixel(x, y).BackgroundColor;
+                ConsoleColor? color = Screen.Get.GetPixel(x, y).BackgroundColor;
 
                 if (color.HasValue)
                     Console.BackgroundColor = color.Value;

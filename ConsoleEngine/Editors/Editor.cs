@@ -1,5 +1,5 @@
 ﻿using ConsoleEngine.Core;
-using ConsoleEngine.Input;
+using ConsoleEngine.InputSystem;
 using System;
 
 namespace ConsoleEngine.Editors

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleEngine.Input
+namespace ConsoleEngine.InputSystem
 {
     public static class KeysService
     {
