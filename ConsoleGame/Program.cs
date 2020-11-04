@@ -12,12 +12,7 @@ namespace ConsoleGame
 
         private static void Test()
         {
-            Display.Init("Test");
-
-            Pixel pixel00 = Screen.GetPixel(0, 0);
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.Clear();
-            pixel00.Display(0, 0);
+            Screen.Get();
 
             while (true)
             {

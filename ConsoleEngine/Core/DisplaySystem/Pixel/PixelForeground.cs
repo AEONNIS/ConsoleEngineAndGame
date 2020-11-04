@@ -25,7 +25,7 @@ namespace ConsoleEngine.Core.DisplaySystem
             }
             else
             {
-                ConsoleColor? color = Screen.Get.GetPixel(x, y).Foreground.Color;
+                ConsoleColor? color = Screen.Get().GetPixel(x, y).Foreground.Color;
 
                 if (color.HasValue)
                     Console.ForegroundColor = color.Value;
