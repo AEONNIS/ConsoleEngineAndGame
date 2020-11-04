@@ -22,28 +22,15 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public void Display(int x, int y)
         {
-            if (BackgroundColor.HasValue)
-            {
-                Console.BackgroundColor = BackgroundColor.Value;
-            }
-            else
-            {
-                ConsoleColor? color = Screen.Get().GetPixel(x, y).BackgroundColor;
-
-                if (color.HasValue)
-                    Console.BackgroundColor = color.Value;
-                else
-                    Console.BackgroundColor = ConsoleColor.Black;
-            }
-
+            Console.BackgroundColor = BackgroundColor ?? Screen.Get().GetColorFrom(false, x, y);
             Foreground.Display(x, y);
         }
         public void Display(Vector2Int position) => Display(position.X, position.Y);
 
         public override string ToString()
         {
-            string backgroundColor = BackgroundColor.HasValue ? BackgroundColor.Value.ToString() : "null";
-            return $"{nameof(BackgroundColor)}: {backgroundColor}, {nameof(Foreground)}: ({Foreground})";
+            string backgroundColor = BackgroundColor.HasValue ? BackgroundColor.Value.ToString() : "Empty";
+            return $"BgC:{backgroundColor}, {Foreground}";
         }
     }
 }

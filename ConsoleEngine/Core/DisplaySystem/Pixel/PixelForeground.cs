@@ -19,20 +19,7 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public void Display(int x, int y)
         {
-            if (Color.HasValue)
-            {
-                Console.ForegroundColor = Color.Value;
-            }
-            else
-            {
-                ConsoleColor? color = Screen.Get().GetPixel(x, y).Foreground.Color;
-
-                if (color.HasValue)
-                    Console.ForegroundColor = color.Value;
-                else
-                    Console.ForegroundColor = ConsoleColor.Black;
-            }
-
+            Console.ForegroundColor = Color ?? Screen.Get().GetColorFrom(true, x, y);
             Console.SetCursorPosition(x, y);
             Console.Write(Symbol);
         }
@@ -40,8 +27,8 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public override string ToString()
         {
-            string color = Color.HasValue ? Color.Value.ToString() : "null";
-            return $"{nameof(Color)}: {color}, {nameof(Symbol)}: '{Symbol}'";
+            string color = Color.HasValue ? Color.Value.ToString() : "Empty";
+            return $"FgC:{color}, Smb:'{Symbol}'";
         }
     }
 }

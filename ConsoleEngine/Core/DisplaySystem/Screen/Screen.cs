@@ -21,6 +21,14 @@ namespace ConsoleEngine.Core.DisplaySystem
         public static string GetDisplayTitle() => Console.Title;
         public static void SetDisplayTitle(string title) => Console.Title = title;
 
+        public ConsoleColor GetColorFrom(bool foreground, int x, int y)
+        {
+            var pixel = _activeBuffer.GetPixel(x, y);
+            ConsoleColor? color = foreground ? pixel.Foreground.Color : pixel.BackgroundColor;
+            return color ?? ConsoleColor.Black;
+        }
+        public ConsoleColor GetColorFrom(bool foreground, Vector2Int position) => GetColorFrom(foreground, position.X, position.Y);
+
         public Pixel GetPixel(int x, int y) => _activeBuffer.GetPixel(x, y);
         public Pixel GetPixel(Vector2Int position) => _activeBuffer.GetPixel(position);
 

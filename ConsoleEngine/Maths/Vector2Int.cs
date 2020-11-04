@@ -8,11 +8,15 @@
             Y = y;
         }
 
+        public static Vector2Int Zero => new Vector2Int(0, 0);
+
         public int X { get; private set; }
         public int Y { get; private set; }
 
         public static bool operator ==(Vector2Int a, Vector2Int b) => a.X == b.X && a.Y == b.Y;
 
         public static bool operator !=(Vector2Int a, Vector2Int b) => a.X != b.X || a.Y != b.Y;
+
+        public override string ToString() => $"({X}, {Y})";
     }
 }
