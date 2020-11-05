@@ -4,7 +4,7 @@ namespace ConsoleEngine.Core.DisplaySystem
 {
     public class ScreenBuffer
     {
-        private Pixel[,] _buffer;
+        private Pixel[,] _buffer; // Использовать вместо массива текстуру в целях оптимизации.
 
         public ScreenBuffer(int width, int height, Pixel fillingPixel)
         {
@@ -19,6 +19,12 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public void Set(Pixel pixel, int x, int y) => _buffer[x, y] = pixel;
         public void Set(Pixel pixel, Vector2Int position) => _buffer[position.X, position.Y] = pixel;
+
+        public void Set(Texture texture)
+        {
+            foreach (var pixel in texture.Pixels)
+                Set(pixel.Value, pixel.Key + texture.Shift);
+        }
 
         public void Clear(Pixel fillingPixel) => Fill(ref _buffer, fillingPixel);
 

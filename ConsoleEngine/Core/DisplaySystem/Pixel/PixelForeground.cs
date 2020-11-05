@@ -17,13 +17,13 @@ namespace ConsoleEngine.Core.DisplaySystem
         public ConsoleColor? Color { get; set; }
         public char Symbol { get; set; }
 
-        public void Display(int x, int y)
+        public void DisplayInConsole(int x, int y)
         {
             Console.ForegroundColor = Color ?? Screen.Get().GetColorFrom(true, x, y);
             Console.SetCursorPosition(x, y);
             Console.Write(Symbol);
         }
-        public void Display(Vector2Int position) => Display(position.X, position.Y);
+        public void DisplayInConsole(Vector2Int position) => DisplayInConsole(position.X, position.Y);
 
         public override string ToString()
         {

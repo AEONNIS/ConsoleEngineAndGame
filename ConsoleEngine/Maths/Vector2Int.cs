@@ -14,8 +14,9 @@
         public int Y { get; private set; }
 
         public static bool operator ==(Vector2Int a, Vector2Int b) => a.X == b.X && a.Y == b.Y;
-
         public static bool operator !=(Vector2Int a, Vector2Int b) => a.X != b.X || a.Y != b.Y;
+
+        public static Vector2Int operator +(Vector2Int a, Vector2Int b) => new Vector2Int(a.X + b.X, a.Y + b.Y);
 
         public override string ToString() => $"({X}, {Y})";
     }

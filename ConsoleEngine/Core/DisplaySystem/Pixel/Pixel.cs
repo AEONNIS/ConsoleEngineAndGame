@@ -20,12 +20,12 @@ namespace ConsoleEngine.Core.DisplaySystem
         public ConsoleColor? BackgroundColor { get; set; }
         public PixelForeground Foreground { get; set; }
 
-        public void Display(int x, int y)
+        public void DisplayInConsole(int x, int y)
         {
             Console.BackgroundColor = BackgroundColor ?? Screen.Get().GetColorFrom(false, x, y);
-            Foreground.Display(x, y);
+            Foreground.DisplayInConsole(x, y);
         }
-        public void Display(Vector2Int position) => Display(position.X, position.Y);
+        public void DisplayInConsole(Vector2Int position) => DisplayInConsole(position.X, position.Y);
 
         public override string ToString()
         {

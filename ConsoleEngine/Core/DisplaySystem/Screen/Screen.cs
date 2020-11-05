@@ -34,10 +34,16 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public void Display(Pixel pixel, int x, int y)
         {
-            pixel.Display(x, y);
+            pixel.DisplayInConsole(x, y);
             _activeBuffer.Set(pixel, x, y);
         }
         public void Display(Pixel pixel, Vector2Int position) => Display(pixel, position.X, position.Y);
+
+        public void Display(Texture texture)
+        {
+            texture.DisplayInConsole();
+            _activeBuffer.Set(texture);
+        }
 
         public void Clear()
         {
