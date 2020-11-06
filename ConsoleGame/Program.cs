@@ -1,4 +1,5 @@
 ﻿using ConsoleEngine.Core.DisplaySystem;
+using ConsoleEngine.Maths;
 using System;
 
 namespace ConsoleGame
@@ -12,11 +13,9 @@ namespace ConsoleGame
 
         private static void Test()
         {
-            Screen.Get();
-            var texture = new Texture();
-            texture.AddOrReplace(1, 2, Pixel.Empty);
-            texture.AddOrReplace(1, 2, Pixel.Black);
-            Console.Write(texture);
+            PixelForeground pf1 = new PixelForeground(null, '-');
+            PixelForeground pf2 = new PixelForeground(null, '-');
+            Console.WriteLine(pf1 == pf2);
 
             while (true)
             {

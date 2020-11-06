@@ -4,7 +4,8 @@ namespace ConsoleEngine.Core.DisplaySystem
 {
     public class ScreenBuffer
     {
-        private Pixel[,] _buffer; // Использовать вместо массива текстуру в целях оптимизации.
+        //private readonly Texture _buffer;
+        private Pixel[,] _buffer;
 
         public ScreenBuffer(int width, int height, Pixel fillingPixel)
         {
