@@ -1,4 +1,10 @@
-﻿using ConsoleEngine.Maths;
+﻿// MovePixel
+// SwapPixels
+// Intersection(Rectangle) | operator *
+// Intersection(Texture) | operator *
+// Удалить лишнее, когда станет понятно, что не используется и не нужно.
+
+using ConsoleEngine.Maths;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,6 +14,7 @@ namespace ConsoleEngine.Core.DisplaySystem
     {
         private readonly Dictionary<Vector2Int, Pixel> _pixels = new Dictionary<Vector2Int, Pixel>();
 
+        #region Constructors
         public Texture() { }
         public Texture(IEnumerable<KeyValuePair<Vector2Int, Pixel>> pixels)
                 : this(pixels, Vector2Int.Zero)
@@ -17,9 +24,13 @@ namespace ConsoleEngine.Core.DisplaySystem
             _pixels = new Dictionary<Vector2Int, Pixel>(pixels);
             Shift = shift;
         }
+        #endregion
 
+        #region Properties
         public Vector2Int Shift { get; set; } = Vector2Int.Zero;
-        public IReadOnlyDictionary<Vector2Int, Pixel> Pixels => _pixels;
+        public IReadOnlyDictionary<Vector2Int, Pixel> Pixels => Normalize()._pixels;
+        public IReadOnlyCollection<Vector2Int> Points => Normalize()._pixels.Keys;
+        #endregion
 
         #region Operators
         public static bool operator ==(Texture a, Texture b)
@@ -28,7 +39,6 @@ namespace ConsoleEngine.Core.DisplaySystem
             var bNorm = b.Normalize();
             return aNorm.Pixels.Count == bNorm.Pixels.Count && aNorm.Pixels.Except(bNorm.Pixels).Any() == false;
         }
-
         public static bool operator !=(Texture a, Texture b)
         {
             var aNorm = a.Normalize();
@@ -36,63 +46,105 @@ namespace ConsoleEngine.Core.DisplaySystem
             return aNorm.Pixels.Count != bNorm.Pixels.Count || aNorm.Pixels.Except(bNorm.Pixels).Any();
         }
 
-        public static Texture operator +(Texture text, Vector2Int shift) => new Texture(text.Pixels, text.Shift + shift);
-        public static Texture operator +(Texture text, (Vector2Int key, Pixel value) pixel)
+        public static Texture operator +(Texture texture, KeyValuePair<Vector2Int, Pixel> pixel) => texture + (pixel.Key, pixel.Value);
+        public static Texture operator +(Texture texture, (Vector2Int Key, Pixel Value) pixel)
         {
-            var pixels = new Dictionary<Vector2Int, Pixel>(text.Pixels);
-            pixels[pixel.key - text.Shift] = pixels.ContainsKey(pixel.key - text.Shift) ? pixels[pixel.key - text.Shift] + pixel.value : pixel.value;
-            return new Texture(pixels, text.Shift);
+            var pixels = new Dictionary<Vector2Int, Pixel>(texture.Normalize().Pixels);
+            pixels[pixel.Key] = pixels.ContainsKey(pixel.Key) ? pixels[pixel.Key] + pixel.Value : pixel.Value;
+            return new Texture(pixels);
         }
         public static Texture operator +(Texture major, Texture minor)
         {
-            var majNorm = major.Normalize();
-            var minNorm = minor.Normalize();
-            var pixelSum = new Dictionary<Vector2Int, Pixel>(majNorm.Pixels);
+            var majorNorm = major.Normalize();
+            var minorNorm = minor.Normalize();
+            var pixelSum = new Dictionary<Vector2Int, Pixel>(majorNorm.Pixels);
 
-            foreach (var minPixel in minNorm.Pixels)
-                pixelSum[minPixel.Key] = pixelSum.ContainsKey(minPixel.Key) ? pixelSum[minPixel.Key] + minPixel.Value : minPixel.Value;
+            foreach (var minorPixel in minorNorm.Pixels)
+                pixelSum[minorPixel.Key] = pixelSum.ContainsKey(minorPixel.Key) ? pixelSum[minorPixel.Key] + minorPixel.Value : minorPixel.Value;
 
             return new Texture(pixelSum);
         }
+
+        public static Texture operator -(Texture texture, Vector2Int position)
+        {
+            var textureNorm = texture.Normalize();
+            textureNorm._pixels.Remove(position);
+            return textureNorm;
+        }
+        public static Texture operator -(Texture texture, IEnumerable<Vector2Int> positions)
+        {
+            var textureNorm = texture.Normalize();
+
+            foreach (var position in positions)
+                textureNorm._pixels.Remove(position);
+
+            return textureNorm;
+        }
+        public static Texture operator -(Texture texture, Pixel pixel)
+        {
+            var textureNorm = texture.Normalize();
+
+            foreach (var px in textureNorm.Pixels)
+            {
+                if (px.Value == pixel)
+                    textureNorm._pixels.Remove(px.Key);
+            }
+
+            return textureNorm;
+        }
+        public static Texture operator -(Texture texture, IEnumerable<Pixel> pixels)
+        {
+            var textureNorm = texture.Normalize();
+
+            foreach (var pixel in textureNorm.Pixels)
+            {
+                if (pixels.Contains(pixel.Value))
+                    textureNorm._pixels.Remove(pixel.Key);
+            }
+
+            return textureNorm;
+        }
         #endregion
 
-        public Texture Normalize()
-        {
-            var pixels = new Dictionary<Vector2Int, Pixel>();
-
-            foreach (var pixel in Pixels)
-                pixels.Add(pixel.Key + Shift, pixel.Value);
-
-            return new Texture(pixels, Vector2Int.Zero);
-        }
-
+        #region Methods
         public void Clear()
         {
             _pixels.Clear();
             Shift = Vector2Int.Zero;
         }
 
+        public Texture Normalize()
+        {
+            if (Shift != Vector2Int.Zero)
+            {
+                var pixels = new Dictionary<Vector2Int, Pixel>();
+
+                foreach (var pixel in _pixels)
+                    pixels.Add(pixel.Key + Shift, pixel.Value);
+
+                return new Texture(pixels);
+            }
+
+            return this;
+        }
+
         public void Set(int x, int y, Pixel pixel) => _pixels[new Vector2Int(x, y)] = pixel;
         public void Set(Vector2Int position, Pixel pixel) => _pixels[position] = pixel;
 
-        public bool Remove(int x, int y) => _pixels.Remove(new Vector2Int(x, y));
-        public bool Remove(Vector2Int position) => _pixels.Remove(position);
-
-        public void RemoveIfExists(Texture texture)
+        public bool IsIntersect(Texture texture)
         {
-            foreach (var pixel in texture.Pixels)
-                _pixels.Remove(pixel.Key);
-        }
+            var thisNorm = Normalize();
+            var textureNorm = texture.Normalize();
 
-        public bool Intersect(Texture texture)
-        {
-            foreach (var pixel in texture.Pixels)
+            foreach (var pixel in textureNorm.Pixels)
             {
-                if (_pixels.ContainsKey(pixel.Key))
+                if (thisNorm.Pixels.ContainsKey(pixel.Key))
                     return true;
             }
             return false;
         }
+
+        public bool IsEmpty() => _pixels.Any() == false;
 
         public void DisplayInConsole()
         {
@@ -106,5 +158,6 @@ namespace ConsoleEngine.Core.DisplaySystem
             result += $", Shf:{Shift}";
             return result;
         }
+        #endregion
     }
 }

@@ -1,19 +1,23 @@
 ﻿using ConsoleEngine.Maths;
+using System.Collections.Generic;
 
 namespace ConsoleEngine.Core.DisplaySystem
 {
     public class ScreenBuffer
     {
-        //private readonly Texture _buffer;
-        private Pixel[,] _buffer;
-
-        public ScreenBuffer(int width, int height, Pixel fillingPixel)
+        #region Constructors
+        public ScreenBuffer() { }
+        public ScreenBuffer(IEnumerable<KeyValuePair<Vector2Int, Pixel>> pixels, string name = "")
         {
-            _buffer = CreateBuffer(width, height, fillingPixel);
+            Buffer = new Texture(pixels);
+            Name = name;
         }
-        public ScreenBuffer(Vector2Int size, Pixel fillingPixel)
-                     : this(size.X, size.Y, fillingPixel)
-        { }
+        #endregion
+
+        #region Properties
+        public string Name { get; set; } = string.Empty;
+        public Texture Buffer { get; set; } = new Texture();
+        #endregion
 
         public Pixel GetPixel(int x, int y) => _buffer[x, y];
         public Pixel GetPixel(Vector2Int position) => _buffer[position.X, position.Y];
