@@ -25,6 +25,12 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public static Pixel Empty => new Pixel(null, PixelForeground.Empty);
         public static Pixel Black => new Pixel(ConsoleColor.Black, PixelForeground.Black);
+        public static Pixel Blue => new Pixel(ConsoleColor.Blue, PixelForeground.Blue);
+        public static Pixel Green => new Pixel(ConsoleColor.Green, PixelForeground.Green);
+        public static Pixel Cyan => new Pixel(ConsoleColor.Cyan, PixelForeground.Cyan);
+        public static Pixel Red => new Pixel(ConsoleColor.Red, PixelForeground.Red);
+        public static Pixel Yellow => new Pixel(ConsoleColor.Yellow, PixelForeground.Yellow);
+        public static Pixel White => new Pixel(ConsoleColor.White, PixelForeground.White);
 
         public ConsoleColor? BackgroundColor { get; set; }
         public PixelForeground Foreground { get; set; }
