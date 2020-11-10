@@ -8,7 +8,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGame", "ConsoleGame\
 		{6D43845C-25FD-4302-8FE6-70C5B105AA18} = {6D43845C-25FD-4302-8FE6-70C5B105AA18}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleEngine", "ConsoleEngine\ConsoleEngine.csproj", "{6D43845C-25FD-4302-8FE6-70C5B105AA18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleEngine", "ConsoleEngine\ConsoleEngine.csproj", "{6D43845C-25FD-4302-8FE6-70C5B105AA18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{25C29B88-EFE3-443C-8974-166FA2033D8F}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\DesignDocument.txt = Docs\DesignDocument.txt
+		Docs\Tasks.txt = Docs\Tasks.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

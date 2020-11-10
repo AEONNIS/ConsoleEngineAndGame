@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Graphics\" />
+    <Folder Include="Code\Graphics\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
 
 </Project>
