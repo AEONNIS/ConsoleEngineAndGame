@@ -2,6 +2,7 @@
 // SwapPixels
 // Intersection(Rectangle) | operator *
 // Intersection(Texture) | operator *
+// Выравнивание текстуры по какому-либо углу: т.е. текстура сдвигается так, что наиболее близкий к этому углу пиксель размещается в него.
 // Удалить лишнее, когда станет понятно, что не используется и не нужно.
 
 using ConsoleEngine.Maths;
@@ -126,6 +127,19 @@ namespace ConsoleEngine.Core.DisplaySystem
             }
 
             return this;
+        }
+
+        public Texture Select(Rectangle rectangle)
+        {
+            var resultPixels = new Dictionary<Vector2Int, Pixel>();
+
+            foreach (var pixel in Normalize().Pixels)
+            {
+                if (rectangle.IsInside(pixel.Key))
+                    resultPixels.Add(pixel.Key, pixel.Value);
+            }
+
+            return new Texture(resultPixels);
         }
 
         public void Set(int x, int y, Pixel pixel) => _pixels[new Vector2Int(x, y)] = pixel;
