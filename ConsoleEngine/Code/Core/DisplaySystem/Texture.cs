@@ -1,8 +1,6 @@
 ﻿// MovePixel
 // SwapPixels
-// Intersection(Rectangle) | operator *
-// Intersection(Texture) | operator *
-// Выравнивание текстуры по какому-либо углу: т.е. текстура сдвигается так, что наиболее близкий к этому углу пиксель размещается в него.
+// RotateRelative(Vector2Int point)
 // Удалить лишнее, когда станет понятно, что не используется и не нужно.
 
 using ConsoleEngine.Maths;
@@ -31,6 +29,7 @@ namespace ConsoleEngine.Core.DisplaySystem
         public Vector2Int Shift { get; set; } = Vector2Int.Zero;
         public IReadOnlyDictionary<Vector2Int, Pixel> Pixels => Normalize()._pixels;
         public IReadOnlyCollection<Vector2Int> Points => Normalize()._pixels.Keys;
+        public bool IsEmpty => _pixels.Any() == false;
         #endregion
 
         #region Operators
@@ -129,17 +128,46 @@ namespace ConsoleEngine.Core.DisplaySystem
             return this;
         }
 
-        public Texture Select(Rectangle rectangle)
+        public Vector2Int GetAlignmentPoint(Angle angle)
+        {
+            var points = Points;
+            var allXs = points.Select(point => point.X);
+            var allYs = points.Select(point => point.Y);
+
+            if (angle == Angle.TopRight)
+                return new Vector2Int(allXs.Min(), allYs.Min());
+            else if (angle == Angle.TopLeft)
+                return new Vector2Int(allXs.Max(), allYs.Min());
+            else if (angle == Angle.BottomRight)
+                return new Vector2Int(allXs.Min(), allYs.Max());
+            else
+                return new Vector2Int(allXs.Max(), allYs.Max());
+        }
+
+        public Texture AlignTo(Vector2Int alignmentPoint, Angle angle)
+        {
+            Shift = alignmentPoint - GetAlignmentPoint(angle);
+            return Normalize();
+        }
+
+        public Texture Select(bool inside, Rectangle rectangle)
         {
             var resultPixels = new Dictionary<Vector2Int, Pixel>();
 
-            foreach (var pixel in Normalize().Pixels)
+            foreach (var pixel in Pixels)
             {
-                if (rectangle.IsInside(pixel.Key))
+                if (rectangle.Contains(pixel.Key) == inside)
                     resultPixels.Add(pixel.Key, pixel.Value);
             }
 
             return new Texture(resultPixels);
+        }
+        public Texture Select(bool inside, Texture texture)
+        {
+            var thisNorm = Normalize();
+            var points = thisNorm.Points.Intersect(texture.Points);
+            var pixels = thisNorm.Pixels.Where(pixel => points.Contains(pixel.Key) == inside);
+            return new Texture(pixels);
         }
 
         public void Set(int x, int y, Pixel pixel) => _pixels[new Vector2Int(x, y)] = pixel;
@@ -147,18 +175,15 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public bool IsIntersect(Texture texture)
         {
-            var thisNorm = Normalize();
-            var textureNorm = texture.Normalize();
+            var pixels = Pixels;
 
-            foreach (var pixel in textureNorm.Pixels)
+            foreach (var pixel in texture.Pixels)
             {
-                if (thisNorm.Pixels.ContainsKey(pixel.Key))
+                if (pixels.ContainsKey(pixel.Key))
                     return true;
             }
             return false;
         }
-
-        public bool IsEmpty() => _pixels.Any() == false;
 
         public void DisplayInConsole()
         {

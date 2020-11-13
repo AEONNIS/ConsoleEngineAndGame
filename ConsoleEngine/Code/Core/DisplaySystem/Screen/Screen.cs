@@ -5,22 +5,36 @@ namespace ConsoleEngine.Core.DisplaySystem
 {
     public class Screen
     {
+        #region StaticFields
         private static readonly Screen _screen = new Screen();
-        private readonly ScreenBuffer _activeBuffer;
+        #endregion
 
+        #region Fields
+        private readonly ScreenBufferPool _bufferPool = new ScreenBufferPool();
+        #endregion
+
+        #region Constructors
         private Screen()
         {
-            _activeBuffer = new ScreenBuffer(Console.LargestWindowWidth, Console.LargestWindowHeight, Pixel.Black);
+            Rectangle = new Rectangle(Vector2Int.Zero, new Vector2Int(Console.LargestWindowWidth, Console.LargestWindowHeight));
             Console.CursorVisible = false;
-            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Console.SetWindowSize(Rectangle.Size.X, Rectangle.Size.Y);
+            Console.SetBufferSize(Rectangle.Size.X, Rectangle.Size.Y);
         }
+        #endregion
 
+        #region Properties
+        public Rectangle Rectangle { get; }
+        #endregion
+
+        #region StaticMethods
         public static Screen Get() => _screen;
 
         public static string GetDisplayTitle() => Console.Title;
         public static void SetDisplayTitle(string title) => Console.Title = title;
+        #endregion
 
+        #region Methods
         public ConsoleColor GetColorFrom(bool foreground, int x, int y)
         {
             var pixel = _activeBuffer.GetPixel(x, y);
@@ -51,5 +65,6 @@ namespace ConsoleEngine.Core.DisplaySystem
             Console.ResetColor();
             Console.Clear();
         }
+        #endregion
     }
 }

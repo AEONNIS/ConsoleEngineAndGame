@@ -5,18 +5,28 @@ namespace ConsoleEngine.Core.DisplaySystem
 {
     public class ScreenBuffer
     {
+        private Texture _total = new Texture();
+        private Texture _delta = new Texture();
+
         #region Constructors
         public ScreenBuffer() { }
         public ScreenBuffer(IEnumerable<KeyValuePair<Vector2Int, Pixel>> pixels, string name = "")
         {
-            Buffer = new Texture(pixels);
+            Total = new Texture(pixels);
             Name = name;
         }
         #endregion
 
         #region Properties
         public string Name { get; set; } = string.Empty;
-        public Texture Buffer { get; set; } = new Texture();
+        public Texture Total
+        {
+            get => _total;
+            set
+            {
+                _total = value;
+            }
+        }
         #endregion
 
         public Pixel GetPixel(int x, int y) => _buffer[x, y];

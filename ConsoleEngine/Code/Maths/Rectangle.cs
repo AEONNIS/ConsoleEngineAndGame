@@ -3,10 +3,10 @@
     public struct Rectangle
     {
         #region Constructors
-        public Rectangle(Vector2Int size, Vector2Int topLeftAngle)
+        public Rectangle(Vector2Int topLeftAngle, Vector2Int size)
         {
-            Size = size;
             TopLeftAngle = topLeftAngle;
+            Size = size;
         }
         #endregion
 
@@ -24,7 +24,7 @@
         #endregion
 
         #region Methods
-        public bool IsInside(Vector2Int point) => TopLeftAngle >= point && BottomRightAngle <= point;
+        public bool Contains(Vector2Int point) => TopLeftAngle >= point && BottomRightAngle <= point;
 
         public override string ToString() => $"Sz:{Size}, TLA:{TopLeftAngle}";
         #endregion

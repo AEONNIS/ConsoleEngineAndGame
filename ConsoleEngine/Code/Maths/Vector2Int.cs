@@ -1,4 +1,6 @@
-﻿namespace ConsoleEngine.Maths
+﻿using System;
+
+namespace ConsoleEngine.Maths
 {
     public struct Vector2Int
     {
@@ -25,6 +27,9 @@
         #region Properties
         public int X { get; set; }
         public int Y { get; set; }
+
+        public float Magnitude => MathF.Sqrt(X * X + Y * Y);
+        public int SqrMagnitude => X * X + Y * Y;
         #endregion
 
         #region Operators
@@ -67,6 +72,9 @@
         #region Methods
         public Vector2Int AddX(int deltaX) => new Vector2Int(X + deltaX, Y);
         public Vector2Int AddY(int deltaY) => new Vector2Int(X, Y + deltaY);
+
+        public float Distance(Vector2Int v) => (this - v).Magnitude;
+        public float SqrDistance(Vector2Int v) => (this - v).SqrMagnitude;
 
         public override string ToString() => $"({X}, {Y})";
         #endregion
