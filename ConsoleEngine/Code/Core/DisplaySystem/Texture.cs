@@ -128,6 +128,9 @@ namespace ConsoleEngine.Core.DisplaySystem
             return this;
         }
 
+        public Pixel? GetPixel(Vector2Int position) => _pixels.TryGetValue(position, out Pixel pixel) ? pixel : null;
+        public Pixel? GetPixel(int x, int y) => GetPixel(new Vector2Int(x, y));
+
         public Vector2Int GetAlignmentPoint(Angle angle)
         {
             var points = Points;

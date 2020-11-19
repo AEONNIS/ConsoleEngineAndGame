@@ -5,8 +5,10 @@ namespace ConsoleEngine.Core.DisplaySystem
 {
     public class ScreenBuffer
     {
+        #region Fields
         private Texture _total = new Texture();
-        private Texture _delta = new Texture();
+        private readonly Texture _delta = new Texture();
+        #endregion
 
         #region Constructors
         public ScreenBuffer() { }
@@ -25,6 +27,7 @@ namespace ConsoleEngine.Core.DisplaySystem
             set
             {
                 _total = value;
+                _delta.Clear();
             }
         }
         #endregion

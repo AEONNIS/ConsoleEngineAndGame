@@ -3,6 +3,7 @@ using System;
 
 namespace ConsoleEngine.Core.DisplaySystem
 {
+
     public struct PixelForeground
     {
         #region Constructors
