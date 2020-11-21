@@ -49,9 +49,9 @@ namespace ConsoleEngine.Core.DisplaySystem
         public static bool operator ==(PixelForeground a, PixelForeground b) => a.Color == b.Color && a.Symbol == b.Symbol;
         public static bool operator !=(PixelForeground a, PixelForeground b) => a.Color != b.Color || a.Symbol != b.Symbol;
 
-        public static PixelForeground operator +(PixelForeground major, PixelForeground minor)
+        public static PixelForeground operator +(PixelForeground minor, PixelForeground major)
         {
-            ConsoleColor? color = major.Color == null && minor.Color != null ? minor.Color : major.Color;
+            ConsoleColor? color = major.Color.HasValue && minor.Color is not null ? minor.Color : major.Color;
             return new PixelForeground(color, major.Symbol);
         }
         #endregion

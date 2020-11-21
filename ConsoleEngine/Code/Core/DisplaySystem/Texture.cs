@@ -11,7 +11,9 @@ namespace ConsoleEngine.Core.DisplaySystem
 {
     public class Texture
     {
+        #region Fields
         private readonly Dictionary<Vector2Int, Pixel> _pixels = new Dictionary<Vector2Int, Pixel>();
+        #endregion
 
         #region Constructors
         public Texture() { }
@@ -46,17 +48,10 @@ namespace ConsoleEngine.Core.DisplaySystem
             return aNorm.Pixels.Count != bNorm.Pixels.Count || aNorm.Pixels.Except(bNorm.Pixels).Any();
         }
 
-        public static Texture operator +(Texture texture, KeyValuePair<Vector2Int, Pixel> pixel) => texture + (pixel.Key, pixel.Value);
-        public static Texture operator +(Texture texture, (Vector2Int Key, Pixel Value) pixel)
+        public static Texture operator +(Texture minor, Texture major)
         {
-            var pixels = new Dictionary<Vector2Int, Pixel>(texture.Normalize().Pixels);
-            pixels[pixel.Key] = pixels.ContainsKey(pixel.Key) ? pixels[pixel.Key] + pixel.Value : pixel.Value;
-            return new Texture(pixels);
-        }
-        public static Texture operator +(Texture major, Texture minor)
-        {
-            var majorNorm = major.Normalize();
             var minorNorm = minor.Normalize();
+            var majorNorm = major.Normalize();
             var pixelSum = new Dictionary<Vector2Int, Pixel>(majorNorm.Pixels);
 
             foreach (var minorPixel in minorNorm.Pixels)
@@ -168,8 +163,8 @@ namespace ConsoleEngine.Core.DisplaySystem
         public Texture Select(bool inside, Texture texture)
         {
             var thisNorm = Normalize();
-            var points = thisNorm.Points.Intersect(texture.Points);
-            var pixels = thisNorm.Pixels.Where(pixel => points.Contains(pixel.Key) == inside);
+            var commonPoints = thisNorm.Points.Intersect(texture.Points);
+            var pixels = thisNorm.Pixels.Where(pixel => commonPoints.Contains(pixel.Key) == inside);
             return new Texture(pixels);
         }
 
