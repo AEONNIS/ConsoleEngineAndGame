@@ -3,38 +3,32 @@
     public class ScreenLayer
     {
         #region Fields
-        private int _order;
         private string _name;
-        private ScreenBuffer _buffer;
+        private Texture _total;
+        private Texture _delta;
         #endregion
 
         #region Properties
-        public int Order => _order;
         public string Name => _name;
-        public Texture Texture => _buffer.Texture;
+        public Texture Texture => _delta.IsEmpty ? _total : _delta;
         #endregion
 
         #region Methods
         public void Init(IGraphicObject graphicObject)
         {
-            _order = 0;
             _name = graphicObject.Name;
-            _buffer.Init(graphicObject.Texture);
+            _total = new Texture(graphicObject.Texture.Pixels);
         }
 
-        public void Overlap(Texture covering)
-        {
-            _order++;
-            _buffer.Overlap(covering);
-        }
+        public void Overlap(Texture covering) => _delta += _total.Select(true, covering);
 
-        public void ClearBufferDelta() => _buffer.ClearDelta();
+        public void ClearDelta() => _delta.Clear();
 
         public void Clear()
         {
-            _order = -1;
             _name = string.Empty;
-            _buffer.Clear();
+            _total.Clear();
+            _delta.Clear();
         }
         #endregion
     }
