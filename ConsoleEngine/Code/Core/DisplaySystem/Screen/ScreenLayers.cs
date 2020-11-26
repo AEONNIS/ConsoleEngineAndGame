@@ -5,30 +5,46 @@ namespace ConsoleEngine.Core.DisplaySystem
     public class ScreenLayers
     {
         #region Fields
-        private readonly Queue<ScreenLayer> _pool = new Queue<ScreenLayer>(); // Сделать generic pool
+        protected readonly Pool<ScreenLayer> _layerPool = new Pool<ScreenLayer>();
         private readonly LinkedList<ScreenLayer> _layers = new LinkedList<ScreenLayer>();
         #endregion
 
         #region PublicMethods
         public void AddTopLayer(IGraphicObject graphicObject)
         {
-            var layer = GetLayerFromPool();
+            var layer = _layerPool.Get();
             layer.Init(graphicObject);
+            OverlapLayers(graphicObject.Texture);
+            _layers.AddFirst(layer);
+        }
 
+        public ScreenLayer GetLayer(IGraphicObject graphicObject)
+        {
+            foreach (var layer in _layers)
+            {
+                if (layer.Name == graphicObject.Name)
+                    return layer;
+            }
+
+            return null;
+        }
+
+        public void RaiseToTop(IGraphicObject graphicObject)
+        {
+            var layer = GetLayer(graphicObject);
+            _layers.Remove(layer);
+            OverlapLayers(layer.Total);
+            _layers.AddFirst(layer);
         }
         #endregion
 
         #region PrivateMethods
-        private ScreenLayer GetLayerFromPool() => _pool.TryDequeue(out ScreenLayer layer) ? layer : new ScreenLayer();
-
-        private void ReturnLayerToPool(ScreenLayer layer) => _pool.Enqueue(layer);
-
-        private void OverlapLayers(IGraphicObject covered)
+        private void OverlapLayers(Texture covering)
         {
+            var coveringPart = new Texture(covering.Pixels);
+
             foreach (var layer in _layers)
-            {
-                var coveringPart=
-            }
+                layer.Overlap(ref coveringPart);
         }
         #endregion
     }

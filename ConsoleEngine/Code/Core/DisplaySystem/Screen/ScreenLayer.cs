@@ -10,7 +10,8 @@
 
         #region Properties
         public string Name => _name;
-        public Texture Texture => _delta.IsEmpty ? _total : _delta;
+        public Texture Total => _total;
+        public Texture Delta => _delta;
         #endregion
 
         #region Methods
@@ -20,7 +21,11 @@
             _total = new Texture(graphicObject.Texture.Pixels);
         }
 
-        public void Overlap(Texture covering) => _delta += _total.Select(true, covering);
+        public void Overlap(ref Texture covering)
+        {
+            _delta += _total.Select(true, covering);
+            covering -= _total.Points;
+        }
 
         public void ClearDelta() => _delta.Clear();
 
