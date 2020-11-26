@@ -37,9 +37,7 @@ namespace ConsoleEngine.Core.DisplaySystem
         #endregion
 
         #region Methods
-        public ConsoleColor GetColorFrom(bool foreground, int x, int y)
-        {
-        }
+        public ConsoleColor GetColorFrom(bool foreground, int x, int y) => GetColorFrom(foreground, new Vector2Int(x, y));
         public ConsoleColor GetColorFrom(bool foreground, Vector2Int position)
         {
             var pixel = _activeBuffer.GetPixel(position);
@@ -54,20 +52,20 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public void Display(Pixel pixel, int x, int y)
         {
-            pixel.DisplayInConsole(x, y);
-            _activeBuffer.Set(pixel, x, y);
+            //pixel.DisplayInConsole(x, y);
+            _activeBuffer.Set(x, y, pixel);
         }
         public void Display(Pixel pixel, Vector2Int position) => Display(pixel, position.X, position.Y);
 
         public void Display(Texture texture)
         {
             texture.DisplayInConsole();
-            _activeBuffer.Set(texture);
+            //_activeBuffer.Set(texture);
         }
 
         public void Clear()
         {
-            _activeBuffer.Clear(Pixel.Black);
+            _activeBuffer.Clear();
             Console.ResetColor();
             Console.Clear();
         }

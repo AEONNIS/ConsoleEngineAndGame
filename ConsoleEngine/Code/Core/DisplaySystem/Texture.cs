@@ -2,7 +2,7 @@
 // SwapPixels
 // RotateRelative(Vector2Int point)
 // Удалить лишнее, когда станет понятно, что не используется и не нужно.
-// Нужно хорошо продумать, когда менять данную текстуру, а когда создавать новую и изменять ее. Чтобы не происходило неумышленного изменения текстуры в использующих операции с текстурами обектах. Возможно, везде создавать новую.
+// Сделать текстуру иммутабельной в базовых методах и создать дополнительные методы для изменения текстуры.
 
 using ConsoleEngine.Maths;
 using System.Collections.Generic;
@@ -186,8 +186,8 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public void DisplayInConsole()
         {
-            foreach (var pixel in _pixels)
-                pixel.Value.DisplayInConsole(pixel.Key + Shift);
+            //foreach (var pixel in _pixels)
+            //    pixel.Value.DisplayInConsole(pixel.Key + Shift);
         }
 
         public override string ToString()

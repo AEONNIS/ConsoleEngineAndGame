@@ -1,48 +1,32 @@
-﻿using ConsoleEngine.Maths;
-using System;
+﻿using System;
 
 namespace ConsoleEngine.Core.DisplaySystem
 {
-
     public struct PixelForeground
     {
-        #region Constructors
-        public PixelForeground(ConsoleColor? color, char symbol)
-        {
-            Color = color;
-            Symbol = symbol;
-        }
-        public PixelForeground(char symbol)
-                        : this(null, symbol)
-        { }
-        public PixelForeground(ConsoleColor? color)
-                        : this(color, ' ')
-        { }
-        #endregion
-
         #region StaticProperties
-        public static PixelForeground Empty => new PixelForeground(null, ' ');
-        public static PixelForeground Black => new PixelForeground(ConsoleColor.Black, ' ');
-        public static PixelForeground DarkBlue => new PixelForeground(ConsoleColor.DarkBlue, ' ');
-        public static PixelForeground DarkGreen => new PixelForeground(ConsoleColor.DarkGreen, ' ');
-        public static PixelForeground DarkCyan => new PixelForeground(ConsoleColor.DarkCyan, ' ');
-        public static PixelForeground DarkRed => new PixelForeground(ConsoleColor.DarkRed, ' ');
-        public static PixelForeground DarkMagenta => new PixelForeground(ConsoleColor.DarkMagenta, ' ');
-        public static PixelForeground DarkYellow => new PixelForeground(ConsoleColor.DarkYellow, ' ');
-        public static PixelForeground Gray => new PixelForeground(ConsoleColor.Gray, ' ');
-        public static PixelForeground DarkGray => new PixelForeground(ConsoleColor.DarkGray, ' ');
-        public static PixelForeground Blue => new PixelForeground(ConsoleColor.Blue, ' ');
-        public static PixelForeground Green => new PixelForeground(ConsoleColor.Green, ' ');
-        public static PixelForeground Cyan => new PixelForeground(ConsoleColor.Cyan, ' ');
-        public static PixelForeground Red => new PixelForeground(ConsoleColor.Red, ' ');
-        public static PixelForeground Magenta => new PixelForeground(ConsoleColor.Magenta, ' ');
-        public static PixelForeground Yellow => new PixelForeground(ConsoleColor.Yellow, ' ');
-        public static PixelForeground White => new PixelForeground(ConsoleColor.White, ' ');
+        public static PixelForeground Empty => new PixelForeground { Color = null, Symbol = ' ' };
+        public static PixelForeground Black => new PixelForeground { Color = ConsoleColor.Black, Symbol = ' ' };
+        public static PixelForeground DarkBlue => new PixelForeground { Color = ConsoleColor.DarkBlue, Symbol = ' ' };
+        public static PixelForeground DarkGreen => new PixelForeground { Color = ConsoleColor.DarkGreen, Symbol = ' ' };
+        public static PixelForeground DarkCyan => new PixelForeground { Color = ConsoleColor.DarkCyan, Symbol = ' ' };
+        public static PixelForeground DarkRed => new PixelForeground { Color = ConsoleColor.DarkRed, Symbol = ' ' };
+        public static PixelForeground DarkMagenta => new PixelForeground { Color = ConsoleColor.DarkMagenta, Symbol = ' ' };
+        public static PixelForeground DarkYellow => new PixelForeground { Color = ConsoleColor.DarkYellow, Symbol = ' ' };
+        public static PixelForeground Gray => new PixelForeground { Color = ConsoleColor.Gray, Symbol = ' ' };
+        public static PixelForeground DarkGray => new PixelForeground { Color = ConsoleColor.DarkGray, Symbol = ' ' };
+        public static PixelForeground Blue => new PixelForeground { Color = ConsoleColor.Blue, Symbol = ' ' };
+        public static PixelForeground Green => new PixelForeground { Color = ConsoleColor.Green, Symbol = ' ' };
+        public static PixelForeground Cyan => new PixelForeground { Color = ConsoleColor.Cyan, Symbol = ' ' };
+        public static PixelForeground Red => new PixelForeground { Color = ConsoleColor.Red, Symbol = ' ' };
+        public static PixelForeground Magenta => new PixelForeground { Color = ConsoleColor.Magenta, Symbol = ' ' };
+        public static PixelForeground Yellow => new PixelForeground { Color = ConsoleColor.Yellow, Symbol = ' ' };
+        public static PixelForeground White => new PixelForeground { Color = ConsoleColor.White, Symbol = ' ' };
         #endregion
 
         #region Properties
-        public ConsoleColor? Color { get; set; }
-        public char Symbol { get; set; }
+        public ConsoleColor? Color { get; init; }
+        public char Symbol { get; init; }
         #endregion
 
         #region Operators
@@ -51,19 +35,19 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public static PixelForeground operator +(PixelForeground minor, PixelForeground major)
         {
-            ConsoleColor? color = major.Color.HasValue && minor.Color is not null ? minor.Color : major.Color;
-            return new PixelForeground(color, major.Symbol);
+            ConsoleColor? color;
+
+            if (minor.Color.HasValue && major.Color is null)
+                color = minor.Color;
+            else
+                color = major.Color;
+
+            return new PixelForeground { Color = color, Symbol = major.Symbol };
         }
         #endregion
 
         #region Methods
-        public void DisplayInConsole(int x, int y)
-        {
-            Console.ForegroundColor = Color ?? Screen.Get().GetColorFrom(true, x, y);
-            Console.SetCursorPosition(x, y);
-            Console.Write(Symbol);
-        }
-        public void DisplayInConsole(Vector2Int position) => DisplayInConsole(position.X, position.Y);
+        public PixelForeground GetCopy() => new PixelForeground { Color = this.Color, Symbol = this.Symbol };
 
         public override string ToString()
         {
