@@ -1,22 +1,22 @@
 using ConsoleEngine.Core.DisplaySystem;
+using NUnit.Framework;
 using System;
-using Xunit;
 
-namespace ConsoleEngine.UnitTests.Core.DisplaySystemTests
+namespace ConsoleEngine.UnitTests.Core.DisplaySystem
 {
     #region OperatorsTests
     public class PixelForegroundTests
     {
-        [Fact]
-        public void OperatorEquals_EqualPixels_ReturnTrue()
+        [Test]
+        public void OperatorEquals()
         {
             PixelForeground redDashA = new PixelForeground { Color = ConsoleColor.Red, Symbol = '-' };
             PixelForeground redDashB = new PixelForeground { Color = ConsoleColor.Red, Symbol = '-' };
 
-            bool actual = (redDashA == redDashB);
+            bool result = redDashA == redDashB;
 
-            Assert.True(actual);
+            Assert.True(result);
         }
+        #endregion
     }
-    #endregion
 }
