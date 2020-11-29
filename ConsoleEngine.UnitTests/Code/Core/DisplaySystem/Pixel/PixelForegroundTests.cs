@@ -4,28 +4,39 @@ using System;
 
 namespace ConsoleEngine.UnitTests.Core.DisplaySystem
 {
+    [TestFixture]
     public class PixelForegroundTests
     {
         #region OperatorsTests
-        [TestCaseSource(nameof(GetCasesWithEqualPixelForegrounds), new object[] { true })]
-        [TestCaseSource(nameof(GetCasesWithNotEqualPixelForegrounds), new object[] { false })]
-        public void OperatorEquals(PixelForeground a, PixelForeground b, bool expected)
+        [TestCaseSource(nameof(CasesWithEqualPixelForegrounds), new object[] { true })]
+        [TestCaseSource(nameof(CasesWithNotEqualPixelForegrounds), new object[] { false })]
+        public void OperatorEquals_VariousPixelForegrounds_ChecksThem(PixelForeground a, PixelForeground b, bool expected)
         {
             bool actual = (a == b);
 
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCaseSource(nameof(GetCasesWithEqualPixelForegrounds), new object[] { false })]
-        [TestCaseSource(nameof(GetCasesWithNotEqualPixelForegrounds), new object[] { true })]
-        public void OperatorNotEquals(PixelForeground a, PixelForeground b, bool expected)
+        [TestCaseSource(nameof(CasesWithEqualPixelForegrounds), new object[] { false })]
+        [TestCaseSource(nameof(CasesWithNotEqualPixelForegrounds), new object[] { true })]
+        public void OperatorNotEquals_VariousPixelForegrounds_ChecksThem(PixelForeground a, PixelForeground b, bool expected)
         {
             bool actual = (a != b);
 
             Assert.AreEqual(expected, actual);
         }
 
-        private static object[] GetCasesWithEqualPixelForegrounds(bool comparisonResult)
+        [TestCaseSource(nameof(PixelForegroundsCasesForOperatorPlus))]
+        public void OperatorPlus(PixelForeground a, PixelForeground b, PixelForeground expected)
+        {
+            PixelForeground actual = (a + b);
+
+            Assert.AreEqual(expected, actual);
+        }
+        #endregion
+
+        #region OperatorsCases
+        private static object[] CasesWithEqualPixelForegrounds(bool comparisonResult)
         {
             return new object[]
             {
@@ -37,7 +48,7 @@ namespace ConsoleEngine.UnitTests.Core.DisplaySystem
                                comparisonResult }
             };
         }
-        private static object[] GetCasesWithNotEqualPixelForegrounds(bool comparisonResult)
+        private static object[] CasesWithNotEqualPixelForegrounds(bool comparisonResult)
         {
             return new object[]
             {
@@ -56,6 +67,28 @@ namespace ConsoleEngine.UnitTests.Core.DisplaySystem
                 new object[] { new PixelForeground { Color = null,               Symbol = ' '},
                                new PixelForeground { Color = null,               Symbol = '-' },
                                comparisonResult }
+            };
+        }
+
+        private static object[] PixelForegroundsCasesForOperatorPlus()
+        {
+            return new object[]
+            {
+                new object[] { new PixelForeground { Color = null,               Symbol = ' ' },
+                               new PixelForeground { Color = null,               Symbol = '-' },
+                               new PixelForeground { Color = null,               Symbol = '-' } },
+
+                new object[] { new PixelForeground { Color = null,               Symbol = ' ' },
+                               new PixelForeground { Color = ConsoleColor.Black, Symbol = '-' },
+                               new PixelForeground { Color = ConsoleColor.Black, Symbol = '-' } },
+
+                new object[] { new PixelForeground { Color = ConsoleColor.Black, Symbol = ' ' },
+                               new PixelForeground { Color = null,               Symbol = '-' },
+                               new PixelForeground { Color = ConsoleColor.Black, Symbol = '-' } },
+
+                new object[] { new PixelForeground { Color = ConsoleColor.Black, Symbol = ' ' },
+                               new PixelForeground { Color = ConsoleColor.White, Symbol = '-' },
+                               new PixelForeground { Color = ConsoleColor.White, Symbol = '-' } },
             };
         }
         #endregion
