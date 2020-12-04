@@ -48,7 +48,7 @@ namespace ConsoleEngine.Core.DisplaySystem
         #endregion
 
         #region Methods
-        public Pixel GetCopy() => new Pixel { BackgroundColor = this.BackgroundColor, Foreground = this.Foreground };
+        public Pixel GetCopy() => new Pixel { BackgroundColor = this.BackgroundColor, Foreground = Foreground.GetCopy() };
 
         public override string ToString()
         {
