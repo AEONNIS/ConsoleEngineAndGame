@@ -47,8 +47,6 @@ namespace ConsoleEngine.Core.DisplaySystem
         #endregion
 
         #region Methods
-        public PixelForeground GetCopy() => new PixelForeground { Color = this.Color, Symbol = this.Symbol };
-
         public override string ToString()
         {
             string color = Color.HasValue ? Color.Value.ToString() : "Empty";

@@ -1,5 +1,4 @@
-﻿// Не писать лишнее, а лишь то, что нужно непосредственно сейчас!
-// Четко и понятно разделить операторы/методы, не меняющие текстуру и меняющие ее!
+﻿// Четко разграничить, какие методы меняют текстуру, а какие нет. Это должно быть понятно из самих методов. Плюс можно задокументировать такие методы.
 
 using ConsoleEngine.Maths;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 
 namespace ConsoleEngine.Core.DisplaySystem
 {
-    public class Texture
+    public class Texture : ICloneable<Texture>
     {
         #region Fields
         private readonly Dictionary<Vector2Int, Pixel> _pixels = new Dictionary<Vector2Int, Pixel>();
@@ -42,22 +41,9 @@ namespace ConsoleEngine.Core.DisplaySystem
         #region Methods
         public void Clear() => _pixels.Clear();
 
-        public Texture GetCopy() => new Texture(Pixels);
+        public Texture Clone() => new Texture(Pixels);
 
-        public void Move(Vector2Int movement)
-        {
-            foreach (var pixel in _pixels)
-            {
-                _pixels.Add(pixel.Key + movement, pixel.Value);
-                _pixels.Remove(pixel.Key);
-            }
-        }
+        public override string ToString() => string.Join(", ", _pixels);
         #endregion
-
-        public override string ToString()
-        {
-            string result = string.Join(", ", _pixels);
-            return result;
-        }
     }
 }

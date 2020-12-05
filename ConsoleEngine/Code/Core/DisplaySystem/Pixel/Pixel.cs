@@ -48,8 +48,6 @@ namespace ConsoleEngine.Core.DisplaySystem
         #endregion
 
         #region Methods
-        public Pixel GetCopy() => new Pixel { BackgroundColor = this.BackgroundColor, Foreground = Foreground.GetCopy() };
-
         public override string ToString()
         {
             string backgroundColor = BackgroundColor.HasValue ? BackgroundColor.Value.ToString() : "Empty";

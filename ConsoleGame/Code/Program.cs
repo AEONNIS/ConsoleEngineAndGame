@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ConsoleGame
+﻿namespace ConsoleGame
 {
     public class Program
     {
@@ -11,9 +9,6 @@ namespace ConsoleGame
 
         private static void Test()
         {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(' ');
 
             while (true)
             {
