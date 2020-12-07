@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ConsoleEngine.Core.DisplaySystem
 {
-    public class Texture : ICloneable<Texture>
+    public class Texture : ITexture, ICloneable<Texture>
     {
         #region Fields
         private readonly Dictionary<Vector2Int, Pixel> _pixels = new Dictionary<Vector2Int, Pixel>();
