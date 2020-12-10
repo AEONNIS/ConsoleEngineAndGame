@@ -1,32 +1,48 @@
-﻿namespace ConsoleEngine.Maths
+﻿using System;
+
+namespace ConsoleEngine.Maths
 {
-    public struct Rectangle
+    public readonly struct Rectangle : IEquatable<Rectangle>
     {
         #region Constructors
-        public Rectangle(Vector2Int topLeftAngle, Vector2Int size)
+        public Rectangle(in Vector2Int topLeftAngle, in Vector2Int size)
         {
             TopLeftAngle = topLeftAngle;
             Size = size;
+
+            TopRightAngle = TopLeftAngle.AddToX(Size.X - 1);
+            BottomLeftAngle = TopLeftAngle.AddToY(Size.Y - 1);
+            BottomRightAngle = TopLeftAngle + Size - 1;
         }
         #endregion
 
         #region Properties
-        public Vector2Int Size { get; set; }
-        public Vector2Int TopLeftAngle { get; set; }
-        public Vector2Int TopRightAngle => TopLeftAngle.AddToX(Size.X - 1);
-        public Vector2Int BottomLeftAngle => TopLeftAngle.AddToY(Size.Y - 1);
-        public Vector2Int BottomRightAngle => TopLeftAngle + Size - 1;
+        public readonly Vector2Int TopLeftAngle { get; }
+        public readonly Vector2Int TopRightAngle { get; }
+        public readonly Vector2Int BottomLeftAngle { get; }
+        public readonly Vector2Int BottomRightAngle { get; }
+        public readonly Vector2Int Size { get; }
         #endregion
 
         #region Operators
-        public static bool operator ==(Rectangle a, Rectangle b) => a.Size == b.Size && a.TopLeftAngle == b.TopLeftAngle;
-        public static bool operator !=(Rectangle a, Rectangle b) => a.Size != b.Size || a.TopLeftAngle != b.TopLeftAngle;
+        public static bool operator ==(in Rectangle a, in Rectangle b) => a.Equals(b);
+        public static bool operator !=(in Rectangle a, in Rectangle b) => a.Equals(b) == false;
         #endregion
 
-        #region Methods
-        public bool Contains(Vector2Int point) => TopLeftAngle >= point && BottomRightAngle <= point;
+        #region StaticMethods
+        public static Rectangle Create(in Vector2Int topLeftAngle, in Vector2Int bottomRightAngle) =>
+                      new Rectangle(topLeftAngle, bottomRightAngle - topLeftAngle + 1);
+        #endregion 
 
-        public override string ToString() => $"Sz:{Size}, TLA:{TopLeftAngle}";
+        #region Methods
+        public readonly bool Contains(in Vector2Int point) => TopLeftAngle <= point && BottomRightAngle >= point;
+
+        public readonly override bool Equals(object obj) => obj is Rectangle rectangle && Equals(rectangle);
+        public readonly bool Equals(Rectangle other) => TopLeftAngle.Equals(other.TopLeftAngle) && Size.Equals(other.Size);
+
+        public readonly override int GetHashCode() => HashCode.Combine(TopLeftAngle, Size);
+
+        public readonly override string ToString() => $"TLA:{TopLeftAngle}, Sz:{Size}";
         #endregion
     }
 }

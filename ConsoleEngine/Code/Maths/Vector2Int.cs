@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Когда значительная часть проекта будет реализована, удалить то, что не используется.
+
+using System;
 
 namespace ConsoleEngine.Maths
 {
