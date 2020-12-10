@@ -2,12 +2,18 @@
 
 namespace ConsoleEngine.Maths
 {
-    public struct Vector2Int
+    public readonly struct Vector2Int : IEquatable<Vector2Int>
     {
+        #region StaticFields
+        private static readonly Vector2Int _zero = new Vector2Int(0, 0);
+        private static readonly Vector2Int _one = new Vector2Int(1, 1);
+        private static readonly Vector2Int _up = new Vector2Int(0, 1);
+        private static readonly Vector2Int _down = new Vector2Int(0, -1);
+        private static readonly Vector2Int _right = new Vector2Int(1, 0);
+        private static readonly Vector2Int _left = new Vector2Int(-1, 0);
+        #endregion
+
         #region Constructors
-        public Vector2Int(int xy)
-                   : this(xy, xy)
-        { }
         public Vector2Int(int x, int y)
         {
             X = x;
@@ -16,67 +22,62 @@ namespace ConsoleEngine.Maths
         #endregion
 
         #region StaticProperties
-        public static Vector2Int Zero => new Vector2Int(0, 0);
-        public static Vector2Int One => new Vector2Int(1, 1);
-        public static Vector2Int Up => new Vector2Int(0, 1);
-        public static Vector2Int Down => new Vector2Int(0, -1);
-        public static Vector2Int Right => new Vector2Int(1, 0);
-        public static Vector2Int Left => new Vector2Int(-1, 0);
+        public static ref readonly Vector2Int Zero => ref _zero;
+        public static ref readonly Vector2Int One => ref _one;
+        public static ref readonly Vector2Int Up => ref _up;
+        public static ref readonly Vector2Int Down => ref _down;
+        public static ref readonly Vector2Int Right => ref _right;
+        public static ref readonly Vector2Int Left => ref _left;
         #endregion
 
         #region Properties
-        public int X { get; set; }
-        public int Y { get; set; }
+        public readonly int X { get; init; }
+        public readonly int Y { get; init; }
 
-        public float Magnitude => MathF.Sqrt(X * X + Y * Y);
-        public int SqrMagnitude => X * X + Y * Y;
+        public readonly float Magnitude => MathF.Sqrt(X * X + Y * Y);
+        public readonly int SqrMagnitude => X * X + Y * Y;
         #endregion
 
         #region Operators
-        public static bool operator ==(Vector2Int a, Vector2Int b) => a.X == b.X && a.Y == b.Y;
-        public static bool operator !=(Vector2Int a, Vector2Int b) => a.X != b.X || a.Y != b.Y;
+        public static bool operator ==(in Vector2Int a, in Vector2Int b) => a.Equals(b);
+        public static bool operator !=(in Vector2Int a, in Vector2Int b) => a.Equals(b) == false;
 
-        public static bool operator >(Vector2Int a, Vector2Int b) => a.X > b.X && a.Y > b.Y;
-        public static bool operator <(Vector2Int a, Vector2Int b) => a.X < b.X && a.Y < b.Y;
+        public static bool operator >(in Vector2Int a, in Vector2Int b) => a.X > b.X && a.Y > b.Y;
+        public static bool operator <(in Vector2Int a, in Vector2Int b) => a.X < b.X && a.Y < b.Y;
 
-        public static bool operator >=(Vector2Int a, Vector2Int b) => a.X >= b.X && a.Y >= b.Y;
-        public static bool operator <=(Vector2Int a, Vector2Int b) => a.X <= b.X && a.Y <= b.Y;
+        public static bool operator >=(in Vector2Int a, in Vector2Int b) => a.X >= b.X && a.Y >= b.Y;
+        public static bool operator <=(in Vector2Int a, in Vector2Int b) => a.X <= b.X && a.Y <= b.Y;
 
-        public static Vector2Int operator +(Vector2Int a, Vector2Int b) => new Vector2Int(a.X + b.X, a.Y + b.Y);
-        public static Vector2Int operator +(Vector2Int a, int i) => new Vector2Int(a.X + i, a.Y + i);
-        public static Vector2Int operator +(int i, Vector2Int a) => new Vector2Int(i + a.X, i + a.Y);
+        public static Vector2Int operator +(in Vector2Int a, in Vector2Int b) => new Vector2Int(a.X + b.X, a.Y + b.Y);
+        public static Vector2Int operator +(in Vector2Int a, int i) => new Vector2Int(a.X + i, a.Y + i);
+        public static Vector2Int operator +(int i, in Vector2Int a) => new Vector2Int(i + a.X, i + a.Y);
 
-        public static Vector2Int operator -(Vector2Int a, Vector2Int b) => new Vector2Int(a.X - b.X, a.Y - b.Y);
-        public static Vector2Int operator -(Vector2Int a, int i) => new Vector2Int(a.X - i, a.Y - i);
-        public static Vector2Int operator -(int i, Vector2Int a) => new Vector2Int(i - a.X, i - a.Y);
-        public static Vector2Int operator -(Vector2Int a) => new Vector2Int(-a.X, -a.Y);
+        public static Vector2Int operator -(in Vector2Int a, in Vector2Int b) => new Vector2Int(a.X - b.X, a.Y - b.Y);
+        public static Vector2Int operator -(in Vector2Int a, int i) => new Vector2Int(a.X - i, a.Y - i);
+        public static Vector2Int operator -(int i, in Vector2Int a) => new Vector2Int(i - a.X, i - a.Y);
+        public static Vector2Int operator -(in Vector2Int a) => new Vector2Int(-a.X, -a.Y);
 
-        public static Vector2Int operator ++(Vector2Int a)
-        {
-            a.X++;
-            a.Y++;
-            return a;
-        }
-        public static Vector2Int operator --(Vector2Int a)
-        {
-            a.X--;
-            a.Y--;
-            return a;
-        }
+        public static Vector2Int operator ++(in Vector2Int a) => new Vector2Int(a.X + 1, a.Y + 1);
+        public static Vector2Int operator --(in Vector2Int a) => new Vector2Int(a.X - 1, a.Y - 1);
 
-        public static Vector2Int operator *(Vector2Int a, Vector2Int b) => new Vector2Int(a.X * b.X, a.Y * b.Y);
-        public static Vector2Int operator *(Vector2Int a, int i) => new Vector2Int(a.X * i, a.Y * i);
-        public static Vector2Int operator *(int i, Vector2Int a) => new Vector2Int(i * a.X, i * a.Y);
+        public static Vector2Int operator *(in Vector2Int a, in Vector2Int b) => new Vector2Int(a.X * b.X, a.Y * b.Y);
+        public static Vector2Int operator *(in Vector2Int a, int i) => new Vector2Int(a.X * i, a.Y * i);
+        public static Vector2Int operator *(int i, in Vector2Int a) => new Vector2Int(i * a.X, i * a.Y);
         #endregion
 
         #region Methods
-        public Vector2Int AddX(int deltaX) => new Vector2Int(X + deltaX, Y);
-        public Vector2Int AddY(int deltaY) => new Vector2Int(X, Y + deltaY);
+        public readonly Vector2Int AddToX(int deltaX) => new Vector2Int(X + deltaX, Y);
+        public readonly Vector2Int AddToY(int deltaY) => new Vector2Int(X, Y + deltaY);
 
-        public float Distance(Vector2Int v) => (this - v).Magnitude;
-        public float SqrDistance(Vector2Int v) => (this - v).SqrMagnitude;
+        public readonly float Distance(in Vector2Int v) => (this - v).Magnitude;
+        public readonly float SqrDistance(in Vector2Int v) => (this - v).SqrMagnitude;
 
-        public override string ToString() => $"({X}, {Y})";
+        public readonly override bool Equals(object obj) => obj is Vector2Int vector && Equals(vector);
+        public readonly bool Equals(Vector2Int other) => X == other.X && Y == other.Y;
+
+        public readonly override int GetHashCode() => HashCode.Combine(X, Y);
+
+        public readonly override string ToString() => $"({X}, {Y})";
         #endregion
     }
 }

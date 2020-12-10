@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleEngine.Core.DisplaySystem
+namespace ConsoleEngine.DisplaySystem
 {
     public struct PixelForeground
     {

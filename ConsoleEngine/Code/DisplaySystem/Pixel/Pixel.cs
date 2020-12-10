@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleEngine.Core.DisplaySystem
+namespace ConsoleEngine.DisplaySystem
 {
     public struct Pixel
     {
@@ -25,8 +25,8 @@ namespace ConsoleEngine.Core.DisplaySystem
         #endregion
 
         #region Properties
-        public ConsoleColor? BackgroundColor { get; init; }
-        public PixelForeground Foreground { get; init; }
+        public ConsoleColor? BackgroundColor { get; set; }
+        public PixelForeground Foreground { get; set; }
         #endregion
 
         #region Operators

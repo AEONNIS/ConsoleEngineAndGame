@@ -1,7 +1,7 @@
 ﻿using ConsoleEngine.Maths;
 using System;
 
-namespace ConsoleEngine.Core.DisplaySystem
+namespace ConsoleEngine.DisplaySystem
 {
     public class Screen
     {
@@ -32,6 +32,28 @@ namespace ConsoleEngine.Core.DisplaySystem
 
         public static string GetDisplayTitle() => Console.Title;
         public static void SetDisplayTitle(string title) => Console.Title = title;
+        #endregion
+
+        #region Methods
+        public void Display(IGraphicObject graphicObject)
+        {
+
+        }
+
+        public void Hide(IGraphicObject graphicObject)
+        {
+
+        }
+
+        public void Clear(IGraphicObject graphicObject)
+        {
+
+        }
+
+        public void Clear()
+        {
+
+        }
         #endregion
     }
 }

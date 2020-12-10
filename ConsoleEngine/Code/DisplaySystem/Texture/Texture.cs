@@ -4,9 +4,9 @@ using ConsoleEngine.Maths;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleEngine.Core.DisplaySystem
+namespace ConsoleEngine.DisplaySystem
 {
-    public class Texture : ITexture, ICloneable<Texture>
+    public class Texture : IReadOnlyTexture, ICloneable<Texture>
     {
         #region Fields
         private readonly Dictionary<Vector2Int, Pixel> _pixels = new Dictionary<Vector2Int, Pixel>();

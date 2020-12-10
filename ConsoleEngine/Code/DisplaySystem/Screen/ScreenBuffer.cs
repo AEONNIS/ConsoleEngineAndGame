@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ConsoleEngine.Core.DisplaySystem
+namespace ConsoleEngine.DisplaySystem
 {
     public class ScreenBuffer
     {

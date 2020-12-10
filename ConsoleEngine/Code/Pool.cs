@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleEngine.Core
+namespace ConsoleEngine
 {
     public class Pool<T> where T : new()
     {

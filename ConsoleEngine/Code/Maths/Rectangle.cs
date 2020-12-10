@@ -13,8 +13,8 @@
         #region Properties
         public Vector2Int Size { get; set; }
         public Vector2Int TopLeftAngle { get; set; }
-        public Vector2Int TopRightAngle => TopLeftAngle.AddX(Size.X - 1);
-        public Vector2Int BottomLeftAngle => TopLeftAngle.AddY(Size.Y - 1);
+        public Vector2Int TopRightAngle => TopLeftAngle.AddToX(Size.X - 1);
+        public Vector2Int BottomLeftAngle => TopLeftAngle.AddToY(Size.Y - 1);
         public Vector2Int BottomRightAngle => TopLeftAngle + Size - 1;
         #endregion
 

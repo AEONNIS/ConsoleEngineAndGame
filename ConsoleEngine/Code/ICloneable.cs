@@ -1,4 +1,4 @@
-﻿namespace ConsoleEngine.Core
+﻿namespace ConsoleEngine
 {
     public interface ICloneable<T>
     {

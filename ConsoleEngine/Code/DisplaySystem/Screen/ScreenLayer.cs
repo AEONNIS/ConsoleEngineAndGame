@@ -1,4 +1,4 @@
-﻿namespace ConsoleEngine.Core.DisplaySystem
+﻿namespace ConsoleEngine.DisplaySystem
 {
     public class ScreenLayer
     {
@@ -6,7 +6,7 @@
 
         #region Properties
         public IGraphicObject GraphicObject { get; private set; }
-        public ITexture HiddenPart => _hiddenPart;
+        public IReadOnlyTexture HiddenPart => _hiddenPart;
         #endregion
 
         #region Methods

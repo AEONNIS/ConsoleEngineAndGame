@@ -1,4 +1,4 @@
-﻿namespace ConsoleEngine.Core.DisplaySystem
+﻿namespace ConsoleEngine.DisplaySystem
 {
     public interface IGraphicObject
     {
