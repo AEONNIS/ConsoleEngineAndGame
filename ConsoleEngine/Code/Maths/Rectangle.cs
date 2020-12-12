@@ -9,19 +9,15 @@ namespace ConsoleEngine.Maths
         {
             TopLeftAngle = topLeftAngle;
             Size = size;
-
-            TopRightAngle = TopLeftAngle.AddToX(Size.X - 1);
-            BottomLeftAngle = TopLeftAngle.AddToY(Size.Y - 1);
-            BottomRightAngle = TopLeftAngle + Size - 1;
         }
         #endregion
 
         #region Properties
-        public readonly Vector2Int TopLeftAngle { get; }
-        public readonly Vector2Int TopRightAngle { get; }
-        public readonly Vector2Int BottomLeftAngle { get; }
-        public readonly Vector2Int BottomRightAngle { get; }
-        public readonly Vector2Int Size { get; }
+        public readonly Vector2Int TopLeftAngle { get; init; }
+        public readonly Vector2Int TopRightAngle => TopLeftAngle.AddToX(Size.X - 1);
+        public readonly Vector2Int BottomLeftAngle => TopLeftAngle.AddToY(Size.Y - 1);
+        public readonly Vector2Int BottomRightAngle => TopLeftAngle + Size - 1;
+        public readonly Vector2Int Size { get; init; }
         #endregion
 
         #region Operators

@@ -2,38 +2,66 @@
 
 namespace ConsoleEngine.DisplaySystem
 {
-    public struct PixelForeground
+    public readonly struct PixelForeground : IEquatable<PixelForeground>
     {
+        #region StaticFields
+        private static readonly PixelForeground _emptySpace = new PixelForeground(null, ' ');
+        private static readonly PixelForeground _blackSpace = new PixelForeground(ConsoleColor.Black, ' ');
+        private static readonly PixelForeground _darkBlueSpace = new PixelForeground(ConsoleColor.DarkBlue, ' ');
+        private static readonly PixelForeground _darkGreenSpace = new PixelForeground(ConsoleColor.DarkGreen, ' ');
+        private static readonly PixelForeground _darkCyanSpace = new PixelForeground(ConsoleColor.DarkCyan, ' ');
+        private static readonly PixelForeground _darkRedSpace = new PixelForeground(ConsoleColor.DarkRed, ' ');
+        private static readonly PixelForeground _darkMagentaSpace = new PixelForeground(ConsoleColor.DarkMagenta, ' ');
+        private static readonly PixelForeground _darkYellowSpace = new PixelForeground(ConsoleColor.DarkYellow, ' ');
+        private static readonly PixelForeground _graySpace = new PixelForeground(ConsoleColor.Gray, ' ');
+        private static readonly PixelForeground _darkGraySpace = new PixelForeground(ConsoleColor.DarkGray, ' ');
+        private static readonly PixelForeground _blueSpace = new PixelForeground(ConsoleColor.Blue, ' ');
+        private static readonly PixelForeground _greenSpace = new PixelForeground(ConsoleColor.Green, ' ');
+        private static readonly PixelForeground _cyanSpace = new PixelForeground(ConsoleColor.Cyan, ' ');
+        private static readonly PixelForeground _redSpace = new PixelForeground(ConsoleColor.Red, ' ');
+        private static readonly PixelForeground _magentaSpace = new PixelForeground(ConsoleColor.Magenta, ' ');
+        private static readonly PixelForeground _yellowSpace = new PixelForeground(ConsoleColor.Yellow, ' ');
+        private static readonly PixelForeground _whiteSpace = new PixelForeground(ConsoleColor.White, ' ');
+        #endregion
+
+        #region Constructors
+        public PixelForeground(ConsoleColor? color, char symbol)
+        {
+            Color = color;
+            Symbol = symbol;
+        }
+        #endregion
+
         #region StaticProperties
-        public static PixelForeground EmptySpace => new PixelForeground { Color = null, Symbol = ' ' };
-        public static PixelForeground BlackSpace => new PixelForeground { Color = ConsoleColor.Black, Symbol = ' ' };
-        public static PixelForeground DarkBlueSpace => new PixelForeground { Color = ConsoleColor.DarkBlue, Symbol = ' ' };
-        public static PixelForeground DarkGreenSpace => new PixelForeground { Color = ConsoleColor.DarkGreen, Symbol = ' ' };
-        public static PixelForeground DarkCyanSpace => new PixelForeground { Color = ConsoleColor.DarkCyan, Symbol = ' ' };
-        public static PixelForeground DarkRedSpace => new PixelForeground { Color = ConsoleColor.DarkRed, Symbol = ' ' };
-        public static PixelForeground DarkMagentaSpace => new PixelForeground { Color = ConsoleColor.DarkMagenta, Symbol = ' ' };
-        public static PixelForeground DarkYellowSpace => new PixelForeground { Color = ConsoleColor.DarkYellow, Symbol = ' ' };
-        public static PixelForeground GraySpace => new PixelForeground { Color = ConsoleColor.Gray, Symbol = ' ' };
-        public static PixelForeground DarkGraySpace => new PixelForeground { Color = ConsoleColor.DarkGray, Symbol = ' ' };
-        public static PixelForeground BlueSpace => new PixelForeground { Color = ConsoleColor.Blue, Symbol = ' ' };
-        public static PixelForeground GreenSpace => new PixelForeground { Color = ConsoleColor.Green, Symbol = ' ' };
-        public static PixelForeground CyanSpace => new PixelForeground { Color = ConsoleColor.Cyan, Symbol = ' ' };
-        public static PixelForeground RedSpace => new PixelForeground { Color = ConsoleColor.Red, Symbol = ' ' };
-        public static PixelForeground MagentaSpace => new PixelForeground { Color = ConsoleColor.Magenta, Symbol = ' ' };
-        public static PixelForeground YellowSpace => new PixelForeground { Color = ConsoleColor.Yellow, Symbol = ' ' };
-        public static PixelForeground WhiteSpace => new PixelForeground { Color = ConsoleColor.White, Symbol = ' ' };
+        public static ref readonly PixelForeground EmptySpace => ref _emptySpace;
+        public static ref readonly PixelForeground BlackSpace => ref _blackSpace;
+        public static ref readonly PixelForeground DarkBlueSpace => ref _darkBlueSpace;
+        public static ref readonly PixelForeground DarkGreenSpace => ref _darkGreenSpace;
+        public static ref readonly PixelForeground DarkCyanSpace => ref _darkCyanSpace;
+        public static ref readonly PixelForeground DarkRedSpace => ref _darkRedSpace;
+        public static ref readonly PixelForeground DarkMagentaSpace => ref _darkMagentaSpace;
+        public static ref readonly PixelForeground DarkYellowSpace => ref _darkYellowSpace;
+        public static ref readonly PixelForeground GraySpace => ref _graySpace;
+        public static ref readonly PixelForeground DarkGraySpace => ref _darkGraySpace;
+        public static ref readonly PixelForeground BlueSpace => ref _blueSpace;
+        public static ref readonly PixelForeground GreenSpace => ref _greenSpace;
+        public static ref readonly PixelForeground CyanSpace => ref _cyanSpace;
+        public static ref readonly PixelForeground RedSpace => ref _redSpace;
+        public static ref readonly PixelForeground MagentaSpace => ref _magentaSpace;
+        public static ref readonly PixelForeground YellowSpace => ref _yellowSpace;
+        public static ref readonly PixelForeground WhiteSpace => ref _whiteSpace;
         #endregion
 
         #region Properties
-        public ConsoleColor? Color { get; init; }
-        public char Symbol { get; init; }
+        public readonly ConsoleColor? Color { get; init; }
+        public readonly char Symbol { get; init; }
         #endregion
 
         #region Operators
-        public static bool operator ==(PixelForeground a, PixelForeground b) => a.Color == b.Color && a.Symbol == b.Symbol;
-        public static bool operator !=(PixelForeground a, PixelForeground b) => a.Color != b.Color || a.Symbol != b.Symbol;
+        public static bool operator ==(in PixelForeground a, in PixelForeground b) => a.Equals(b);
+        public static bool operator !=(in PixelForeground a, in PixelForeground b) => a.Equals(b) == false;
 
-        public static PixelForeground operator +(PixelForeground minor, PixelForeground major)
+        public static PixelForeground operator +(in PixelForeground minor, in PixelForeground major)
         {
             ConsoleColor? color;
 
@@ -47,7 +75,12 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region Methods
-        public override string ToString()
+        public readonly override bool Equals(object obj) => obj is PixelForeground foreground && Equals(foreground);
+        public readonly bool Equals(PixelForeground other) => Color == other.Color && Symbol == other.Symbol;
+
+        public readonly override int GetHashCode() => HashCode.Combine(Color, Symbol);
+
+        public readonly override string ToString()
         {
             string color = Color.HasValue ? Color.Value.ToString() : "Empty";
             return $"FgC:{color}, Smb:'{Symbol}'";
