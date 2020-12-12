@@ -2,38 +2,69 @@
 
 namespace ConsoleEngine.DisplaySystem
 {
-    public struct Pixel
+    public readonly struct Pixel : IEquatable<Pixel>
     {
+        #region StaticFields
+        private static readonly Pixel _emptySpace = new Pixel(null, PixelForeground.EmptySpace);
+        private static readonly Pixel _blackSpace = new Pixel(ConsoleColor.Black, PixelForeground.BlackSpace);
+        private static readonly Pixel _darkBlueSpace = new Pixel(ConsoleColor.DarkBlue, PixelForeground.DarkBlueSpace);
+        private static readonly Pixel _darkGreenSpace = new Pixel(ConsoleColor.DarkGreen, PixelForeground.DarkGreenSpace);
+        private static readonly Pixel _darkCyanSpace = new Pixel(ConsoleColor.DarkCyan, PixelForeground.DarkCyanSpace);
+        private static readonly Pixel _darkRedSpace = new Pixel(ConsoleColor.DarkRed, PixelForeground.DarkRedSpace);
+        private static readonly Pixel _darkMagentaSpace = new Pixel(ConsoleColor.DarkMagenta, PixelForeground.DarkMagentaSpace);
+        private static readonly Pixel _darkYellowSpace = new Pixel(ConsoleColor.DarkYellow, PixelForeground.DarkYellowSpace);
+        private static readonly Pixel _graySpace = new Pixel(ConsoleColor.Gray, PixelForeground.GraySpace);
+        private static readonly Pixel _darkGraySpace = new Pixel(ConsoleColor.DarkGray, PixelForeground.DarkGraySpace);
+        private static readonly Pixel _blueSpace = new Pixel(ConsoleColor.Blue, PixelForeground.BlueSpace);
+        private static readonly Pixel _greenSpace = new Pixel(ConsoleColor.Green, PixelForeground.GreenSpace);
+        private static readonly Pixel _cyanSpace = new Pixel(ConsoleColor.Cyan, PixelForeground.CyanSpace);
+        private static readonly Pixel _redSpace = new Pixel(ConsoleColor.Red, PixelForeground.RedSpace);
+        private static readonly Pixel _magentaSpace = new Pixel(ConsoleColor.Magenta, PixelForeground.MagentaSpace);
+        private static readonly Pixel _yellowSpace = new Pixel(ConsoleColor.Yellow, PixelForeground.YellowSpace);
+        private static readonly Pixel _whiteSpace = new Pixel(ConsoleColor.White, PixelForeground.WhiteSpace);
+        #endregion
+
+        #region Constructors
+        public Pixel(ConsoleColor? backgroundColor, in PixelForeground foreground)
+        {
+            BackgroundColor = backgroundColor;
+            Foreground = foreground;
+        }
+        public Pixel(ConsoleColor? backgroundColor, ConsoleColor? foregroundColor, char symbol) :
+               this(backgroundColor, new PixelForeground(foregroundColor, symbol))
+        { }
+        #endregion
+
         #region StaticProperties
-        public static Pixel EmptySpace => new Pixel { BackgroundColor = null, Foreground = PixelForeground.EmptySpace };
-        public static Pixel BlackSpace => new Pixel { BackgroundColor = ConsoleColor.Black, Foreground = PixelForeground.BlackSpace };
-        public static Pixel DarkBlueSpace => new Pixel { BackgroundColor = ConsoleColor.DarkBlue, Foreground = PixelForeground.DarkBlueSpace };
-        public static Pixel DarkGreenSpace => new Pixel { BackgroundColor = ConsoleColor.DarkGreen, Foreground = PixelForeground.DarkGreenSpace };
-        public static Pixel DarkCyanSpace => new Pixel { BackgroundColor = ConsoleColor.DarkCyan, Foreground = PixelForeground.DarkCyanSpace };
-        public static Pixel DarkRedSpace => new Pixel { BackgroundColor = ConsoleColor.DarkRed, Foreground = PixelForeground.DarkRedSpace };
-        public static Pixel DarkMagentaSpace => new Pixel { BackgroundColor = ConsoleColor.DarkMagenta, Foreground = PixelForeground.DarkMagentaSpace };
-        public static Pixel DarkYellowSpace => new Pixel { BackgroundColor = ConsoleColor.DarkYellow, Foreground = PixelForeground.DarkYellowSpace };
-        public static Pixel GraySpace => new Pixel { BackgroundColor = ConsoleColor.Gray, Foreground = PixelForeground.GraySpace };
-        public static Pixel DarkGraySpace => new Pixel { BackgroundColor = ConsoleColor.DarkGray, Foreground = PixelForeground.DarkGraySpace };
-        public static Pixel BlueSpace => new Pixel { BackgroundColor = ConsoleColor.Blue, Foreground = PixelForeground.BlueSpace };
-        public static Pixel GreenSpace => new Pixel { BackgroundColor = ConsoleColor.Green, Foreground = PixelForeground.GreenSpace };
-        public static Pixel CyanSpace => new Pixel { BackgroundColor = ConsoleColor.Cyan, Foreground = PixelForeground.CyanSpace };
-        public static Pixel RedSpace => new Pixel { BackgroundColor = ConsoleColor.Red, Foreground = PixelForeground.RedSpace };
-        public static Pixel MagentaSpace => new Pixel { BackgroundColor = ConsoleColor.Magenta, Foreground = PixelForeground.MagentaSpace };
-        public static Pixel YellowSpace => new Pixel { BackgroundColor = ConsoleColor.Yellow, Foreground = PixelForeground.YellowSpace };
-        public static Pixel WhiteSpace => new Pixel { BackgroundColor = ConsoleColor.White, Foreground = PixelForeground.WhiteSpace };
+        public static ref readonly Pixel EmptySpace => ref _emptySpace;
+        public static ref readonly Pixel BlackSpace => ref _blackSpace;
+        public static ref readonly Pixel DarkBlueSpace => ref _darkBlueSpace;
+        public static ref readonly Pixel DarkGreenSpace => ref _darkGreenSpace;
+        public static ref readonly Pixel DarkCyanSpace => ref _darkCyanSpace;
+        public static ref readonly Pixel DarkRedSpace => ref _darkRedSpace;
+        public static ref readonly Pixel DarkMagentaSpace => ref _darkMagentaSpace;
+        public static ref readonly Pixel DarkYellowSpace => ref _darkYellowSpace;
+        public static ref readonly Pixel GraySpace => ref _graySpace;
+        public static ref readonly Pixel DarkGraySpace => ref _darkGraySpace;
+        public static ref readonly Pixel BlueSpace => ref _blueSpace;
+        public static ref readonly Pixel GreenSpace => ref _greenSpace;
+        public static ref readonly Pixel CyanSpace => ref _cyanSpace;
+        public static ref readonly Pixel RedSpace => ref _redSpace;
+        public static ref readonly Pixel MagentaSpace => ref _magentaSpace;
+        public static ref readonly Pixel YellowSpace => ref _yellowSpace;
+        public static ref readonly Pixel WhiteSpace => ref _whiteSpace;
         #endregion
 
         #region Properties
-        public ConsoleColor? BackgroundColor { get; set; }
-        public PixelForeground Foreground { get; set; }
+        public readonly ConsoleColor? BackgroundColor { get; init; }
+        public readonly PixelForeground Foreground { get; init; }
         #endregion
 
         #region Operators
-        public static bool operator ==(Pixel a, Pixel b) => a.BackgroundColor == b.BackgroundColor && a.Foreground == b.Foreground;
-        public static bool operator !=(Pixel a, Pixel b) => a.BackgroundColor != b.BackgroundColor || a.Foreground != b.Foreground;
+        public static bool operator ==(in Pixel a, in Pixel b) => a.Equals(b);
+        public static bool operator !=(in Pixel a, in Pixel b) => a.Equals(b) == false;
 
-        public static Pixel operator +(Pixel minor, Pixel major)
+        public static Pixel operator +(in Pixel minor, in Pixel major)
         {
             ConsoleColor? backgroundColor;
 
@@ -43,12 +74,17 @@ namespace ConsoleEngine.DisplaySystem
                 backgroundColor = major.BackgroundColor;
 
             PixelForeground foreground = minor.Foreground + major.Foreground;
-            return new Pixel { BackgroundColor = backgroundColor, Foreground = foreground };
+            return new Pixel(backgroundColor, foreground);
         }
         #endregion
 
         #region Methods
-        public override string ToString()
+        public readonly override bool Equals(object obj) => obj is Pixel pixel && Equals(pixel);
+        public readonly bool Equals(Pixel other) => BackgroundColor == other.BackgroundColor && Foreground.Equals(other.Foreground);
+
+        public readonly override int GetHashCode() => HashCode.Combine(BackgroundColor, Foreground);
+
+        public readonly override string ToString()
         {
             string backgroundColor = BackgroundColor.HasValue ? BackgroundColor.Value.ToString() : "Empty";
             return $"BgC:{backgroundColor}, {Foreground}";

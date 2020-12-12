@@ -12,13 +12,10 @@ namespace ConsoleGame
 
         private static void Test()
         {
-            Random rnd = new Random(DateTime.Now.Millisecond);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Red;
 
-            for (int i = 0; i < 10; i++)
-            {
-                Vector2Int v = new Vector2Int(rnd.Next(0, 3), rnd.Next(0, 3));
-                Console.WriteLine($"{v}, {v.GetHashCode()}");
-            }
+            Console.WriteLine(' ');
 
             while (true)
             {

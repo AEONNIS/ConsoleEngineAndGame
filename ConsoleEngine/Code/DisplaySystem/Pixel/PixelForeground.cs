@@ -70,7 +70,7 @@ namespace ConsoleEngine.DisplaySystem
             else
                 color = major.Color;
 
-            return new PixelForeground { Color = color, Symbol = major.Symbol };
+            return new PixelForeground(color, major.Symbol);
         }
         #endregion
 
