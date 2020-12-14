@@ -12,10 +12,6 @@ namespace ConsoleGame
 
         private static void Test()
         {
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.ForegroundColor = ConsoleColor.Red;
-
-            Console.WriteLine(' ');
 
             while (true)
             {

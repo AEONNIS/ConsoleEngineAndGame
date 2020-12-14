@@ -12,7 +12,7 @@ namespace ConsoleEngine.UnitTests.Maths
 
         #region PropertiesTests
         [TestCaseSource(nameof(MagnitudeCases))]
-        public void Magnitude_Vector2Int_ExpectedMagnitude(Vector2Int vector, double expectedMagnitude)
+        public void Magnitude_Vector2Int_ExpectedMagnitude(in Vector2Int vector, double expectedMagnitude)
         {
             double actualMagnitude = vector.Magnitude;
 
@@ -20,7 +20,7 @@ namespace ConsoleEngine.UnitTests.Maths
         }
 
         [TestCaseSource(nameof(SqrMagnitudeCases))]
-        public void SqrMagnitude_Vector2Int_ExpectedSqrMagnitude(Vector2Int vector, double expectedSqrMagnitude)
+        public void SqrMagnitude_Vector2Int_ExpectedSqrMagnitude(in Vector2Int vector, double expectedSqrMagnitude)
         {
             double actualSqrMagnitude = vector.SqrMagnitude;
 
@@ -29,16 +29,20 @@ namespace ConsoleEngine.UnitTests.Maths
         #endregion
 
         #region MethodsTests
-        [TestCaseSource(nameof(EqualVector2IntsCases), new object[] { true })]
-        [TestCaseSource(nameof(NotEqualVector2IntsCases), new object[] { false })]
-        public void GetHashCode_VariousVector2Ints_ChecksThem(Vector2Int a, Vector2Int b, bool expected)
+        [TestCaseSource(nameof(DistanceCases))]
+        public void Distance_Vector2Ints_ExpectedDistance(in Vector2Int a, in Vector2Int b, double expectedDistance)
         {
-            int aHashCode = a.GetHashCode();
-            int bHashCode = b.GetHashCode();
+            double actualDistance = a.Distance(b);
 
-            bool actual = (aHashCode == bHashCode);
+            Assert.AreEqual(expectedDistance, actualDistance, _delta);
+        }
 
-            Assert.AreEqual(expected, actual);
+        [TestCaseSource(nameof(SqrDistanceCases))]
+        public void SqrDistance_Vector2Ints_ExpectedSqrDistance(in Vector2Int a, in Vector2Int b, double expectedSqrDistance)
+        {
+            double actualSqrDistance = a.SqrDistance(b);
+
+            Assert.AreEqual(expectedSqrDistance, actualSqrDistance, _delta);
         }
         #endregion
 
@@ -57,26 +61,19 @@ namespace ConsoleEngine.UnitTests.Maths
             new object[] { new Vector2Int(7, 9), 130 }
         };
 
-
-        private static object[] EqualVector2IntsCases(bool comparisonResult)
+        private static object[] DistanceCases() => new object[]
         {
-            return new object[]
-            {
-                new object[] { new Vector2Int(0, 0), new Vector2Int(0, 0), comparisonResult },
-                new object[] { new Vector2Int(-1, 5), new Vector2Int(-1, 5), comparisonResult },
-                new object[] { new Vector2Int(3, 1), new Vector2Int(3, 1), comparisonResult }
-            };
-        }
+            new object[] { new Vector2Int(0, 0), new Vector2Int(2, 3), 3.606 },
+            new object[] { new Vector2Int(5, 3), new Vector2Int(1, 2), 4.123 },
+            new object[] { new Vector2Int(7, -9), new Vector2Int(-5, 3), 16.971 }
+        };
 
-        private static object[] NotEqualVector2IntsCases(bool comparisonResult)
+        private static object[] SqrDistanceCases() => new object[]
         {
-            return new object[]
-            {
-                new object[] { new Vector2Int(0, 0), new Vector2Int(1, 1), comparisonResult },
-                new object[] { new Vector2Int(-1, 5), new Vector2Int(1, -5), comparisonResult },
-                new object[] { new Vector2Int(3, 1), new Vector2Int(1, 3), comparisonResult }
-            };
-        }
+            new object[] { new Vector2Int(0, 0), new Vector2Int(2, 3), 13 },
+            new object[] { new Vector2Int(5, 3), new Vector2Int(1, 2), 17 },
+            new object[] { new Vector2Int(7, -9), new Vector2Int(-5, 3), 288 }
+        };
         #endregion
     }
 }
