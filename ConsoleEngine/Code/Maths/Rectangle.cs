@@ -27,7 +27,7 @@ namespace ConsoleEngine.Maths
 
         #region StaticMethods
         public static Rectangle Create(in Vector2Int topLeftAngle, in Vector2Int bottomRightAngle) =>
-                      new Rectangle(topLeftAngle, bottomRightAngle - topLeftAngle + 1);
+                                    new Rectangle(topLeftAngle, bottomRightAngle - topLeftAngle + 1);
         #endregion 
 
         #region Methods
