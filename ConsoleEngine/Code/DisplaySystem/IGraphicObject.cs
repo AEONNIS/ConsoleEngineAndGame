@@ -2,7 +2,6 @@
 {
     public interface IGraphicObject
     {
-        public string Name { get; }
-        public Texture Texture { get; }
+        public IReadOnlyTexture Texture { get; }
     }
 }

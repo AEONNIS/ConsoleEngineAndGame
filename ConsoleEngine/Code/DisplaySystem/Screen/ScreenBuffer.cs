@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ConsoleEngine.DisplaySystem
 {
@@ -11,9 +10,15 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region PublicMethods
-        public ScreenLayer GetLayer(IGraphicObject graphicObject)
+        public bool Contains(IGraphicObject graphicObject)
         {
-            throw new Exception();
+            foreach (var layer in _layers)
+            {
+                if (layer.GraphicObject == graphicObject)
+                    return true;
+            }
+
+            return false;
         }
 
         public void AddToTop(IGraphicObject graphicObject)
@@ -31,14 +36,19 @@ namespace ConsoleEngine.DisplaySystem
 
         }
 
-        public void Clear(IGraphicObject graphicObject)
+        public void Remove(IGraphicObject graphicObject)
+        {
+
+        }
+
+        public void Clear()
         {
 
         }
         #endregion
 
         #region PrivateMethods
-        private void OverlapLayers(Texture covering)
+        private void OverlapLayers(ref Texture covering)
         {
 
         }

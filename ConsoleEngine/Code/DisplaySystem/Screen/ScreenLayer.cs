@@ -2,7 +2,9 @@
 {
     public class ScreenLayer
     {
+        #region Fields
         private readonly Texture _hiddenPart = new Texture();
+        #endregion
 
         #region Properties
         public IGraphicObject GraphicObject { get; private set; }

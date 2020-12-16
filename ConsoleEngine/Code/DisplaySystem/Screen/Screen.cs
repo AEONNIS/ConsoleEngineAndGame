@@ -12,19 +12,16 @@ namespace ConsoleEngine.DisplaySystem
         #region Fields
         private readonly ScreenBuffer _fullBuffer = new ScreenBuffer();
         private readonly Texture _activeBuffer = new Texture();
+        private readonly Rectangle _rectangle = new Rectangle(Vector2Int.Zero, new Vector2Int(Console.LargestWindowWidth, Console.LargestWindowHeight));
         #endregion
 
         #region Constructors
         private Screen()
         {
             Console.CursorVisible = false;
-            Console.SetWindowSize(Rectangle.Size.X, Rectangle.Size.Y);
-            Console.SetBufferSize(Rectangle.Size.X, Rectangle.Size.Y);
+            Console.SetWindowSize(_rectangle.Size.X, _rectangle.Size.Y);
+            Console.SetBufferSize(_rectangle.Size.X, _rectangle.Size.Y);
         }
-        #endregion
-
-        #region Properties
-        public Rectangle Rectangle { get; private init; } = new Rectangle(Vector2Int.Zero, new Vector2Int(Console.LargestWindowWidth, Console.LargestWindowHeight));
         #endregion
 
         #region StaticMethods
@@ -37,7 +34,12 @@ namespace ConsoleEngine.DisplaySystem
         #region Methods
         public void Display(IGraphicObject graphicObject)
         {
+            if (_fullBuffer.Contains(graphicObject))
+                _fullBuffer.RaiseToTop(graphicObject);
+            else
+                _fullBuffer.AddToTop(graphicObject);
 
+            _activeBuffer.AddOrReplace(graphicObject.Texture);
         }
 
         public void Hide(IGraphicObject graphicObject)
@@ -45,7 +47,7 @@ namespace ConsoleEngine.DisplaySystem
 
         }
 
-        public void Clear(IGraphicObject graphicObject)
+        public void Remove(IGraphicObject graphicObject)
         {
 
         }
