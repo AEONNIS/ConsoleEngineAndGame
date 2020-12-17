@@ -9,7 +9,7 @@ namespace ConsoleEngine
         #endregion
 
         #region Methods
-        public T Retrieve() => _pool.TryDequeue(out T result) ? result : new T();
+        public T Extract() => _pool.TryDequeue(out T result) ? result : new T();
 
         public void Place(T obj) => _pool.Enqueue(obj);
         #endregion

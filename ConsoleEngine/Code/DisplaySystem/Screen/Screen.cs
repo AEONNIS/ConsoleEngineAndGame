@@ -10,8 +10,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region Fields
-        private readonly ScreenBuffer _fullBuffer = new ScreenBuffer();
-        private readonly Texture _activeBuffer = new Texture();
+        private readonly ScreenBuffer _buffer = new ScreenBuffer();
         private readonly Rectangle _rectangle = new Rectangle(Vector2Int.Zero, new Vector2Int(Console.LargestWindowWidth, Console.LargestWindowHeight));
         #endregion
 
@@ -31,28 +30,34 @@ namespace ConsoleEngine.DisplaySystem
         public static void SetDisplayTitle(string title) => Console.Title = title;
         #endregion
 
-        #region Methods
+        #region PublicMethods
         public void Display(IGraphicObject graphicObject)
         {
-            if (_fullBuffer.Contains(graphicObject))
-                _fullBuffer.RaiseToTop(graphicObject);
-            else
-                _fullBuffer.AddToTop(graphicObject);
-
-            _activeBuffer.AddOrReplace(graphicObject.Texture);
+            var texture = _buffer.Contains(graphicObject) ? _buffer.RaiseToTop(graphicObject) : _buffer.AddToTop(graphicObject);
+            Display(texture);
         }
 
         public void Hide(IGraphicObject graphicObject)
         {
-
+            var texture = _buffer.Hide(graphicObject);
+            Display(texture);
         }
 
         public void Remove(IGraphicObject graphicObject)
         {
-
+            var texture = _buffer.Remove(graphicObject);
+            Display(texture);
         }
 
         public void Clear()
+        {
+            var texture = _buffer.Clear();
+            Display(texture);
+        }
+        #endregion
+
+        #region PrivateMethods
+        private void Display(IReadOnlyTexture texture)
         {
 
         }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ConsoleEngine.DisplaySystem
 {
-    public class Texture : IReadOnlyTexture, IEnumerable<KeyValuePair<Vector2Int, Pixel>>, ICloneable<Texture>
+    public class Texture : IReadOnlyTexture
     {
         #region Fields
         private readonly Dictionary<Vector2Int, Pixel> _placedPixels = new Dictionary<Vector2Int, Pixel>();
