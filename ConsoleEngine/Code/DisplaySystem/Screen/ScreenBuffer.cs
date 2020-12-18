@@ -7,7 +7,7 @@ namespace ConsoleEngine.DisplaySystem
     {
         #region Fields
         private readonly Pool<ScreenLayer> _layerPool = new Pool<ScreenLayer>();
-        private readonly LinkedList<ScreenLayer> _layers = new LinkedList<ScreenLayer>(); // Оптимизировать?
+        private readonly LinkedList<ScreenLayer> _layers = new LinkedList<ScreenLayer>(); // Может его вместе с методами вынести в отдельный класс?
         private readonly Pixel _defaultBackgroundPixel = Pixel.BlackSpace;
         #endregion
 
@@ -16,7 +16,7 @@ namespace ConsoleEngine.DisplaySystem
         {
             foreach (var layer in _layers)
             {
-                if (layer.GraphicObject == graphicObject)
+                if (layer.Contains(graphicObject))
                     return true;
             }
 
@@ -28,28 +28,37 @@ namespace ConsoleEngine.DisplaySystem
             var layer = _layerPool.Extract();
             layer.Init(graphicObject);
             Overlap(graphicObject.Texture, _layers);
-            _layers.AddFirst(layer); // Оптимизировать, используя LinkedListNode?
+            _layers.AddFirst(layer);
+
             return graphicObject.Texture;
         }
 
         public IReadOnlyTexture RaiseToTop(IGraphicObject graphicObject)
         {
-            var layerNode = ExtractLayerNode(graphicObject, out int index);
+            var layersBefore = SelectLayersBefore(graphicObject);
+            var layerNode = ExtractLayerNode(graphicObject);
+            Overlap(graphicObject.Texture, layersBefore);
+            layerNode.Value.SetVisibility(true);
+            _layers.AddFirst(layerNode);
+
+            return layerNode.Value.HiddenPartGetAndClear();
         }
 
         public IReadOnlyTexture Hide(IGraphicObject graphicObject)
         {
-            throw new System.Exception();
+            // Нужны операции с текстурами, прописать их...
+            return null;
         }
 
         public IReadOnlyTexture Remove(IGraphicObject graphicObject)
         {
-            throw new System.Exception();
+            return null;
         }
 
         public IReadOnlyTexture Clear()
         {
-            throw new System.Exception();
+            // Слои вернуть в пул.
+            return null;
         }
         #endregion
 
@@ -62,19 +71,31 @@ namespace ConsoleEngine.DisplaySystem
                 layer.Overlap(ref coveringPart);
         }
 
-        private IEnumerable<ScreenLayer> SelectLayers(int index) => _layers.Where((layer, number) => number <= index);
+        private ScreenLayer FindLayer(IGraphicObject graphicObject)
+        {
+            foreach (var layer in _layers)
+            {
+                if (layer.Contains(graphicObject))
+                    return layer;
+            }
 
-        private LinkedListNode<ScreenLayer> ExtractLayerNode(IGraphicObject graphicObject, out int index)
+            return null;
+        }
+
+        private IEnumerable<ScreenLayer> SelectLayersBefore(IGraphicObject graphicObject) =>
+                                            _layers.TakeWhile(layer => layer.Contains(graphicObject) == false && layer.IsVisible);
+
+        private IEnumerable<ScreenLayer> SelectLayersAfter(IGraphicObject graphicObject) =>
+                                            _layers.SkipWhile(layer => layer.Contains(graphicObject) && layer.IsVisible).Skip(1);
+
+        private LinkedListNode<ScreenLayer> ExtractLayerNode(IGraphicObject graphicObject)
         {
             LinkedListNode<ScreenLayer> result = null;
-            index = 0;
 
             foreach (var layer in _layers)
             {
-                if (layer.GraphicObject == graphicObject)
+                if (layer.Contains(graphicObject))
                     result = _layers.Find(layer);
-
-                index++;
             }
 
             _layers.Remove(result);

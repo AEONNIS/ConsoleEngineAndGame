@@ -15,6 +15,11 @@ namespace ConsoleEngine.DisplaySystem
         #region Constructors
         public Texture() { }
         public Texture(in IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
+
+        #endregion
+        public bool IsEmpty => _placedPixels.Count == 0;
+        #region Properties
+
         #endregion
 
         #region Methods

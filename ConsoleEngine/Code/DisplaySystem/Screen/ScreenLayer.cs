@@ -8,23 +8,34 @@
 
         #region Properties
         public IGraphicObject GraphicObject { get; private set; }
-        public IReadOnlyTexture HiddenPart => _hiddenPart;
+        public bool IsVisible { get; private set; }
         #endregion
 
         #region Methods
         public void Init(IGraphicObject graphicObject)
         {
-            _hiddenPart.Clear();
             GraphicObject = graphicObject;
+            _hiddenPart.Clear();
+            IsVisible = true;
+        }
+
+        public bool Contains(IGraphicObject graphicObject) => GraphicObject == graphicObject;
+
+        public void SetVisibility(bool visibility) => IsVisible = visibility;
+
+        public IReadOnlyTexture HiddenPartGetAndClear()
+        {
+            IReadOnlyTexture result = _hiddenPart.Clone();
+            _hiddenPart.Clear();
+            return result;
         }
 
         public void Clear()
         {
             GraphicObject = null;
             _hiddenPart.Clear();
+            IsVisible = false;
         }
-
-        public void ClearHiddenPart() => _hiddenPart.Clear();
 
         public void Overlap(ref Texture covering)
         {
