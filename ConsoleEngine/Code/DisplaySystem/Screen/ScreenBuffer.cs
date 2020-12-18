@@ -6,30 +6,30 @@ namespace ConsoleEngine.DisplaySystem
     {
         #region Fields
         private readonly Pool<ScreenLayer> _layerPool = new Pool<ScreenLayer>();
-        private readonly List<ScreenLayer, IGraphicObject> _layers = new List<ScreenLayer, IGraphicObject>();
+        private readonly ScreenLayers _screenLayers = new ScreenLayers();
         private readonly Pixel _defaultBackgroundPixel = Pixel.BlackSpace;
         #endregion
 
         #region PublicMethods
-        public bool Contains(IGraphicObject graphicObject) => _layers.Contains(graphicObject);
+        public bool Contains(IGraphicObject graphicObject) => _screenLayers.Contains(graphicObject);
 
         public IReadOnlyTexture AddToTop(IGraphicObject graphicObject)
         {
             var layer = _layerPool.Extract();
             layer.Init(graphicObject);
-            Overlap(graphicObject.Texture, _layers.AllCollection);
-            _layers.AddFirst(layer);
+            Overlap(graphicObject.Texture, _screenLayers.Layers);
+            _screenLayers.AddFirst(layer);
 
             return graphicObject.Texture;
         }
 
         public IReadOnlyTexture RaiseToTop(IGraphicObject graphicObject)
         {
-            var layersBefore = _layers.SelectItemsBefore(graphicObject);
-            var layerNode = _layers.ExtractItemNode(graphicObject);
+            var layersBefore = _screenLayers.SelectLayersBefore(graphicObject);
+            var layerNode = _screenLayers.ExtractLayerNode(graphicObject);
             Overlap(graphicObject.Texture, layersBefore);
             layerNode.Value.SetVisibility(true);
-            _layers.AddFirst(layerNode);
+            _screenLayers.AddFirst(layerNode);
 
             return layerNode.Value.HiddenPartGetAndClear();
         }
