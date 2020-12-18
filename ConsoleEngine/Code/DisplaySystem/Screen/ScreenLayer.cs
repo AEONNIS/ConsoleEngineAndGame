@@ -1,6 +1,6 @@
 ﻿namespace ConsoleEngine.DisplaySystem
 {
-    public class ScreenLayer
+    public class ScreenLayer : IContainer<IGraphicObject>, IVisible
     {
         #region Fields
         private readonly Texture _hiddenPart = new Texture();
