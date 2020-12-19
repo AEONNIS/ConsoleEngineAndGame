@@ -8,6 +8,15 @@
 
         #region Properties
         public IGraphicObject GraphicObject { get; private set; }
+        public IReadOnlyTexture VisiblePart
+        {
+            get
+            {
+                var result = GraphicObject.Texture.Clone();
+                result.Substract(_hiddenPart);
+                return result;
+            }
+        }
         public bool IsVisible { get; private set; }
         #endregion
 
@@ -30,6 +39,12 @@
             return result;
         }
 
+        public void Hide()
+        {
+            _hiddenPart.Clear();
+            IsVisible = false;
+        }
+
         public void Clear()
         {
             GraphicObject = null;
@@ -40,6 +55,11 @@
         public void Overlap(ref Texture covering)
         {
 
+        }
+
+        public IReadOnlyTexture RemoveOverlap(IReadOnlyTexture overlap)
+        {
+            return null;
         }
         #endregion
     }
