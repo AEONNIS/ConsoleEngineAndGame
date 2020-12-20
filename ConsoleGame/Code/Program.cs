@@ -1,4 +1,5 @@
 ﻿using ConsoleEngine.DisplaySystem;
+using System;
 
 namespace ConsoleGame
 {

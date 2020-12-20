@@ -1,5 +1,6 @@
 ﻿using ConsoleEngine.Maths;
 using System;
+using System.Collections.Generic;
 
 namespace ConsoleEngine.DisplaySystem
 {
@@ -63,11 +64,14 @@ namespace ConsoleEngine.DisplaySystem
         private void Display(IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
-            {
-                placedPixel.Key.SetCursorPosition();
-                SetConsoleColors(placedPixel.Value);
-                Console.Write(placedPixel.Value.Foreground.Symbol);
-            }
+                Display(placedPixel);
+        }
+
+        private void Display(KeyValuePair<Vector2Int, Pixel> placedPixel)
+        {
+            placedPixel.Key.SetCursorPosition();
+            SetConsoleColors(placedPixel.Value);
+            Console.Write(placedPixel.Value.Foreground.Symbol);
         }
 
         private void SetConsoleColors(in Pixel pixel)

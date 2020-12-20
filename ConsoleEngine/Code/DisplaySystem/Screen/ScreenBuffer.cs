@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ConsoleEngine.DisplaySystem
+﻿namespace ConsoleEngine.DisplaySystem
 {
     public class ScreenBuffer
     {
@@ -13,84 +11,85 @@ namespace ConsoleEngine.DisplaySystem
         public ScreenBuffer(in Pixel emptyPixel) => _graphicControl = new ScreenGraphicControl(emptyPixel);
         #endregion
 
-        #region PublicMethods
+        #region Methods
         public bool Contains(IGraphicObject graphicObject) => _layerOrder.Contains(graphicObject);
 
         public IReadOnlyTexture AddToTop(IGraphicObject graphicObject)
         {
-            var layer = _layerOrder.InitNewLayer(graphicObject);
-
-            Overlap(graphicObject.Texture, _layerOrder.Layers);
+            var layer = _layerOrder.GetNewLayer(graphicObject);
+            _graphicControl.Overlap(layer.TotalTexture, _layerOrder.Layers);
             _layerOrder.AddToTop(layer);
 
-            return graphicObject.Texture;
+            return layer.TotalTexture;
         }
 
         public IReadOnlyTexture RaiseToTop(IGraphicObject graphicObject)
         {
-            var layersAbove = _layerOrder.SelectLayersAbove(graphicObject);
-            var layerNode = _layerOrder.ExtractLayerNode(graphicObject);
+            var layer = _layerOrder.FindLayer(graphicObject);
 
-            Overlap(graphicObject.Texture, layersAbove);
-            _layerOrder.AddToTop(layerNode);
-
-            if (layerNode.Value.IsVisible)
+            if (layer.IsVisible)
             {
-                return layerNode.Value.HiddenPartGetAndClear();
+                var layersAbove = _layerOrder.SelectLayersAbove(graphicObject);
+                var layerNode = _layerOrder.ExtractLayerNode(graphicObject);
+                _graphicControl.Overlap(layer.TotalTexture, layersAbove);
+                _layerOrder.AddToTop(layerNode);
+
+                return layer.HiddenPartGetCloneAndClear();
             }
             else
             {
-                layerNode.Value.SetVisibility(true);
-                return layerNode.Value.GraphicObject.Texture;
+                var layerNode = _layerOrder.ExtractLayerNode(graphicObject);
+                _graphicControl.Overlap(layer.TotalTexture, _layerOrder.Layers);
+                _layerOrder.AddToTop(layerNode);
+                layer.SetVisibility(true);
+
+                return layer.TotalTexture;
             }
         }
 
         public IReadOnlyTexture Hide(IGraphicObject graphicObject)
         {
-            var layersBelow = _layerOrder.SelectLayersBelow(graphicObject);
-            var layerNode = _layerOrder.ExtractLayerNode(graphicObject); // Слой не должен извлекаться: порядок слоев не меняется, мы просто помечаем слой, как скрытый.
+            var layer = _layerOrder.FindLayer(graphicObject);
 
-            var result = RemoveOverlap(layerNode.Value.VisiblePart, layersBelow);
-            layerNode.Value.SetVisibility(false);
+            if (layer.IsVisible)
+            {
+                var layersBelow = _layerOrder.SelectLayersBelow(graphicObject);
+                var result = _graphicControl.RemoveOverlap(layer.VisiblePart, layersBelow);
+                layer.Hide();
 
-            return result;
+                return result;
+            }
+            else
+            {
+                return new Texture();
+            }
         }
 
         public IReadOnlyTexture Remove(IGraphicObject graphicObject)
         {
-            var layersBelow = _layerOrder.SelectLayersBelow(graphicObject);
             var layer = _layerOrder.FindLayer(graphicObject);
 
-            var result = RemoveOverlap(layer.VisiblePart, layersBelow);
-            _layerOrder.Clear(layer);
+            if (layer.IsVisible)
+            {
+                var layersBelow = _layerOrder.SelectLayersBelow(graphicObject);
+                var result = _graphicControl.RemoveOverlap(layer.VisiblePart, layersBelow);
+                _layerOrder.Remove(layer);
 
-            return result;
+                return result;
+            }
+            else
+            {
+                _layerOrder.Remove(layer);
+
+                return new Texture();
+            }
         }
 
         public IReadOnlyTexture Clear()
         {
-            var points = _layerOrder.AllPoints;
-            Texture result = new Texture(points, Pixel.BlackSpace);
+            var result = _graphicControl.GetEmptyPixelTexture(_layerOrder.Layers);
             _layerOrder.Clear();
             return result;
-        }
-        #endregion
-
-        #region PrivateMethods
-        private void Overlap(IReadOnlyTexture covering, IEnumerable<ScreenLayer> layers)
-        {
-            var coveringPart = covering.Clone();
-
-            foreach (var layer in layers)
-            {
-                if (layer.IsVisible)
-                    layer.Overlap(ref coveringPart);
-            }
-        }
-
-        private IReadOnlyTexture RemoveOverlap(IReadOnlyTexture overlap, IEnumerable<ScreenLayer> layers)
-        {
-            return null;
         }
         #endregion
     }

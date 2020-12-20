@@ -3,16 +3,18 @@
     public class ScreenLayer
     {
         #region Fields
+        private IGraphicObject _graphicObject;
         private readonly Texture _hiddenPart = new Texture();
         #endregion
 
         #region Properties
-        public IGraphicObject GraphicObject { get; private set; }
+        public IReadOnlyTexture TotalTexture => _graphicObject.Texture;
+
         public IReadOnlyTexture VisiblePart
         {
             get
             {
-                var result = GraphicObject.Texture.Clone();
+                var result = _graphicObject.Texture.Clone();
                 result.Substract(_hiddenPart);
                 return result;
             }
@@ -23,16 +25,16 @@
         #region Methods
         public void Init(IGraphicObject graphicObject)
         {
-            GraphicObject = graphicObject;
+            _graphicObject = graphicObject;
             _hiddenPart.Clear();
             IsVisible = true;
         }
 
-        public bool Contains(IGraphicObject graphicObject) => GraphicObject == graphicObject;
+        public bool Contains(IGraphicObject graphicObject) => _graphicObject == graphicObject;
 
         public void SetVisibility(bool visibility) => IsVisible = visibility;
 
-        public IReadOnlyTexture HiddenPartGetAndClear()
+        public IReadOnlyTexture HiddenPartGetCloneAndClear()
         {
             IReadOnlyTexture result = _hiddenPart.Clone();
             _hiddenPart.Clear();
@@ -47,14 +49,17 @@
 
         public void Clear()
         {
-            GraphicObject = null;
+            _graphicObject = null;
             _hiddenPart.Clear();
             IsVisible = false;
         }
 
         public void Overlap(ref Texture covering)
         {
+            if (IsVisible)
+            {
 
+            }
         }
 
         public IReadOnlyTexture RemoveOverlap(IReadOnlyTexture overlap)

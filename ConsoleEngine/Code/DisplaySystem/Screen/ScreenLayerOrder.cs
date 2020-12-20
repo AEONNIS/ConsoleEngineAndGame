@@ -1,5 +1,4 @@
-﻿using ConsoleEngine.Maths;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleEngine.DisplaySystem
@@ -13,18 +12,10 @@ namespace ConsoleEngine.DisplaySystem
 
         #region Properties
         public IReadOnlyCollection<ScreenLayer> Layers => _layers;
-
-        public IEnumerable<Vector2Int> AllPoints
-        {
-            get
-            {
-                return null;
-            }
-        }
         #endregion
 
         #region Methods
-        public ScreenLayer InitNewLayer(IGraphicObject graphicObject)
+        public ScreenLayer GetNewLayer(IGraphicObject graphicObject) // Можно ли совместить с добавлением слоя наверх?
         {
             var layer = _layerPool.Extract();
             layer.Init(graphicObject);
@@ -79,7 +70,7 @@ namespace ConsoleEngine.DisplaySystem
         public IEnumerable<ScreenLayer> SelectLayersBelow(IGraphicObject graphicObject) =>
                                             _layers.SkipWhile(layer => layer.Contains(graphicObject)).Skip(1);
 
-        public void Clear(ScreenLayer layer)
+        public void Remove(ScreenLayer layer)
         {
             _layers.Remove(layer);
             layer.Clear();
