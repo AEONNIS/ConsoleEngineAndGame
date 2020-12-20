@@ -68,6 +68,8 @@ namespace ConsoleEngine.Maths
         #endregion
 
         #region Methods
+        public readonly void SetCursorPosition() => Console.SetCursorPosition(X, Y);
+
         public readonly Vector2Int AddToX(int deltaX) => new Vector2Int(X + deltaX, Y);
         public readonly Vector2Int AddToY(int deltaY) => new Vector2Int(X, Y + deltaY);
 

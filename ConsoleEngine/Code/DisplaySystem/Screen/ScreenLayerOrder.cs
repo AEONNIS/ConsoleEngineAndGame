@@ -60,10 +60,13 @@ namespace ConsoleEngine.DisplaySystem
             foreach (var layer in _layers)
             {
                 if (layer.Contains(graphicObject))
+                {
                     result = _layers.Find(layer);
+                    _layers.Remove(result);
+                    break;
+                }
             }
 
-            _layers.Remove(result);
             return result;
         }
 
@@ -76,8 +79,9 @@ namespace ConsoleEngine.DisplaySystem
         public IEnumerable<ScreenLayer> SelectLayersBelow(IGraphicObject graphicObject) =>
                                             _layers.SkipWhile(layer => layer.Contains(graphicObject)).Skip(1);
 
-        public void ClearLayer(ScreenLayer layer)
+        public void Clear(ScreenLayer layer)
         {
+            _layers.Remove(layer);
             layer.Clear();
             _layerPool.Place(layer);
         }

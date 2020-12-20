@@ -6,7 +6,11 @@ namespace ConsoleEngine.DisplaySystem
     {
         #region Fields
         private readonly ScreenLayerOrder _layerOrder = new ScreenLayerOrder();
-        private readonly Pixel _defaultBackgroundPixel = Pixel.BlackSpace;
+        private readonly ScreenGraphicControl _graphicControl;
+        #endregion
+
+        #region Constructors
+        public ScreenBuffer(in Pixel emptyPixel) => _graphicControl = new ScreenGraphicControl(emptyPixel);
         #endregion
 
         #region PublicMethods
@@ -55,10 +59,10 @@ namespace ConsoleEngine.DisplaySystem
         public IReadOnlyTexture Remove(IGraphicObject graphicObject)
         {
             var layersBelow = _layerOrder.SelectLayersBelow(graphicObject);
-            var layerNode = _layerOrder.ExtractLayerNode(graphicObject);
+            var layer = _layerOrder.FindLayer(graphicObject);
 
-            var result = RemoveOverlap(layerNode.Value.VisiblePart, layersBelow);
-            _layerOrder.ClearLayer(layerNode.Value);
+            var result = RemoveOverlap(layer.VisiblePart, layersBelow);
+            _layerOrder.Clear(layer);
 
             return result;
         }
@@ -66,7 +70,7 @@ namespace ConsoleEngine.DisplaySystem
         public IReadOnlyTexture Clear()
         {
             var points = _layerOrder.AllPoints;
-            Texture result = new Texture(points, _defaultBackgroundPixel);
+            Texture result = new Texture(points, Pixel.BlackSpace);
             _layerOrder.Clear();
             return result;
         }

@@ -31,6 +31,8 @@ namespace ConsoleEngine.DisplaySystem
 
         #region Properties
         public bool IsEmpty => _placedPixels.Count == 0;
+
+        public IEnumerable<Vector2Int> Points => throw new System.NotImplementedException();
         #endregion
 
         #region Methods
