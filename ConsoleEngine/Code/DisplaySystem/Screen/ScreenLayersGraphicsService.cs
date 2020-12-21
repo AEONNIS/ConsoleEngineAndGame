@@ -2,31 +2,31 @@
 
 namespace ConsoleEngine.DisplaySystem
 {
-    public class ScreenGraphicControl
+    public class ScreenLayersGraphicsService
     {
         #region Fields
         private readonly Pixel _emptyPixel;
         #endregion
 
         #region Constructors
-        public ScreenGraphicControl(in Pixel emptyPixel) => _emptyPixel = emptyPixel;
+        public ScreenLayersGraphicsService(in Pixel emptyPixel) => _emptyPixel = emptyPixel;
         #endregion
 
         #region Methods
-        public void Overlap(IReadOnlyTexture covering, IEnumerable<ScreenLayer> layers)
+        public void ToCover(IEnumerable<ScreenLayer> layers, IReadOnlyTexture covering)
         {
             var coveringPart = covering.Clone();
 
             foreach (var layer in layers)
             {
-                layer.Overlap(ref coveringPart);
+                layer.ToCover(ref coveringPart);
 
                 if (coveringPart.IsEmpty)
                     break;
             }
         }
 
-        public IReadOnlyTexture RemoveOverlap(IReadOnlyTexture overlap, IEnumerable<ScreenLayer> layers)
+        public IReadOnlyTexture ToUncover(IEnumerable<ScreenLayer> layers, IReadOnlyTexture covering)
         {
             return null;
         }

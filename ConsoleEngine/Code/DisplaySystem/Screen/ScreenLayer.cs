@@ -4,29 +4,32 @@
     {
         #region Fields
         private IGraphicObject _graphicObject;
-        private readonly Texture _hiddenPart = new Texture();
+        private readonly Texture _coveredPart = new Texture();
         #endregion
 
         #region Properties
-        public IReadOnlyTexture TotalTexture => _graphicObject.Texture;
+        public bool IsVisible { get; private set; }
 
-        public IReadOnlyTexture VisiblePart
+        public IReadOnlyTexture Total => _graphicObject.Texture;
+
+        public IReadOnlyTexture CoveredPart => _coveredPart;
+
+        public IReadOnlyTexture UncoveredPart
         {
             get
             {
-                var result = _graphicObject.Texture.Clone();
-                result.Substract(_hiddenPart);
+                var result = Total.Clone();
+                result.Subtract(_coveredPart);
                 return result;
             }
         }
-        public bool IsVisible { get; private set; }
         #endregion
 
         #region Methods
         public void Init(IGraphicObject graphicObject)
         {
             _graphicObject = graphicObject;
-            _hiddenPart.Clear();
+            _coveredPart.Clear();
             IsVisible = true;
         }
 
@@ -34,27 +37,27 @@
 
         public void SetVisibility(bool visibility) => IsVisible = visibility;
 
-        public IReadOnlyTexture HiddenPartGetCloneAndClear()
+        public IReadOnlyTexture GetCoveredPartCloneAndCleanIt()
         {
-            IReadOnlyTexture result = _hiddenPart.Clone();
-            _hiddenPart.Clear();
+            IReadOnlyTexture result = _coveredPart.Clone();
+            _coveredPart.Clear();
             return result;
         }
 
         public void Hide()
         {
-            _hiddenPart.Clear();
+            _coveredPart.Clear();
             IsVisible = false;
         }
 
         public void Clear()
         {
             _graphicObject = null;
-            _hiddenPart.Clear();
+            _coveredPart.Clear();
             IsVisible = false;
         }
 
-        public void Overlap(ref Texture covering)
+        public void ToCover(ref Texture covering)
         {
             if (IsVisible)
             {
@@ -62,7 +65,7 @@
             }
         }
 
-        public IReadOnlyTexture RemoveOverlap(IReadOnlyTexture overlap)
+        public IReadOnlyTexture ToUncover(IReadOnlyTexture covering)
         {
             return null;
         }

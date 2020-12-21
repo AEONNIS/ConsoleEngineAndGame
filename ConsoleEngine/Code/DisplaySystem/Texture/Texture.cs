@@ -41,7 +41,7 @@ namespace ConsoleEngine.DisplaySystem
 
         }
 
-        public void Substract(IReadOnlyTexture texture)
+        public void Subtract(IReadOnlyTexture texture)
         {
 
         }

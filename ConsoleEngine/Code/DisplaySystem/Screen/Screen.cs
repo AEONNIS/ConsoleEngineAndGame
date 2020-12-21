@@ -73,7 +73,8 @@ namespace ConsoleEngine.DisplaySystem
             SetConsoleColors(placedPixel.Value);
             Console.Write(placedPixel.Value.Foreground.Symbol);
         }
-
+        // Не будет работать отображение текстуры чисто как фона и сверхудругой текстуры, чисто как символы.
+        // Надо разделить, где мы берем цвет из emptyPixel, а где из изображения на экране.
         private void SetConsoleColors(in Pixel pixel)
         {
             Console.BackgroundColor = pixel.BackgroundColor ?? _emptyPixel.BackgroundColor.Value;

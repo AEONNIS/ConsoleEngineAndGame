@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleEngine.DisplaySystem
 {
-    public class ScreenLayerOrder
+    public class ScreenLayersOrder
     {
         #region Fields
         private readonly Pool<ScreenLayer> _layerPool = new Pool<ScreenLayer>();
@@ -15,12 +15,16 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region Methods
-        public ScreenLayer GetNewLayer(IGraphicObject graphicObject) // Можно ли совместить с добавлением слоя наверх?
+        public ScreenLayer GetNewLayer(IGraphicObject graphicObject)
         {
             var layer = _layerPool.Extract();
             layer.Init(graphicObject);
+
             return layer;
         }
+
+        public void AddToTop(ScreenLayer layer) => _layers.AddFirst(layer);
+        public void AddToTop(LinkedListNode<ScreenLayer> layerNode) => _layers.AddFirst(layerNode);
 
         public bool Contains(IGraphicObject graphicObject)
         {
@@ -60,9 +64,6 @@ namespace ConsoleEngine.DisplaySystem
 
             return result;
         }
-
-        public void AddToTop(ScreenLayer layer) => _layers.AddFirst(layer);
-        public void AddToTop(LinkedListNode<ScreenLayer> layerNode) => _layers.AddFirst(layerNode);
 
         public IEnumerable<ScreenLayer> SelectLayersAbove(IGraphicObject graphicObject) =>
                                             _layers.TakeWhile(layer => layer.Contains(graphicObject) == false);
