@@ -11,7 +11,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region Fields
-        private readonly ScreenBuffer _buffer;
+        private readonly ScreenBuffer _buffer = new ScreenBuffer();
         private readonly Rectangle _rectangle = new Rectangle(Vector2Int.Zero, new Vector2Int(Console.LargestWindowWidth, Console.LargestWindowHeight));
         private readonly Pixel _emptyPixel = Pixel.BlackSpace;
         #endregion
@@ -19,8 +19,6 @@ namespace ConsoleEngine.DisplaySystem
         #region Constructors
         private Screen()
         {
-            _buffer = new ScreenBuffer(_emptyPixel);
-
             Console.CursorVisible = false;
             Console.SetWindowSize(_rectangle.Size.X, _rectangle.Size.Y);
             Console.SetBufferSize(_rectangle.Size.X, _rectangle.Size.Y);
@@ -43,19 +41,19 @@ namespace ConsoleEngine.DisplaySystem
 
         public void Hide(IGraphicObject graphicObject)
         {
-            var texture = _buffer.Hide(graphicObject);
+            var texture = _buffer.Hide(graphicObject, _emptyPixel);
             Display(texture);
         }
 
         public void Remove(IGraphicObject graphicObject)
         {
-            var texture = _buffer.Remove(graphicObject);
+            var texture = _buffer.Remove(graphicObject, _emptyPixel);
             Display(texture);
         }
 
         public void Clear()
         {
-            var texture = _buffer.Clear();
+            var texture = _buffer.Clear(_emptyPixel);
             Display(texture);
         }
         #endregion

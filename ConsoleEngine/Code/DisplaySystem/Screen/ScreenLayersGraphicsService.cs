@@ -1,39 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using ConsoleEngine.Maths;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleEngine.DisplaySystem
 {
     public class ScreenLayersGraphicsService
     {
-        #region Fields
-        private readonly Pixel _emptyPixel;
-        #endregion
-
-        #region Constructors
-        public ScreenLayersGraphicsService(in Pixel emptyPixel) => _emptyPixel = emptyPixel;
-        #endregion
-
-        #region Methods
-        public void ToCover(IEnumerable<ScreenLayer> layers, IReadOnlyTexture covering)
+        #region StaticMethods
+        public static void ToCover(IEnumerable<ScreenLayer> layersTopToBottom, IReadOnlyTexture covering)
         {
-            var coveringPart = covering.Clone();
-
-            foreach (var layer in layers)
+            if (covering.IsEmpty == false)
             {
-                layer.ToCover(ref coveringPart);
+                var coveringPart = covering.Clone();
 
-                if (coveringPart.IsEmpty)
-                    break;
+                foreach (var layer in layersTopToBottom)
+                {
+                    layer.ToCover(ref coveringPart);
+
+                    if (coveringPart.IsEmpty)
+                        break;
+                }
             }
         }
 
-        public IReadOnlyTexture ToUncover(IEnumerable<ScreenLayer> layers, IReadOnlyTexture covering)
+        public static IReadOnlyTexture ToUncover(IEnumerable<ScreenLayer> layersTopToBottom, IReadOnlyTexture covering, Pixel emptyPixel)
         {
-            return null;
+            var result = new Texture();
+
+            if (covering.IsEmpty == false)
+            {
+                var coveringPart = covering.Clone();
+
+                foreach (var layer in layersTopToBottom)
+                {
+                    var uncovered = layer.ToUncover(ref coveringPart);
+                    result.AddOrReplace(uncovered);
+
+                    if (coveringPart.IsEmpty)
+                        break;
+                }
+
+                var emptyPart = Texture.CreateFrom(coveringPart.Points, emptyPixel);
+                result.AddOrReplace(emptyPart);
+            }
+
+            return result;
         }
 
-        public IReadOnlyTexture GetEmptyPixelTexture(IEnumerable<ScreenLayer> layers)
+        public static IReadOnlyTexture GetEmptyTextureFrom(IEnumerable<ScreenLayer> layers, Pixel emptyPixel)
         {
-            return null;
+            IEnumerable<IReadOnlyTexture> textures = layers.Select(layer => layer.Total);
+            IEnumerable<Vector2Int> points = Texture.GetAllPoints(textures);
+            return Texture.CreateFrom(points, emptyPixel);
         }
         #endregion
     }

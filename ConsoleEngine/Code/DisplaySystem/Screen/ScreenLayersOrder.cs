@@ -11,7 +11,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region Properties
-        public IReadOnlyCollection<ScreenLayer> Layers => _layers;
+        public IReadOnlyCollection<ScreenLayer> LayersTopToBottom => _layers;
         #endregion
 
         #region Methods
@@ -65,11 +65,11 @@ namespace ConsoleEngine.DisplaySystem
             return result;
         }
 
-        public IEnumerable<ScreenLayer> SelectLayersAbove(IGraphicObject graphicObject) =>
+        public IEnumerable<ScreenLayer> SelectLayersTopToBottomAbove(IGraphicObject graphicObject) =>
                                             _layers.TakeWhile(layer => layer.Contains(graphicObject) == false);
 
-        public IEnumerable<ScreenLayer> SelectLayersBelow(IGraphicObject graphicObject) =>
-                                            _layers.SkipWhile(layer => layer.Contains(graphicObject)).Skip(1);
+        public IEnumerable<ScreenLayer> SelectLayersTopToBottomBelow(IGraphicObject graphicObject) =>
+                                            _layers.SkipWhile(layer => layer.Contains(graphicObject) == false).Skip(1);
 
         public void Remove(ScreenLayer layer)
         {

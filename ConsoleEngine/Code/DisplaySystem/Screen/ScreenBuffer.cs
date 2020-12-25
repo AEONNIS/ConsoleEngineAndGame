@@ -4,11 +4,6 @@
     {
         #region Fields
         private readonly ScreenLayersOrder _layersOrder = new ScreenLayersOrder();
-        private readonly ScreenLayersGraphicsService _graphicsService;
-        #endregion
-
-        #region Constructors
-        public ScreenBuffer(in Pixel emptyPixel) => _graphicsService = new ScreenLayersGraphicsService(emptyPixel);
         #endregion
 
         #region Methods
@@ -17,7 +12,7 @@
         public IReadOnlyTexture AddToTop(IGraphicObject graphicObject)
         {
             var layer = _layersOrder.GetNewLayer(graphicObject);
-            _graphicsService.ToCover(_layersOrder.Layers, layer.Total);
+            ScreenLayersGraphicsService.ToCover(_layersOrder.LayersTopToBottom, layer.Total);
             _layersOrder.AddToTop(layer);
 
             return layer.Total;
@@ -29,9 +24,9 @@
 
             if (layer.IsVisible)
             {
-                var layersAbove = _layersOrder.SelectLayersAbove(graphicObject);
+                var layersAbove = _layersOrder.SelectLayersTopToBottomAbove(graphicObject);
                 var layerNode = _layersOrder.ExtractLayerNode(graphicObject);
-                _graphicsService.ToCover(layersAbove, layer.Total);
+                ScreenLayersGraphicsService.ToCover(layersAbove, layer.CoveredPart);
                 _layersOrder.AddToTop(layerNode);
 
                 return layer.GetCoveredPartCloneAndCleanIt();
@@ -39,7 +34,7 @@
             else
             {
                 var layerNode = _layersOrder.ExtractLayerNode(graphicObject);
-                _graphicsService.ToCover(_layersOrder.Layers, layer.Total);
+                ScreenLayersGraphicsService.ToCover(_layersOrder.LayersTopToBottom, layer.Total);
                 _layersOrder.AddToTop(layerNode);
                 layer.SetVisibility(true);
 
@@ -47,14 +42,14 @@
             }
         }
 
-        public IReadOnlyTexture Hide(IGraphicObject graphicObject)
+        public IReadOnlyTexture Hide(IGraphicObject graphicObject, Pixel emptyPixel)
         {
             var layer = _layersOrder.FindLayer(graphicObject);
 
             if (layer.IsVisible)
             {
-                var layersBelow = _layersOrder.SelectLayersBelow(graphicObject);
-                var result = _graphicsService.ToUncover(layersBelow, layer.UncoveredPart);
+                var layersBelow = _layersOrder.SelectLayersTopToBottomBelow(graphicObject);
+                var result = ScreenLayersGraphicsService.ToUncover(layersBelow, layer.UncoveredPart, emptyPixel);
                 layer.Hide();
 
                 return result;
@@ -65,14 +60,14 @@
             }
         }
 
-        public IReadOnlyTexture Remove(IGraphicObject graphicObject)
+        public IReadOnlyTexture Remove(IGraphicObject graphicObject, Pixel emptyPixel)
         {
             var layer = _layersOrder.FindLayer(graphicObject);
 
             if (layer.IsVisible)
             {
-                var layersBelow = _layersOrder.SelectLayersBelow(graphicObject);
-                var result = _graphicsService.ToUncover(layersBelow, layer.UncoveredPart);
+                var layersBelow = _layersOrder.SelectLayersTopToBottomBelow(graphicObject);
+                var result = ScreenLayersGraphicsService.ToUncover(layersBelow, layer.UncoveredPart, emptyPixel);
                 _layersOrder.Remove(layer);
 
                 return result;
@@ -85,9 +80,9 @@
             }
         }
 
-        public IReadOnlyTexture Clear()
+        public IReadOnlyTexture Clear(Pixel emptyPixel)
         {
-            var result = _graphicsService.GetEmptyPixelTexture(_layersOrder.Layers);
+            var result = ScreenLayersGraphicsService.GetEmptyTextureFrom(_layersOrder.LayersTopToBottom, emptyPixel);
             _layersOrder.Clear();
 
             return result;

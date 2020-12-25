@@ -18,7 +18,7 @@
         {
             get
             {
-                var result = Total.Clone();
+                var result = Total.Clone(); // Оптимизировать, юез клонирования...
                 result.Subtract(_coveredPart);
                 return result;
             }
@@ -61,13 +61,22 @@
         {
             if (IsVisible)
             {
-
+                var coveredAddition = Texture.IntersectAndSubstract(Total, ref covering);
+                _coveredPart.AddOrReplace(coveredAddition);
             }
         }
 
-        public IReadOnlyTexture ToUncover(IReadOnlyTexture covering)
+        public IReadOnlyTexture ToUncover(ref Texture covering)
         {
-            return null;
+            if (IsVisible)
+            {
+                var result = Texture.IntersectAndSubstract(CoveredPart, ref covering);
+                _coveredPart.Subtract(result);
+
+                return result;
+            }
+
+            return Texture.Empty;
         }
         #endregion
     }
