@@ -40,7 +40,7 @@ namespace ConsoleEngine.DisplaySystem
                         break;
                 }
 
-                var emptyPart = Texture.CreateFrom(coveringPart.Points, emptyPixel);
+                var emptyPart = new Texture(coveringPart.Points, emptyPixel);
                 result.AddOrReplace(emptyPart);
             }
 
@@ -49,9 +49,9 @@ namespace ConsoleEngine.DisplaySystem
 
         public static IReadOnlyTexture GetEmptyTextureFrom(IEnumerable<ScreenLayer> layers, Pixel emptyPixel)
         {
-            IEnumerable<IReadOnlyTexture> textures = layers.Select(layer => layer.Total);
-            IEnumerable<Vector2Int> points = Texture.GetAllPoints(textures);
-            return Texture.CreateFrom(points, emptyPixel);
+            var textures = layers.Select(layer => layer.Total);
+            var points = Texture.GetAllPoints(textures);
+            return new Texture(points, emptyPixel);
         }
         #endregion
     }

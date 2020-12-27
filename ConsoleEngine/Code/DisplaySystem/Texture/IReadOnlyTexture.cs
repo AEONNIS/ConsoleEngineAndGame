@@ -1,4 +1,6 @@
-﻿using ConsoleEngine.Maths;
+﻿// Нужно пройтись по коду и отобрать, где использовать текстуру только для чтения, а где нет.
+
+using ConsoleEngine.Maths;
 using System.Collections.Generic;
 
 namespace ConsoleEngine.DisplaySystem
@@ -7,7 +9,9 @@ namespace ConsoleEngine.DisplaySystem
     {
         public bool IsEmpty { get; }
 
-        public IEnumerable<Vector2Int> Points { get; }
+        public IReadOnlyCollection<Vector2Int> Points { get; }
+
+        bool Contains(in Vector2Int point);
 
         public IEnumerable<Vector2Int> GetPointsAfterSubstraction(IReadOnlyTexture texture);
     }

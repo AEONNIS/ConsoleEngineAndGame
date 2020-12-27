@@ -1,14 +1,4 @@
-﻿// Четко разграничить, какие методы меняют текстуру, а какие нет. Это должно быть понятно из самих методов. Плюс можно задокументировать такие методы.
-
-/* ОПЕРАЦИИ С ТЕКСТУРАМИ
- * Добавление новой текстуры с заменой общих пикселей на пиксели добавляемой текстуры.
- * Вычитание из одной текстуры другой.
- * Нахождение области пересечения.
- * Нахождение оставшихся точек (только Vector2Int) после вычитания одной текстуры из другой.
- * Создание новой текстуры на основе точек и заданного пикселя (все точки будут содержать этот пиксель).
- */
-
-using ConsoleEngine.Maths;
+﻿using ConsoleEngine.Maths;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -27,9 +17,10 @@ namespace ConsoleEngine.DisplaySystem
         #region Constructors
         public Texture() { }
         public Texture(in IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
-        public Texture(IEnumerable<Vector2Int> points, Pixel fillPixel)
+        public Texture(in IEnumerable<Vector2Int> points, Pixel fillingPixel)
         {
-            throw new System.NotImplementedException();
+            foreach (var point in points)
+                _placedPixels.Add(point, fillingPixel);
         }
         #endregion
 
@@ -40,39 +31,67 @@ namespace ConsoleEngine.DisplaySystem
         #region Properties
         public bool IsEmpty => _placedPixels.Count == 0;
 
-        public IEnumerable<Vector2Int> Points => throw new System.NotImplementedException();
+        public IReadOnlyCollection<Vector2Int> Points => _placedPixels.Keys;
         #endregion
 
         #region StaticMethods
-        public static IEnumerable<Vector2Int> GetIntersectionPoints(IReadOnlyTexture a, IReadOnlyTexture b)
+        public static IReadOnlyCollection<Vector2Int> GetAllPoints(IEnumerable<IReadOnlyTexture> textures)
         {
-            return null;
+            List<Vector2Int> points = new List<Vector2Int>();
+
+            foreach (var texture in textures)
+            {
+                foreach (var placedPixel in texture)
+                {
+                    if (points.Contains(placedPixel.Key) == false)
+                        points.Add(placedPixel.Key);
+                }
+            }
+
+            return points;
         }
 
-        public static IEnumerable<Vector2Int> GetAllPoints(IEnumerable<IReadOnlyTexture> textures)
+        public static Texture Subtract(IReadOnlyTexture minuend, IReadOnlyTexture subtrahend)
         {
-            return null;
+            Texture result = new Texture();
+
+            foreach (var placedPixel in minuend)
+            {
+                if (subtrahend.Contains(placedPixel.Key) == false)
+                    result.AddOrReplace(placedPixel.Key, placedPixel.Value);
+            }
+
+            return result;
         }
 
-        public static IReadOnlyTexture CreateFrom(IEnumerable<Vector2Int> points, Pixel fillingPixel)
+        public static Texture SubtractAndGetIntersection(ref Texture minuend, IReadOnlyTexture intersectionSource)
         {
-            return null;
-        }
+            Texture result = new Texture();
 
-        public static IReadOnlyTexture IntersectAndSubstract(IReadOnlyTexture unchangeable, ref Texture changeable)
-        {
-            // В одном цикле находить общие точки и вычитать их из одной текстуры, которая меняется,
-            // а из другой текстуры отбирать пиксели с общими координатами и из них создавать новую текстуру.
+            foreach (var placedPixel in intersectionSource)
+            {
+                if (minuend.Contains(placedPixel.Key))
+                {
+                    minuend.Subtract(placedPixel.Key);
+                    result.AddOrReplace(placedPixel.Key, placedPixel.Value);
+                }
+            }
 
-            return null;
+            return result;
         }
         #endregion
 
         #region Methods
+        public bool Contains(in Vector2Int point) => _placedPixels.ContainsKey(point);
+
+        public void AddOrReplace(Vector2Int position, Pixel pixel) => _placedPixels[position] = pixel;
+
         public void AddOrReplace(IReadOnlyTexture texture) // М.б. сделать возврат самой себя после изменения?
         {
 
         }
+
+        public bool Subtract(Vector2Int point) => _placedPixels.Remove(point);
 
         public void Subtract(IReadOnlyTexture texture) // М.б. сделать возврат самой себя после изменения?
         {

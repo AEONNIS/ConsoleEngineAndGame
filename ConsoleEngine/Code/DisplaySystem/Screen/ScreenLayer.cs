@@ -14,15 +14,7 @@
 
         public IReadOnlyTexture CoveredPart => _coveredPart;
 
-        public IReadOnlyTexture UncoveredPart
-        {
-            get
-            {
-                var result = Total.Clone(); // Оптимизировать, юез клонирования...
-                result.Subtract(_coveredPart);
-                return result;
-            }
-        }
+        public IReadOnlyTexture UncoveredPart => Texture.Subtract(Total, CoveredPart);
         #endregion
 
         #region Methods
@@ -61,7 +53,7 @@
         {
             if (IsVisible)
             {
-                var coveredAddition = Texture.IntersectAndSubstract(Total, ref covering);
+                var coveredAddition = Texture.SubtractAndGetIntersection(ref covering, Total);
                 _coveredPart.AddOrReplace(coveredAddition);
             }
         }
@@ -70,7 +62,7 @@
         {
             if (IsVisible)
             {
-                var result = Texture.IntersectAndSubstract(CoveredPart, ref covering);
+                var result = Texture.SubtractAndGetIntersection(ref covering, CoveredPart);
                 _coveredPart.Subtract(result);
 
                 return result;

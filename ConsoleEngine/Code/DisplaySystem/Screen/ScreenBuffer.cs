@@ -56,7 +56,7 @@
             }
             else
             {
-                return new Texture();
+                return Texture.Empty;
             }
         }
 
@@ -76,7 +76,7 @@
             {
                 _layersOrder.Remove(layer);
 
-                return new Texture();
+                return Texture.Empty;
             }
         }
 
