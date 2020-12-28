@@ -7,12 +7,14 @@ namespace ConsoleEngine.DisplaySystem
 {
     public interface IReadOnlyTexture : IEnumerable<KeyValuePair<Vector2Int, Pixel>>, ICloneable<Texture>
     {
+        #region Properties
         public bool IsEmpty { get; }
 
         public IReadOnlyCollection<Vector2Int> Points { get; }
+        #endregion
 
-        bool Contains(in Vector2Int point);
-
-        public IEnumerable<Vector2Int> GetPointsAfterSubstraction(IReadOnlyTexture texture);
+        #region Methods
+        public bool Contains(in Vector2Int point);
+        #endregion
     }
 }

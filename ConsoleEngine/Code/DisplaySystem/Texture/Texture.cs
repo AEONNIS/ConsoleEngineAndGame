@@ -16,8 +16,8 @@ namespace ConsoleEngine.DisplaySystem
 
         #region Constructors
         public Texture() { }
-        public Texture(in IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
-        public Texture(in IEnumerable<Vector2Int> points, Pixel fillingPixel)
+        public Texture(IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
+        public Texture(IEnumerable<Vector2Int> points, Pixel fillingPixel)
         {
             foreach (var point in points)
                 _placedPixels.Add(point, fillingPixel);
@@ -58,7 +58,7 @@ namespace ConsoleEngine.DisplaySystem
             foreach (var placedPixel in minuend)
             {
                 if (subtrahend.Contains(placedPixel.Key) == false)
-                    result.AddOrReplace(placedPixel.Key, placedPixel.Value);
+                    result._placedPixels[placedPixel.Key] = placedPixel.Value;
             }
 
             return result;
@@ -72,8 +72,8 @@ namespace ConsoleEngine.DisplaySystem
             {
                 if (minuend.Contains(placedPixel.Key))
                 {
-                    minuend.Subtract(placedPixel.Key);
-                    result.AddOrReplace(placedPixel.Key, placedPixel.Value);
+                    minuend._placedPixels.Remove(placedPixel.Key);
+                    result._placedPixels[placedPixel.Key] = placedPixel.Value;
                 }
             }
 
@@ -84,31 +84,28 @@ namespace ConsoleEngine.DisplaySystem
         #region Methods
         public bool Contains(in Vector2Int point) => _placedPixels.ContainsKey(point);
 
-        public void AddOrReplace(Vector2Int position, Pixel pixel) => _placedPixels[position] = pixel;
-
-        public void AddOrReplace(IReadOnlyTexture texture) // М.б. сделать возврат самой себя после изменения?
+        public Texture AddOrReplace(IReadOnlyTexture texture)
         {
+            foreach (var placedPixel in texture)
+                _placedPixels[placedPixel.Key] = placedPixel.Value;
 
+            return this;
         }
 
-        public bool Subtract(Vector2Int point) => _placedPixels.Remove(point);
-
-        public void Subtract(IReadOnlyTexture texture) // М.б. сделать возврат самой себя после изменения?
+        public Texture Subtract(IReadOnlyTexture texture)
         {
+            foreach (var placedPixel in texture)
+                _placedPixels.Remove(placedPixel.Key);
 
+            return this;
         }
 
-        public void Intersect(IReadOnlyTexture texture) // М.б. сделать возврат самой себя после изменения?
+        public Texture Clear()
         {
+            _placedPixels.Clear();
 
+            return this;
         }
-
-        public IEnumerable<Vector2Int> GetPointsAfterSubstraction(IReadOnlyTexture texture)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Clear() => _placedPixels.Clear();
 
         public Texture Clone() => new Texture(_placedPixels);
 
