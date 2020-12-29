@@ -1,5 +1,4 @@
-﻿using ConsoleEngine.Maths;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleEngine.DisplaySystem
@@ -25,10 +24,9 @@ namespace ConsoleEngine.DisplaySystem
 
         public static IReadOnlyTexture ToUncover(IEnumerable<ScreenLayer> layersTopToBottom, IReadOnlyTexture covering, Pixel emptyPixel)
         {
-            var result = new Texture();
-
             if (covering.IsEmpty == false)
             {
+                var result = new Texture();
                 var coveringPart = covering.Clone();
 
                 foreach (var layer in layersTopToBottom)
@@ -42,9 +40,11 @@ namespace ConsoleEngine.DisplaySystem
 
                 var emptyPart = new Texture(coveringPart.Points, emptyPixel);
                 result.AddOrReplace(emptyPart);
+
+                return result;
             }
 
-            return result;
+            return Texture.Empty;
         }
 
         public static IReadOnlyTexture GetEmptyTextureFrom(IEnumerable<ScreenLayer> layers, Pixel emptyPixel)
