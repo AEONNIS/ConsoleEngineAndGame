@@ -1,4 +1,6 @@
-﻿namespace ConsoleEngine.DisplaySystem
+﻿using ConsoleEngine.Maths;
+
+namespace ConsoleEngine.DisplaySystem
 {
     public class ScreenBuffer
     {
@@ -8,6 +10,21 @@
 
         #region Methods
         public bool Contains(IGraphicObject graphicObject) => _layersOrder.Contains(graphicObject);
+
+        public Pixel? GetPixelIn(in Vector2Int point)
+        {
+            Pixel? result = null;
+
+            foreach (var layer in _layersOrder.LayersTopToBottom)
+            {
+                result = layer.GetPixelIn(point);
+
+                if (result.HasValue)
+                    return result;
+            }
+
+            return result;
+        }
 
         public IReadOnlyTexture AddToTop(IGraphicObject graphicObject)
         {
@@ -42,14 +59,14 @@
             }
         }
 
-        public IReadOnlyTexture Hide(IGraphicObject graphicObject, Pixel emptyPixel)
+        public IReadOnlyTexture Hide(IGraphicObject graphicObject, in Pixel empty)
         {
             var layer = _layersOrder.FindLayer(graphicObject);
 
             if (layer.IsVisible)
             {
                 var layersBelow = _layersOrder.SelectLayersTopToBottomBelow(graphicObject);
-                var result = ScreenLayersGraphicsService.ToUncover(layersBelow, layer.UncoveredPart, emptyPixel);
+                var result = ScreenLayersGraphicsService.ToUncover(layersBelow, layer.UncoveredPart, empty);
                 layer.Hide();
 
                 return result;
@@ -60,14 +77,14 @@
             }
         }
 
-        public IReadOnlyTexture Remove(IGraphicObject graphicObject, Pixel emptyPixel)
+        public IReadOnlyTexture Remove(IGraphicObject graphicObject, in Pixel empty)
         {
             var layer = _layersOrder.FindLayer(graphicObject);
 
             if (layer.IsVisible)
             {
                 var layersBelow = _layersOrder.SelectLayersTopToBottomBelow(graphicObject);
-                var result = ScreenLayersGraphicsService.ToUncover(layersBelow, layer.UncoveredPart, emptyPixel);
+                var result = ScreenLayersGraphicsService.ToUncover(layersBelow, layer.UncoveredPart, empty);
                 _layersOrder.Remove(layer);
 
                 return result;
@@ -80,9 +97,9 @@
             }
         }
 
-        public IReadOnlyTexture Clear(Pixel emptyPixel)
+        public IReadOnlyTexture Clear(in Pixel empty)
         {
-            var result = ScreenLayersGraphicsService.GetEmptyTextureFrom(_layersOrder.LayersTopToBottom, emptyPixel);
+            var result = ScreenLayersGraphicsService.GetEmptyTextureFrom(_layersOrder.LayersTopToBottom, empty);
             _layersOrder.Clear();
 
             return result;

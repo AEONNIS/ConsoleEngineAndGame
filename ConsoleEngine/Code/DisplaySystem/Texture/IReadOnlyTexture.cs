@@ -1,6 +1,4 @@
-﻿// Нужно пройтись по коду и отобрать, где использовать текстуру только для чтения, а где нет.
-
-using ConsoleEngine.Maths;
+﻿using ConsoleEngine.Maths;
 using System.Collections.Generic;
 
 namespace ConsoleEngine.DisplaySystem
@@ -15,6 +13,8 @@ namespace ConsoleEngine.DisplaySystem
 
         #region Methods
         public bool Contains(in Vector2Int point);
+
+        public Pixel? GetPixelIn(in Vector2Int point);
         #endregion
     }
 }

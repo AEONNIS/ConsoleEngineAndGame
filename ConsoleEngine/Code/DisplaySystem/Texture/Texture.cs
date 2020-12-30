@@ -16,11 +16,11 @@ namespace ConsoleEngine.DisplaySystem
 
         #region Constructors
         public Texture() { }
-        public Texture(IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
-        public Texture(IEnumerable<Vector2Int> points, Pixel fillingPixel)
+        public Texture(in IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
+        public Texture(in IEnumerable<Vector2Int> points, in Pixel filling)
         {
             foreach (var point in points)
-                _placedPixels.Add(point, fillingPixel);
+                _placedPixels.Add(point, filling);
         }
         #endregion
 
@@ -35,7 +35,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region StaticMethods
-        public static IReadOnlyCollection<Vector2Int> GetAllPoints(IEnumerable<IReadOnlyTexture> textures)
+        public static IReadOnlyCollection<Vector2Int> GetAllPoints(in IEnumerable<IReadOnlyTexture> textures)
         {
             List<Vector2Int> points = new List<Vector2Int>();
 
@@ -51,7 +51,7 @@ namespace ConsoleEngine.DisplaySystem
             return points;
         }
 
-        public static Texture Subtract(IReadOnlyTexture minuend, IReadOnlyTexture subtrahend)
+        public static Texture Subtract(in IReadOnlyTexture minuend, in IReadOnlyTexture subtrahend)
         {
             Texture result = new Texture();
 
@@ -64,13 +64,13 @@ namespace ConsoleEngine.DisplaySystem
             return result;
         }
 
-        public static Texture SubtractAndGetIntersection(ref Texture minuend, IReadOnlyTexture intersectionSource)
+        public static Texture SubtractAndGetIntersection(ref Texture minuend, in IReadOnlyTexture intersectionSource)
         {
             Texture result = new Texture();
 
             foreach (var placedPixel in intersectionSource)
             {
-                if (minuend.Contains(placedPixel.Key))
+                if (minuend._placedPixels.ContainsKey(placedPixel.Key))
                 {
                     minuend._placedPixels.Remove(placedPixel.Key);
                     result._placedPixels[placedPixel.Key] = placedPixel.Value;
@@ -84,7 +84,9 @@ namespace ConsoleEngine.DisplaySystem
         #region Methods
         public bool Contains(in Vector2Int point) => _placedPixels.ContainsKey(point);
 
-        public Texture AddOrReplace(IReadOnlyTexture texture)
+        public Pixel? GetPixelIn(in Vector2Int point) => _placedPixels.TryGetValue(point, out Pixel result) ? result : null;
+
+        public Texture AddOrReplace(in IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
                 _placedPixels[placedPixel.Key] = placedPixel.Value;
@@ -92,7 +94,7 @@ namespace ConsoleEngine.DisplaySystem
             return this;
         }
 
-        public Texture Subtract(IReadOnlyTexture texture)
+        public Texture Subtract(in IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
                 _placedPixels.Remove(placedPixel.Key);

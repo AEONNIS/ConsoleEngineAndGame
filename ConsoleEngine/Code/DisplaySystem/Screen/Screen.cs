@@ -13,7 +13,7 @@ namespace ConsoleEngine.DisplaySystem
         #region Fields
         private readonly ScreenBuffer _buffer = new ScreenBuffer();
         private readonly Rectangle _rectangle = new Rectangle(Vector2Int.Zero, new Vector2Int(Console.LargestWindowWidth, Console.LargestWindowHeight));
-        private readonly Pixel _emptyPixel = Pixel.BlackSpace;
+        private readonly Pixel _empty = Pixel.BlackSpace;
         #endregion
 
         #region Constructors
@@ -41,43 +41,79 @@ namespace ConsoleEngine.DisplaySystem
 
         public void Hide(IGraphicObject graphicObject)
         {
-            var texture = _buffer.Hide(graphicObject, _emptyPixel);
+            var texture = _buffer.Hide(graphicObject, _empty);
             Display(texture);
         }
 
         public void Remove(IGraphicObject graphicObject)
         {
-            var texture = _buffer.Remove(graphicObject, _emptyPixel);
+            var texture = _buffer.Remove(graphicObject, _empty);
             Display(texture);
         }
 
         public void Clear()
         {
-            var texture = _buffer.Clear(_emptyPixel);
+            var texture = _buffer.Clear(_empty);
             Display(texture);
         }
         #endregion
 
         #region PrivateMethods
-        private void Display(IReadOnlyTexture texture)
+        private void Display(in IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
                 Display(placedPixel);
         }
 
-        private void Display(KeyValuePair<Vector2Int, Pixel> placedPixel)
+        private void Display(in KeyValuePair<Vector2Int, Pixel> placedPixel)
         {
             placedPixel.Key.SetCursorPosition();
-            SetConsoleColors(placedPixel.Value);
+            SetConsoleColors(placedPixel.Value, placedPixel.Key);
             Console.Write(placedPixel.Value.Foreground.Symbol);
         }
-        // Не будет работать отображение текстуры чисто как фона и сверху другой текстуры, чисто как символы.
-        // Надо разделить, где мы берем цвет из emptyPixel, а где из изображения на экране.
-        private void SetConsoleColors(in Pixel pixel)
+
+        private void SetConsoleColors(in Pixel original, in Vector2Int point)
         {
-            Console.BackgroundColor = pixel.BackgroundColor ?? _emptyPixel.BackgroundColor.Value;
-            Console.ForegroundColor = pixel.Foreground.Color ?? _emptyPixel.Foreground.Color.Value;
+            if (original.BackgroundColor.HasValue && original.Foreground.Color.HasValue)
+            {
+                Console.BackgroundColor = original.BackgroundColor.Value;
+                Console.ForegroundColor = original.Foreground.Color.Value;
+            }
+            else
+            {
+                Pixel? buffer = _buffer.GetPixelIn(point);
+                SetColor(true, original, buffer, _empty);
+                SetColor(false, original, buffer, _empty);
+            }
         }
+
+        private void SetColor(bool background, in Pixel original, in Pixel? buffer, in Pixel empty)
+        {
+            if (buffer.HasValue)
+            {
+                SetColor(true, GetColor(original.BackgroundColor, buffer.Value.BackgroundColor, empty.BackgroundColor));
+                SetColor(false, GetColor(original.Foreground.Color, buffer.Value.Foreground.Color, empty.Foreground.Color));
+            }
+            else
+            {
+                SetColor(true, GetColor(original.BackgroundColor, empty.BackgroundColor));
+                SetColor(false, GetColor(original.Foreground.Color, empty.Foreground.Color));
+            }
+        }
+
+        private void SetColor(bool background, ConsoleColor color)
+        {
+            if (background)
+                Console.BackgroundColor = color;
+            else
+                Console.ForegroundColor = color;
+        }
+
+        private ConsoleColor GetColor(ConsoleColor? original, ConsoleColor? buffer, ConsoleColor? empty) =>
+                                original ?? buffer ?? empty.Value;
+
+        private ConsoleColor GetColor(ConsoleColor? original, ConsoleColor? empty) =>
+                                original ?? empty.Value;
         #endregion
     }
 }

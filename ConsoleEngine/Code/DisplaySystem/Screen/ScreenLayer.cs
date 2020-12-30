@@ -1,4 +1,6 @@
-﻿namespace ConsoleEngine.DisplaySystem
+﻿using ConsoleEngine.Maths;
+
+namespace ConsoleEngine.DisplaySystem
 {
     public class ScreenLayer
     {
@@ -26,6 +28,8 @@
         }
 
         public bool Contains(IGraphicObject graphicObject) => _graphicObject == graphicObject;
+
+        public Pixel? GetPixelIn(in Vector2Int point) => Total.GetPixelIn(point);
 
         public void SetVisibility(bool visibility) => IsVisible = visibility;
 
