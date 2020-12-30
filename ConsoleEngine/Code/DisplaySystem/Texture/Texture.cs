@@ -17,9 +17,9 @@ namespace ConsoleEngine.DisplaySystem
         #region Constructors
         public Texture() { }
         public Texture(in IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
-        public Texture(in IEnumerable<Vector2Int> points, in Pixel filling)
+        public Texture(in IEnumerable<Vector2Int> uniquePoints, in Pixel filling)
         {
-            foreach (var point in points)
+            foreach (var point in uniquePoints)
                 _placedPixels.Add(point, filling);
         }
         #endregion
@@ -35,7 +35,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region StaticMethods
-        public static IReadOnlyCollection<Vector2Int> GetAllPoints(in IEnumerable<IReadOnlyTexture> textures)
+        public static IReadOnlyCollection<Vector2Int> GetAllUniquePoints(in IEnumerable<IReadOnlyTexture> textures)
         {
             List<Vector2Int> points = new List<Vector2Int>();
 
