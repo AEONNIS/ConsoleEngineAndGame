@@ -16,8 +16,8 @@ namespace ConsoleEngine.DisplaySystem
 
         #region Constructors
         public Texture() { }
-        public Texture(in IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
-        public Texture(in IEnumerable<Vector2Int> uniquePoints, in Pixel filling)
+        public Texture(IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
+        public Texture(IEnumerable<Vector2Int> uniquePoints, in Pixel filling)
         {
             foreach (var point in uniquePoints)
                 _placedPixels.Add(point, filling);
@@ -25,7 +25,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region StaticProperties
-        public static ref readonly IReadOnlyTexture Empty => ref _empty;
+        public static IReadOnlyTexture Empty => _empty;
         #endregion
 
         #region Properties
@@ -35,7 +35,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region StaticMethods
-        public static IReadOnlyCollection<Vector2Int> GetAllUniquePoints(in IEnumerable<IReadOnlyTexture> textures)
+        public static IReadOnlyCollection<Vector2Int> GetAllPointsFrom(IEnumerable<IReadOnlyTexture> textures)
         {
             List<Vector2Int> points = new List<Vector2Int>();
 
@@ -51,7 +51,7 @@ namespace ConsoleEngine.DisplaySystem
             return points;
         }
 
-        public static Texture Subtract(in IReadOnlyTexture minuend, in IReadOnlyTexture subtrahend)
+        public static Texture Subtract(IReadOnlyTexture minuend, IReadOnlyTexture subtrahend)
         {
             Texture result = new Texture();
 
@@ -64,7 +64,7 @@ namespace ConsoleEngine.DisplaySystem
             return result;
         }
 
-        public static Texture SubtractAndGetIntersection(ref Texture minuend, in IReadOnlyTexture intersectionSource)
+        public static Texture SubtractAndGetIntersection(ref Texture minuend, IReadOnlyTexture intersectionSource)
         {
             Texture result = new Texture();
 
@@ -86,7 +86,7 @@ namespace ConsoleEngine.DisplaySystem
 
         public Pixel? GetPixelIn(in Vector2Int point) => _placedPixels.TryGetValue(point, out Pixel result) ? result : null;
 
-        public Texture AddOrReplace(in IReadOnlyTexture texture)
+        public Texture AddOrReplace(IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
                 _placedPixels[placedPixel.Key] = placedPixel.Value;
@@ -94,7 +94,7 @@ namespace ConsoleEngine.DisplaySystem
             return this;
         }
 
-        public Texture Subtract(in IReadOnlyTexture texture)
+        public Texture Subtract(IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
                 _placedPixels.Remove(placedPixel.Key);

@@ -50,7 +50,7 @@ namespace ConsoleEngine.DisplaySystem
         public static IReadOnlyTexture GetEmptyTextureFrom(IEnumerable<ScreenLayer> layers, in Pixel empty)
         {
             var textures = layers.Select(layer => layer.Total);
-            var points = Texture.GetAllUniquePoints(textures);
+            var points = Texture.GetAllPointsFrom(textures);
             return new Texture(points, empty);
         }
         #endregion

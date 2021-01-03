@@ -6,65 +6,52 @@ using System.Collections.Generic;
 namespace ConsoleEngine.UnitTests.DisplaySystem
 {
     [TestFixture]
-    public class TextureTests // Размещать кейсы под соответствующими тестами, чтобы рядом.
+    public class TextureTests
     {
-        #region StaticFields
+        #region TempStaticFields
         private readonly static Pixel _fillingBlack = Pixel.BlackSpace;
         private readonly static Pixel _fillingWhite = Pixel.WhiteSpace;
         #endregion
 
         #region StaticMethodsTests
-        [TestCaseSource(nameof(GetAllUniquePointsCase))]
-        public void GetAllUniquePoints_Textures_ReturnExpectedPoints(IEnumerable<IReadOnlyTexture> textures, IReadOnlyCollection<Vector2Int> expectedPoints)
+        [TestCaseSource(nameof(GetAllPointsFromCase))]
+        public void GetAllPointsFrom_Textures_ReturnsAllUniquePoints(IEnumerable<IReadOnlyTexture> textures, IReadOnlyCollection<Vector2Int> expectedPoints)
         {
-            var actualPoints = Texture.GetAllUniquePoints(textures);
+            var actualPoints = Texture.GetAllPointsFrom(textures);
 
             Assert.That(expectedPoints, Is.EquivalentTo(actualPoints));
         }
 
-        private static object[] GetAllUniquePointsCase() => new object[]
+        private static object[] GetAllPointsFromCase()
         {
-            new object[] { new Texture[]
+            Texture texture1 = new Texture(new Vector2Int[]
             {
-                new Texture(new Vector2Int[]
-                {
-                    new Vector2Int(0, 0),
-                    new Vector2Int(0, 1),
-                    new Vector2Int(1, 0)
-                }, _fillingBlack),
+                new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(1, 0),
+            }, Pixel.BlackSpace);
 
-                new Texture(new Vector2Int[]
-                {
-                    new Vector2Int(1, 0),
-                    new Vector2Int(0, 2),
-                    new Vector2Int(3, 0),
-                    new Vector2Int(0, 3)
-                }, _fillingBlack),
-
-                new Texture(new Vector2Int[]
-                {
-                    new Vector2Int(0, 3),
-                    new Vector2Int(0, 2),
-                    new Vector2Int(1, 0),
-                    new Vector2Int(1, 2),
-                    new Vector2Int(1, 3)
-                }, _fillingBlack),
-
-            }, new Vector2Int[]
+            Texture texture2 = new Texture(new Vector2Int[]
             {
-                new Vector2Int(0, 0),
-                new Vector2Int(0, 1),
-                new Vector2Int(1, 0),
-                new Vector2Int(0, 2),
-                new Vector2Int(3, 0),
-                new Vector2Int(0, 3),
-                new Vector2Int(1, 2),
-                new Vector2Int(1, 3)
-            } },
-        };
+                new Vector2Int(1, 0), new Vector2Int(0, 2), new Vector2Int(3, 0), new Vector2Int(0, 3),
+            }, Pixel.BlackSpace);
+
+            Texture texture3 = new Texture(new Vector2Int[]
+            {
+                new Vector2Int(0, 3), new Vector2Int(0, 2), new Vector2Int(1, 0), new Vector2Int(1, 2), new Vector2Int(1, 3),
+            }, Pixel.BlackSpace);
+
+            Texture[] textures = new Texture[] { texture1, texture2, texture3, };
+
+            Vector2Int[] points = new Vector2Int[]
+            {
+                new Vector2Int(0, 0), new Vector2Int(0, 1), new Vector2Int(1, 0), new Vector2Int(0, 2), new Vector2Int(3, 0),
+                new Vector2Int(0, 3), new Vector2Int(1, 2), new Vector2Int(1, 3),
+            };
+
+            return new object[] { textures, points };
+        }
 
         [TestCaseSource(nameof(SubtractCase))]
-        public void Subtract_MinuendAndSubtrahendTextures_ReturnDifference(IReadOnlyTexture minuend, IReadOnlyTexture subtrahend, Texture expectedDifference)
+        public void Subtract_MinuendAndSubtrahendTextures_ReturnsDifference(IReadOnlyTexture minuend, IReadOnlyTexture subtrahend, Texture expectedDifference)
         {
             var actualDifference = Texture.Subtract(minuend, subtrahend);
 
@@ -148,7 +135,7 @@ namespace ConsoleEngine.UnitTests.DisplaySystem
         {
             var actual = texture.Contains(point);
 
-            Assert.That(expected == actual);
+            Assert.That(expected, Is.EqualTo(actual));
         }
 
         private static object[] ContainsCases() => new object[]
@@ -170,20 +157,31 @@ namespace ConsoleEngine.UnitTests.DisplaySystem
             }, _fillingBlack), new Vector2Int(2, 3), false, }
         };
 
-        public void GetPixelIn_TextureAndPoint_ExpectedPixel(IReadOnlyTexture texture, Vector2Int point, Pixel? expectedPixel)
+        [TestCaseSource(nameof(GetPixelInCases))]
+        public void GetPixelIn_TextureAndPoint_ExpectedPixel(IReadOnlyTexture texture, in Vector2Int point, Pixel? expectedPixel)
         {
             var actualPixel = texture.GetPixelIn(point);
 
-            Assert.That(expectedPixel == actualPixel);
+            Assert.That(expectedPixel, Is.EqualTo(actualPixel));
         }
 
         private static object[] GetPixelInCases() => new object[]
         {
-            new object[] { new Texture(new KeyValuePair<Vector2Int, Pixel>[] 
-            { 
-
-            }) }
+            new object[] { GetTextureFor_GetPixelInCases(), new Vector2Int(0, 1), new Pixel?(_fillingWhite) },
+            new object[] { GetTextureFor_GetPixelInCases(), new Vector2Int(1, 0), new Pixel?(_fillingBlack) },
+            new object[] { GetTextureFor_GetPixelInCases(), new Vector2Int(2, 0), null }
         };
+
+        private static Texture GetTextureFor_GetPixelInCases()
+        {
+            return new Texture(new KeyValuePair<Vector2Int, Pixel>[]
+            {
+                new KeyValuePair<Vector2Int, Pixel>(new Vector2Int(0, 0), _fillingBlack),
+                new KeyValuePair<Vector2Int, Pixel>(new Vector2Int(0, 1), _fillingWhite),
+                new KeyValuePair<Vector2Int, Pixel>(new Vector2Int(1, 0), _fillingBlack),
+                new KeyValuePair<Vector2Int, Pixel>(new Vector2Int(1, 1), _fillingWhite)
+            });
+        }
         #endregion
     }
 }
