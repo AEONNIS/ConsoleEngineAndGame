@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using ConsoleEngine.Maths;
+using System;
 
 namespace ConsoleGame
 {
@@ -7,8 +7,12 @@ namespace ConsoleGame
     {
         public static void Main(string[] args)
         {
-            Test test = new Test();
-            test.Start();
+            Console.CursorVisible = false;
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            Console.SetBufferSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+
+            Room room = new Room(Vector2Int.Zero);
+            room.Display();
 
             Console.ReadKey();
         }
@@ -21,198 +25,113 @@ namespace ConsoleGame
         }
     }
 
-    public class Test
+    public class Room
     {
-        private const int _windowsWidth = 60;
-        private const int _defaultInit = 100;
+        #region Consts
+        private const int _minSideSize = 8;
+        private const int _maxSideSize = 8;
 
-        private long _totalTime = 0;
-        private long _totalTimeByIn = 0;
+        private const int _minDoors = 3;
+        private const int _maxDoors = 3;
 
-        public Test()
+        private const char _wall = '\u2588';
+        private const char _door = '\u2592';
+        #endregion
+
+        #region Fields
+        private readonly Vector2Int _topLeftPoint;
+        private readonly Vector2Int _size;
+        private readonly Vector2Int[] _doors;
+        #endregion
+
+        #region Constructors
+        public Room(Vector2Int topLeftPoint)
         {
-            Console.SetWindowSize(_windowsWidth, Console.LargestWindowHeight);
-            Console.BufferWidth = Console.WindowWidth;
-        }
+            Random random = new Random(DateTime.Now.Millisecond);
 
-        public void Start()
-        {
-            Reset();
+            _topLeftPoint = topLeftPoint;
+            _size = new Vector2Int(GetRandomSideSize(random), GetRandomSideSize(random));
+            _doors = new Vector2Int[random.Next(_minDoors, _maxDoors + 1)];
+            WorldSide[] doorSides = new WorldSide[_doors.Length];
 
-            int coordinates = Init("Coordinates: ");
-            int points = Init("Points: ");
-            int steps = Init("Steps: ");
-            int turns = Init("Turns: ");
-
-            StartTesting(turns, steps, points, coordinates);
-            DisplayAverage(turns);
-            Turn();
-        }
-
-        private void Turn()
-        {
-            while (true)
+            for (int i = 0; i < _doors.Length; i++)
             {
-                Repeat();
+                doorSides[i] = GetDoorSide(random, doorSides);
+                _doors[i] = GetRandomDoor(random, doorSides[i]);
             }
         }
+        #endregion
 
-        private int Init(string message)
+        #region PublicMethods
+        public void Display()
         {
-            int result = _defaultInit; ;
-            Console.Write(message);
+            Console.SetCursorPosition(_topLeftPoint.X, _topLeftPoint.Y);
+            Console.Write(new string(_wall, _size.X));
 
-            if (int.TryParse(Console.ReadLine(), out int res))
-                result = res;
+            Console.SetCursorPosition(_topLeftPoint.X, _topLeftPoint.Y + _size.Y);
+            Console.Write(new string(_wall, _size.X));
 
-            Console.SetCursorPosition(message.Length, Console.CursorTop - 1);
-            Console.WriteLine(result);
+            for (int i = 1; i < _size.Y; i++)
+            {
+                Console.SetCursorPosition(_topLeftPoint.X, _topLeftPoint.Y + i);
+                Console.Write(_wall);
+
+                Console.SetCursorPosition(_topLeftPoint.X + _size.X - 1, _topLeftPoint.Y + i);
+                Console.Write(_wall);
+            }
+
+            foreach (var door in _doors)
+            {
+                Console.SetCursorPosition(_topLeftPoint.X + door.X, _topLeftPoint.Y + door.Y);
+                Console.Write(_door);
+            }
+        }
+        #endregion
+
+        #region PrivateMethods
+        private int GetRandomSideSize(Random random) => random.Next(_minSideSize, _maxSideSize + 1);
+
+        private WorldSide GetDoorSide(Random random, WorldSide[] doorSides)
+        {
+            WorldSide result = GetRandomWorldSide(random);
+
+            while (CheckDoorSide(doorSides, result) == false)
+                result = GetRandomWorldSide(random);
+
             return result;
         }
 
-        private void Reset()
-        {
-            GC.Collect();
-            Console.ResetColor();
-            Console.Clear();
+        private WorldSide GetRandomWorldSide(Random random) => (WorldSide)random.Next((int)WorldSide.Top, (int)WorldSide.Right + 1);
 
-            _totalTime = 0;
-            _totalTimeByIn = 0;
+        private bool CheckDoorSide(WorldSide[] doorSides, WorldSide doorSide)
+        {
+            foreach (var side in doorSides)
+            {
+                if (doorSide == side)
+                    return false;
+            }
+
+            return true;
         }
 
-        private void Repeat()
+        private Vector2Int GetRandomDoor(Random random, WorldSide side)
         {
-            GC.Collect();
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("\nRepeat? y = yes, another = exit;");
-
-            if (Console.ReadKey().Key == ConsoleKey.Y)
-                Start();
+            if (side == WorldSide.Top)
+                return new Vector2Int(random.Next(1, _size.X), 0);
+            else if (side == WorldSide.Down)
+                return new Vector2Int(random.Next(1, _size.X), _size.Y);
+            else if (side == WorldSide.Left)
+                return new Vector2Int(0, random.Next(1, _size.Y));
             else
-                Environment.Exit(0);
+                return new Vector2Int(_size.X, random.Next(1, _size.Y));
         }
-
-        private void DisplayAverage(int turns)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"\nAverage {nameof(Testing)} Time: {_totalTime / turns}");
-            Console.WriteLine($"Average {nameof(TestingByIn)} Time: {_totalTimeByIn / turns}");
-        }
-
-        private void StartTesting(int turns, int steps, int points, int coordinates)
-        {
-            Console.WriteLine();
-
-            for (int i = 0; i < turns; i++)
-                TurnTest(steps, points, coordinates);
-        }
-
-        private void TurnTest(int steps, int points, int coordinates)
-        {
-            _totalTime += Testing(steps, points, coordinates);
-            _totalTimeByIn += TestingByIn(steps, points, coordinates);
-        }
-
-        private long Testing(int steps, int points, int coordinates)
-        {
-            Testing testing = new Testing(steps, points, coordinates);
-            return testing.Start();
-        }
-
-        private long TestingByIn(int steps, int points, int coordinates)
-        {
-            TestingByIn testingByIn = new TestingByIn(steps, points, coordinates);
-            return testingByIn.Start();
-        }
+        #endregion
     }
 
-    public class Testing
+    public class Door
     {
-        private readonly Stopwatch _timer = new Stopwatch();
-        private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        private readonly int _steps;
-        private readonly Point[] _points;
 
-        public Testing(int steps, int points, int coordinates)
-        {
-            _steps = steps;
-            _points = new Point[points];
-
-            for (int i = 0; i < _points.Length; i++)
-                _points[i] = new Point(coordinates);
-        }
-
-        public long Start()
-        {
-            _timer.Start();
-
-            for (int i = 0; i < _steps; i++)
-                Step(_points[Select()]);
-
-            _timer.Stop();
-            DisplayResult();
-
-            return _timer.ElapsedTicks;
-        }
-
-        private void Step(Point point) => point.Test();
-
-        private int Select() => _random.Next(0, _points.Length);
-
-        private void DisplayResult()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{nameof(Testing)} Time: {_timer.ElapsedTicks}");
-        }
     }
 
-    public class TestingByIn
-    {
-        private readonly Stopwatch _timer = new Stopwatch();
-        private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        private readonly int _steps;
-        private readonly Point[] _points;
-
-        public TestingByIn(int steps, int points, int coordinates)
-        {
-            _steps = steps;
-            _points = new Point[points];
-
-            for (int i = 0; i < _points.Length; i++)
-                _points[i] = new Point(coordinates);
-        }
-
-        public long Start()
-        {
-            _timer.Restart();
-
-            for (int i = 0; i < _steps; i++)
-                Step(in _points[Select()]);
-
-            _timer.Stop();
-            DisplayResult();
-
-            return _timer.ElapsedTicks;
-        }
-
-        private void Step(in Point point) => point.Test();
-
-        private int Select() => _random.Next(0, _points.Length);
-
-        private void DisplayResult()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{nameof(TestingByIn)} Time: {_timer.ElapsedTicks}");
-        }
-    }
-
-    public readonly struct Point
-    {
-        private readonly double[] _coordinates;
-
-        public Point(int coordinates) => _coordinates = new double[coordinates];
-
-        public readonly void Test() { }
-    }
+    public enum WorldSide { None = -1, Top, Down, Left, Right }
 }
-
