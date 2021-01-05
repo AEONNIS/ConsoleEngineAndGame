@@ -11,11 +11,6 @@ namespace ConsoleGame
         #region PublicMethods
         public void Start()
         {
-            Tileset.Wall.Intact.Display();
-            Tileset.Door.ClosedHorizontal.Display();
-            Tileset.Wall.Intact.Display();
-            Console.WriteLine();
-            Tileset.Door.ClosedVertical.Display();
 
             Console.ReadKey();
 
