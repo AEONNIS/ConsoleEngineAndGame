@@ -9,30 +9,38 @@ namespace ConsoleEngine.UnitTests.DisplaySystem
     {
         #region OperatorsTests
         [TestCaseSource(nameof(OperatorPlusCases))]
-        public void OperatorPlus_VariousPixelForegrounds_ReturnExpectedPixelForeground(in PixelForeground a, in PixelForeground b,
-                                                                                       in PixelForeground expectedPixelForeground)
+        public void OperatorPlus_SomePixelForegrounds_ReturnsAdditionResult(in PixelForeground minor, in PixelForeground major,
+                                                                            in PixelForeground additionResult)
         {
-            PixelForeground actualPixelForeground = (a + b);
+            PixelForeground actualAdditionResult = minor + major;
 
-            Assert.AreEqual(expectedPixelForeground, actualPixelForeground);
+            Assert.That(additionResult, Is.EqualTo(actualAdditionResult));
         }
-        #endregion
 
-        #region TestsCases
-        private static object[] OperatorPlusCases() => new object[]
+        private static object[] OperatorPlusCases()
         {
-            new object[] { new PixelForeground(null, ' '), new PixelForeground(null, '-'),
-                           new PixelForeground(null, '-') },
+            var minor1 = new PixelForeground(null, ' ');
+            var major1 = new PixelForeground(null, '-');
+            var additionResult1 = new PixelForeground(null, '-');
+            var case1 = new PixelForeground[] { minor1, major1, additionResult1 };
 
-            new object[] { new PixelForeground(null, ' '), new PixelForeground(ConsoleColor.Black, '-'),
-                           new PixelForeground(ConsoleColor.Black, '-') },
+            var minor2 = new PixelForeground(null, ' ');
+            var major2 = new PixelForeground(ConsoleColor.Black, '-');
+            var additionResult2 = new PixelForeground(ConsoleColor.Black, '-');
+            var case2 = new PixelForeground[] { minor2, major2, additionResult2 };
 
-            new object[] { new PixelForeground(ConsoleColor.Black, ' '), new PixelForeground(null, '-'),
-                           new PixelForeground(ConsoleColor.Black, '-') },
+            var minor3 = new PixelForeground(ConsoleColor.Black, ' ');
+            var major3 = new PixelForeground(null, '-');
+            var additionResult3 = new PixelForeground(ConsoleColor.Black, '-');
+            var case3 = new PixelForeground[] { minor3, major3, additionResult3 };
 
-            new object[] { new PixelForeground(ConsoleColor.Black, ' '), new PixelForeground(ConsoleColor.White, '-'),
-                           new PixelForeground(ConsoleColor.White, '-') }
-        };
+            var minor4 = new PixelForeground(ConsoleColor.Black, ' ');
+            var major4 = new PixelForeground(ConsoleColor.White, '-');
+            var additionResult4 = new PixelForeground(ConsoleColor.White, '-');
+            var case4 = new PixelForeground[] { minor4, major4, additionResult4 };
+
+            return new object[] { case1, case2, case3, case4 };
+        }
         #endregion
     }
 }
