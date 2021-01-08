@@ -17,12 +17,4 @@ namespace ConsoleGame
         private readonly Rectangle _transform;
         #endregion
     }
-
-    public readonly struct Wall
-    {
-        #region Properties
-        public readonly Rectangle Rectangle { get; init; }
-        public readonly IWallTile[] Tiles { get; init; }
-        #endregion
-    }
 }

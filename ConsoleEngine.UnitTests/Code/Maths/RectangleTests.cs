@@ -6,10 +6,10 @@ namespace ConsoleEngine.UnitTests.Maths
     [TestFixture]
     public class RectangleTests
     {
-        #region ConstructorsTests
+        #region ConstructorsAndFactoryMethodsTests
         [TestCaseSource(nameof(ConstructorAndCreateCases))]
         public void Constructor_TopLeftAngleAndSize_ExpectedOtherAngles(in Vector2Int topLeftAngle, in Vector2Int size,
-                        in Vector2Int expectedTopRightAngle, in Vector2Int expectedBottomLeftAngle, in Vector2Int expectedBottomRightAngle)
+                        Vector2Int expectedTopRightAngle, Vector2Int expectedBottomLeftAngle, Vector2Int expectedBottomRightAngle)
         {
             Rectangle rectangle = new Rectangle(topLeftAngle, size);
 
@@ -17,16 +17,17 @@ namespace ConsoleEngine.UnitTests.Maths
             Vector2Int actualBottomLeftAngle = rectangle.BottomLeftAngle;
             Vector2Int actualBottomRightAngle = rectangle.BottomRightAngle;
 
-            Assert.AreEqual(expectedTopRightAngle, actualTopRightAngle);
-            Assert.AreEqual(expectedBottomLeftAngle, actualBottomLeftAngle);
-            Assert.AreEqual(expectedBottomRightAngle, actualBottomRightAngle);
+            Assert.Multiple(() =>
+            {
+                Assert.That(expectedTopRightAngle, Is.EqualTo(actualTopRightAngle));
+                Assert.That(expectedBottomLeftAngle, Is.EqualTo(actualBottomLeftAngle));
+                Assert.That(expectedBottomRightAngle, Is.EqualTo(actualBottomRightAngle));
+            });
         }
-        #endregion
 
-        #region StaticMethodsTests
         [TestCaseSource(nameof(ConstructorAndCreateCases))]
-        public void Create_TopLeftAngleAndBottomRightAngle_ExpectedOtherAnglesAndSize(in Vector2Int topLeftAngle, in Vector2Int expectedSize,
-                        in Vector2Int expectedTopRightAngle, in Vector2Int expectedBottomLeftAngle, in Vector2Int bottomRightAngle)
+        public void Create_TopLeftAngleAndBottomRightAngle_ExpectedOtherAnglesAndSize(in Vector2Int topLeftAngle, Vector2Int expectedSize,
+                        Vector2Int expectedTopRightAngle, Vector2Int expectedBottomLeftAngle, in Vector2Int bottomRightAngle)
         {
             Rectangle rectangle = Rectangle.Create(topLeftAngle, bottomRightAngle);
 
@@ -34,55 +35,66 @@ namespace ConsoleEngine.UnitTests.Maths
             Vector2Int actualTopRightAngle = rectangle.TopRightAngle;
             Vector2Int actualBottomLeftAngle = rectangle.BottomLeftAngle;
 
-            Assert.AreEqual(expectedSize, actualSize);
-            Assert.AreEqual(expectedTopRightAngle, actualTopRightAngle);
-            Assert.AreEqual(expectedBottomLeftAngle, actualBottomLeftAngle);
+            Assert.Multiple(() =>
+            {
+                Assert.That(expectedSize, Is.EqualTo(actualSize));
+                Assert.That(expectedTopRightAngle, Is.EqualTo(actualTopRightAngle));
+                Assert.That(expectedBottomLeftAngle, Is.EqualTo(actualBottomLeftAngle));
+            });
+        }
+
+        private static object[] ConstructorAndCreateCases()
+        {
+            var topLeftAngle1 = new Vector2Int(0, 0);
+            var size1 = new Vector2Int(7, 7);
+            var topRightAngle1 = new Vector2Int(6, 0);
+            var bottomLeftAngle1 = new Vector2Int(0, 6);
+            var bottomRightAngle1 = new Vector2Int(6, 6);
+            var case1 = new Vector2Int[] { topLeftAngle1, size1, topRightAngle1, bottomLeftAngle1, bottomRightAngle1 };
+
+            var topLeftAngle2 = new Vector2Int(5, 8);
+            var size2 = new Vector2Int(3, 4);
+            var topRightAngle2 = new Vector2Int(7, 8);
+            var bottomLeftAngle2 = new Vector2Int(5, 11);
+            var bottomRightAngle2 = new Vector2Int(7, 11);
+            var case2 = new Vector2Int[] { topLeftAngle2, size2, topRightAngle2, bottomLeftAngle2, bottomRightAngle2 };
+
+            return new object[] { case1, case2 };
         }
         #endregion
 
-        #region MethodTests
-        [TestCaseSource(nameof(RectangleContainsPointCases), new object[] { true })]
-        [TestCaseSource(nameof(RectangleNotContainsPointCases), new object[] { false })]
-        public void Contains_RectangleAndPoint_ReturnExpectedBool(in Rectangle rectangle, in Vector2Int point, bool expected)
+        #region MethodsTests
+        [TestCaseSource(nameof(RectangleContainsPointCases))]
+        [TestCaseSource(nameof(RectangleNotContainsPointCases))]
+        public void Contains_RectangleAndPoint_RectangleContainsPointResult(in Rectangle rectangle, in Vector2Int point, bool rectangleContainsPoint)
         {
-            bool actual = rectangle.Contains(point);
+            bool actualRectangleContainsPoint = rectangle.Contains(point);
 
-            Assert.AreEqual(expected, actual);
+            Assert.That(rectangleContainsPoint == actualRectangleContainsPoint, Is.True);
         }
-        #endregion
 
-        #region TestsCases
-        private static object[] ConstructorAndCreateCases() => new object[]
+        private static object[] RectangleContainsPointCases()
         {
-            new object[] { new Vector2Int(0, 0), new Vector2Int(7, 7),
-                           new Vector2Int(6, 0), new Vector2Int(0, 6), new Vector2Int(6, 6) },
-
-            new object[] { new Vector2Int(5, 8), new Vector2Int(3, 4),
-                           new Vector2Int(7, 8), new Vector2Int(5, 11), new Vector2Int(7, 11) }
-        };
-
-        private static object[] RectangleContainsPointCases(bool result)
-        {
-            Rectangle rectangle = new Rectangle(new Vector2Int(0, 0), new Vector2Int(8, 8));
+            var rectangle = new Rectangle(new Vector2Int(0, 0), new Vector2Int(8, 8));
 
             return new object[]
             {
-                new object[] { rectangle, new Vector2Int(0, 0), result },
-                new object[] { rectangle, new Vector2Int(5, 6), result },
-                new object[] { rectangle, new Vector2Int(7, 3), result },
-                new object[] { rectangle, new Vector2Int(7, 7), result }
+                new object[] { rectangle, new Vector2Int(0, 0), true },
+                new object[] { rectangle, new Vector2Int(5, 6), true },
+                new object[] { rectangle, new Vector2Int(7, 3), true },
+                new object[] { rectangle, new Vector2Int(7, 7), true }
             };
         }
-        private static object[] RectangleNotContainsPointCases(bool result)
+        private static object[] RectangleNotContainsPointCases()
         {
-            Rectangle rectangle = new Rectangle(new Vector2Int(0, 0), new Vector2Int(8, 8));
+            var rectangle = new Rectangle(new Vector2Int(0, 0), new Vector2Int(8, 8));
 
             return new object[]
             {
-                new object[] { rectangle, new Vector2Int(0, -1), result },
-                new object[] { rectangle, new Vector2Int(-3, 6), result },
-                new object[] { rectangle, new Vector2Int(8, 8), result },
-                new object[] { rectangle, new Vector2Int(5, 10), result }
+                new object[] { rectangle, new Vector2Int(0, -1), false },
+                new object[] { rectangle, new Vector2Int(-3, 6), false },
+                new object[] { rectangle, new Vector2Int(8, 8), false },
+                new object[] { rectangle, new Vector2Int(5, 10), false }
             };
         }
         #endregion

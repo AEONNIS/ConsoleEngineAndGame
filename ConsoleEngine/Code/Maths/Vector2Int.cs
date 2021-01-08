@@ -74,7 +74,7 @@ namespace ConsoleEngine.Maths
         public readonly Vector2Int AddToY(int deltaY) => new Vector2Int(X, Y + deltaY);
 
         public readonly float Distance(in Vector2Int v) => (this - v).Magnitude;
-        public readonly float SqrDistance(in Vector2Int v) => (this - v).SqrMagnitude;
+        public readonly int SqrDistance(in Vector2Int v) => (this - v).SqrMagnitude;
 
         public readonly override bool Equals(object obj) => obj is Vector2Int vector && Equals(vector);
         public readonly bool Equals(Vector2Int other) => X == other.X && Y == other.Y;
