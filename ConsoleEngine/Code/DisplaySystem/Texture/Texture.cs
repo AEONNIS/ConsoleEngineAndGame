@@ -6,10 +6,6 @@ namespace ConsoleEngine.DisplaySystem
 {
     public class Texture : IReadOnlyTexture
     {
-        #region StaticFields
-        private static readonly IReadOnlyTexture _empty = new Texture();
-        #endregion
-
         #region Fields
         private readonly Dictionary<Vector2Int, Pixel> _placedPixels = new Dictionary<Vector2Int, Pixel>();
         #endregion
@@ -25,7 +21,7 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region StaticProperties
-        public static IReadOnlyTexture Empty => _empty;
+        public static IReadOnlyTexture Empty { get; } = new Texture();
         #endregion
 
         #region Properties
@@ -86,17 +82,17 @@ namespace ConsoleEngine.DisplaySystem
 
         public Pixel? GetPixelIn(in Vector2Int point) => _placedPixels.TryGetValue(point, out Pixel result) ? result : null;
 
-        public Texture AddOrReplace(IReadOnlyTexture texture)
+        public Texture AddOrReplace(IReadOnlyTexture additional)
         {
-            foreach (var placedPixel in texture)
+            foreach (var placedPixel in additional)
                 _placedPixels[placedPixel.Key] = placedPixel.Value;
 
             return this;
         }
 
-        public Texture Subtract(IReadOnlyTexture texture)
+        public Texture Subtract(IReadOnlyTexture subtrahend)
         {
-            foreach (var placedPixel in texture)
+            foreach (var placedPixel in subtrahend)
                 _placedPixels.Remove(placedPixel.Key);
 
             return this;
