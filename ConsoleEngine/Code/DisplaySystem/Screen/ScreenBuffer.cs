@@ -46,7 +46,7 @@ namespace ConsoleEngine.DisplaySystem
                 ScreenLayersGraphicsService.ToCover(layersAbove, layer.CoveredPart);
                 _layersOrder.AddToTop(layerNode);
 
-                return layer.GetCoveredPartCloneAndCleanIt();
+                return layer.GetCoveredPartCloneAndClearCoveredPart();
             }
             else
             {

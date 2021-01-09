@@ -14,7 +14,7 @@ namespace ConsoleEngine.DisplaySystem
 
                 foreach (var layer in layersTopToBottom)
                 {
-                    layer.ToCover(ref coveringPart);
+                    layer.ToCover(coveringPart);
 
                     if (coveringPart.IsEmpty)
                         break;
@@ -31,7 +31,7 @@ namespace ConsoleEngine.DisplaySystem
 
                 foreach (var layer in layersTopToBottom)
                 {
-                    var uncovered = layer.ToUncover(ref coveringPart);
+                    var uncovered = layer.ToUncover(coveringPart);
                     result.AddOrReplace(uncovered);
 
                     if (coveringPart.IsEmpty)

@@ -60,7 +60,7 @@ namespace ConsoleEngine.DisplaySystem
             return result;
         }
 
-        public static Texture SubtractAndGetIntersection(ref Texture minuend, IReadOnlyTexture intersectionSource)
+        public static Texture SubtractAndGetIntersection(Texture minuend, IReadOnlyTexture intersectionSource)
         {
             Texture result = new Texture();
 

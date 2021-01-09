@@ -33,7 +33,7 @@ namespace ConsoleEngine.DisplaySystem
 
         public void SetVisibility(bool visibility) => IsVisible = visibility;
 
-        public IReadOnlyTexture GetCoveredPartCloneAndCleanIt()
+        public IReadOnlyTexture GetCoveredPartCloneAndClearCoveredPart()
         {
             IReadOnlyTexture result = _coveredPart.Clone();
             _coveredPart.Clear();
@@ -53,20 +53,20 @@ namespace ConsoleEngine.DisplaySystem
             IsVisible = false;
         }
 
-        public void ToCover(ref Texture covering)
+        public void ToCover(Texture covering)
         {
             if (IsVisible)
             {
-                var coveredAddition = Texture.SubtractAndGetIntersection(ref covering, Total);
+                var coveredAddition = Texture.SubtractAndGetIntersection(covering, UncoveredPart);
                 _coveredPart.AddOrReplace(coveredAddition);
             }
         }
 
-        public IReadOnlyTexture ToUncover(ref Texture covering)
+        public IReadOnlyTexture ToUncover(Texture covering)
         {
             if (IsVisible)
             {
-                var result = Texture.SubtractAndGetIntersection(ref covering, CoveredPart);
+                var result = Texture.SubtractAndGetIntersection(covering, CoveredPart);
                 _coveredPart.Subtract(result);
 
                 return result;

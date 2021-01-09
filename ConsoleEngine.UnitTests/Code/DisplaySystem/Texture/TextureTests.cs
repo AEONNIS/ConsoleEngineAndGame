@@ -118,7 +118,7 @@ namespace ConsoleEngine.UnitTests.DisplaySystem
         public void SubtractAndGetIntersection_SomeTextures_ReturnsDifferenceAndIntersection(Texture minuend, IReadOnlyTexture intersectionSource,
                                                                                              IReadOnlyTexture difference, IReadOnlyTexture intersection)
         {
-            var actualIntersection = Texture.SubtractAndGetIntersection(ref minuend, intersectionSource);
+            var actualIntersection = Texture.SubtractAndGetIntersection(minuend, intersectionSource);
             var actualDifference = minuend;
 
             Assert.Multiple(() =>
