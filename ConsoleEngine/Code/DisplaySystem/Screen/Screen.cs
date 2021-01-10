@@ -59,13 +59,13 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region PrivateMethods
-        private void Display(in IReadOnlyTexture texture)
+        private void Display(IReadOnlyTexture texture)
         {
             foreach (var placedPixel in texture)
                 Display(placedPixel);
         }
 
-        private void Display(in KeyValuePair<Vector2Int, Pixel> placedPixel)
+        private void Display(KeyValuePair<Vector2Int, Pixel> placedPixel)
         {
             placedPixel.Key.SetCursorPosition();
             SetConsoleColors(placedPixel.Value, placedPixel.Key);

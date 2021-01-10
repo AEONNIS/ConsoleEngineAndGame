@@ -6,7 +6,7 @@ namespace ConsoleEngine.DisplaySystem
     public class ScreenLayersGraphicsService
     {
         #region StaticMethods
-        public static void ToCover(IEnumerable<ScreenLayer> layersTopToBottom, in IReadOnlyTexture covering)
+        public static void ToCover(IEnumerable<ScreenLayer> layersTopToBottom, IReadOnlyTexture covering)
         {
             if (covering.IsEmpty == false)
             {
@@ -22,7 +22,7 @@ namespace ConsoleEngine.DisplaySystem
             }
         }
 
-        public static IReadOnlyTexture ToUncover(IEnumerable<ScreenLayer> layersTopToBottom, in IReadOnlyTexture covering, in Pixel empty)
+        public static IReadOnlyTexture ToUncover(IEnumerable<ScreenLayer> layersTopToBottom, IReadOnlyTexture covering, in Pixel empty)
         {
             if (covering.IsEmpty == false)
             {

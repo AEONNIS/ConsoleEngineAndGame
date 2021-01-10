@@ -20,11 +20,13 @@ namespace ConsoleEngine.DisplaySystem
         #endregion
 
         #region Methods
-        public void Init(IGraphicObject graphicObject)
+        public ScreenLayer Init(IGraphicObject graphicObject)
         {
             _graphicObject = graphicObject;
             _coveredPart.Clear();
             IsVisible = true;
+
+            return this;
         }
 
         public bool Contains(IGraphicObject graphicObject) => _graphicObject == graphicObject;
