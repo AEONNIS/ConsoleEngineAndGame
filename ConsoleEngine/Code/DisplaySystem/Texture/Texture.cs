@@ -18,6 +18,14 @@ namespace ConsoleEngine.DisplaySystem
             foreach (var point in uniquePoints)
                 _placedPixels.Add(point, filling);
         }
+        public Texture(in Rectangle rectangle, in Pixel filling)
+        {
+            for (int y = rectangle.TopLeftAngle.Y; y <= rectangle.BottomRightAngle.Y; y++)
+            {
+                for (int x = rectangle.TopLeftAngle.X; x <= rectangle.BottomRightAngle.X; x++)
+                    _placedPixels.Add(new Vector2Int(x, y), filling);
+            }
+        }
         #endregion
 
         #region StaticProperties

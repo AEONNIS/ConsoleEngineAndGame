@@ -31,7 +31,7 @@ namespace ConsoleEngine.DisplaySystem
 
         public bool Contains(IGraphicObject graphicObject) => _graphicObject == graphicObject;
 
-        public Pixel? GetPixelIn(in Vector2Int point) => Total.GetPixelIn(point);
+        public Pixel? GetPixelIn(in Vector2Int point) => IsVisible ? UncoveredPart.GetPixelIn(point) : null;
 
         public void SetVisibility(bool visibility) => IsVisible = visibility;
 

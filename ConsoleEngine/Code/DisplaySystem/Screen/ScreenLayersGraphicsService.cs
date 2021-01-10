@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ConsoleEngine.DisplaySystem
 {
-    public class ScreenLayersGraphicsService
+    public static class ScreenLayersGraphicsService
     {
         #region StaticMethods
         public static void ToCover(IEnumerable<ScreenLayer> layersTopToBottom, IReadOnlyTexture covering)

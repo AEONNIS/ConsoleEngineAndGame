@@ -82,38 +82,9 @@ namespace ConsoleEngine.DisplaySystem
             else
             {
                 Pixel? buffer = _buffer.GetPixelIn(point);
-                SetColor(true, original, buffer, _empty);
-                SetColor(false, original, buffer, _empty);
+                ConsoleColorsSettingService.SetConsoleColors(original, buffer, _empty);
             }
         }
-
-        private void SetColor(bool background, in Pixel original, in Pixel? buffer, in Pixel empty)
-        {
-            if (buffer.HasValue)
-            {
-                SetColor(true, GetColor(original.BackgroundColor, buffer.Value.BackgroundColor, empty.BackgroundColor));
-                SetColor(false, GetColor(original.Foreground.Color, buffer.Value.Foreground.Color, empty.Foreground.Color));
-            }
-            else
-            {
-                SetColor(true, GetColor(original.BackgroundColor, empty.BackgroundColor));
-                SetColor(false, GetColor(original.Foreground.Color, empty.Foreground.Color));
-            }
-        }
-
-        private void SetColor(bool background, ConsoleColor color)
-        {
-            if (background)
-                Console.BackgroundColor = color;
-            else
-                Console.ForegroundColor = color;
-        }
-
-        private ConsoleColor GetColor(ConsoleColor? original, ConsoleColor? buffer, ConsoleColor? empty) =>
-                                original ?? buffer ?? empty.Value;
-
-        private ConsoleColor GetColor(ConsoleColor? original, ConsoleColor? empty) =>
-                                original ?? empty.Value;
         #endregion
     }
 }
