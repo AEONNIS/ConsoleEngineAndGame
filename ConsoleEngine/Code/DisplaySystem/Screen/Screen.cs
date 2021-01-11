@@ -25,7 +25,11 @@ namespace ConsoleEngine.DisplaySystem
         }
         #endregion
 
-        #region StaticMethods
+        #region Properties
+        public Rectangle Rectangle => _rectangle;
+        #endregion
+
+        #region PublicStaticMethods
         public static Screen Get() => _screen;
 
         public static string GetDisplayTitle() => Console.Title;

@@ -1,7 +1,7 @@
 ﻿using ConsoleEngine.Maths;
 using NUnit.Framework;
 
-namespace ConsoleEngine.UnitTests.Maths
+namespace ConsoleEngine.Tests.Unit.Maths
 {
     [TestFixture]
     public class RectangleTests

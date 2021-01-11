@@ -3,7 +3,7 @@ using ConsoleEngine.Maths;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace ConsoleEngine.UnitTests.DisplaySystem
+namespace ConsoleEngine.Tests.Unit.DisplaySystem
 {
     [TestFixture]
     public class TextureTests
