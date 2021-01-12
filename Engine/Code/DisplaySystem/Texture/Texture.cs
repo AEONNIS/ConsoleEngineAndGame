@@ -13,17 +13,17 @@ namespace Engine.DisplaySystem
         #region Constructors
         public Texture() { }
         public Texture(IEnumerable<KeyValuePair<Vector2Int, Pixel>> placedPixels) => _placedPixels = new Dictionary<Vector2Int, Pixel>(placedPixels);
-        public Texture(IEnumerable<Vector2Int> uniquePoints, in Pixel filling)
+        public Texture(IEnumerable<Vector2Int> uniquePoints, in Pixel filler)
         {
             foreach (var point in uniquePoints)
-                _placedPixels.Add(point, filling);
+                _placedPixels.Add(point, filler);
         }
-        public Texture(in Rectangle rectangle, in Pixel filling)
+        public Texture(in Rectangle rectangle, in Pixel filler)
         {
             for (int y = rectangle.TopLeftAngle.Y; y <= rectangle.BottomRightAngle.Y; y++)
             {
                 for (int x = rectangle.TopLeftAngle.X; x <= rectangle.BottomRightAngle.X; x++)
-                    _placedPixels.Add(new Vector2Int(x, y), filling);
+                    _placedPixels.Add(new Vector2Int(x, y), filler);
             }
         }
         #endregion
@@ -38,7 +38,7 @@ namespace Engine.DisplaySystem
         public IReadOnlyCollection<Vector2Int> Points => _placedPixels.Keys;
         #endregion
 
-        #region StaticMethods
+        #region PublicStaticMethods
         public static IReadOnlyCollection<Vector2Int> GetAllPointsFrom(IEnumerable<IReadOnlyTexture> textures)
         {
             List<Vector2Int> points = new List<Vector2Int>();
@@ -85,11 +85,25 @@ namespace Engine.DisplaySystem
         }
         #endregion
 
-        #region Methods
+        #region PublicMethods
         public bool Contains(in Vector2Int point) => _placedPixels.ContainsKey(point);
 
         public Pixel? GetPixelIn(in Vector2Int point) => _placedPixels.TryGetValue(point, out Pixel result) ? result : null;
 
+        // _+   Добавить тесты.
+        public Texture AddOrReplace(in Vector2Int position, in Pixel pixel)
+        {
+            _placedPixels[position] = pixel;
+
+            return this;
+        }
+
+        public Texture AddOrReplace(KeyValuePair<Vector2Int, Pixel> placedPixel)
+        {
+            _placedPixels[placedPixel.Key] = placedPixel.Value;
+
+            return this;
+        }
         public Texture AddOrReplace(IReadOnlyTexture additional)
         {
             foreach (var placedPixel in additional)

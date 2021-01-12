@@ -51,20 +51,22 @@ namespace Engine.Maths
         public static bool operator <=(in Vector2Int a, in Vector2Int b) => a.X <= b.X && a.Y <= b.Y;
 
         public static Vector2Int operator +(in Vector2Int a, in Vector2Int b) => new Vector2Int(a.X + b.X, a.Y + b.Y);
-        public static Vector2Int operator +(in Vector2Int a, int i) => new Vector2Int(a.X + i, a.Y + i);
-        public static Vector2Int operator +(int i, in Vector2Int a) => new Vector2Int(i + a.X, i + a.Y);
+        public static Vector2Int operator +(in Vector2Int v, int i) => new Vector2Int(v.X + i, v.Y + i);
+        public static Vector2Int operator +(int i, in Vector2Int v) => new Vector2Int(i + v.X, i + v.Y);
 
         public static Vector2Int operator -(in Vector2Int a, in Vector2Int b) => new Vector2Int(a.X - b.X, a.Y - b.Y);
-        public static Vector2Int operator -(in Vector2Int a, int i) => new Vector2Int(a.X - i, a.Y - i);
-        public static Vector2Int operator -(int i, in Vector2Int a) => new Vector2Int(i - a.X, i - a.Y);
-        public static Vector2Int operator -(in Vector2Int a) => new Vector2Int(-a.X, -a.Y);
+        public static Vector2Int operator -(in Vector2Int v, int i) => new Vector2Int(v.X - i, v.Y - i);
+        public static Vector2Int operator -(int i, in Vector2Int v) => new Vector2Int(i - v.X, i - v.Y);
+        public static Vector2Int operator -(in Vector2Int v) => new Vector2Int(-v.X, -v.Y);
 
-        public static Vector2Int operator ++(in Vector2Int a) => new Vector2Int(a.X + 1, a.Y + 1);
-        public static Vector2Int operator --(in Vector2Int a) => new Vector2Int(a.X - 1, a.Y - 1);
+        public static Vector2Int operator ++(in Vector2Int v) => new Vector2Int(v.X + 1, v.Y + 1);
+        public static Vector2Int operator --(in Vector2Int v) => new Vector2Int(v.X - 1, v.Y - 1);
 
         public static Vector2Int operator *(in Vector2Int a, in Vector2Int b) => new Vector2Int(a.X * b.X, a.Y * b.Y);
-        public static Vector2Int operator *(in Vector2Int a, int i) => new Vector2Int(a.X * i, a.Y * i);
-        public static Vector2Int operator *(int i, in Vector2Int a) => new Vector2Int(i * a.X, i * a.Y);
+        public static Vector2Int operator *(in Vector2Int v, int i) => new Vector2Int(v.X * i, v.Y * i);
+        public static Vector2Int operator *(int i, in Vector2Int v) => new Vector2Int(i * v.X, i * v.Y);
+        public static Vector2Int operator *(in Vector2Int a, float f) => new Vector2Int((int)(a.X * f), (int)(a.Y * f));
+        public static Vector2Int operator *(float f, in Vector2Int a) => new Vector2Int((int)(f * a.X), (int)(f * a.Y));
         #endregion
 
         #region Methods
