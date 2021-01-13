@@ -4,6 +4,11 @@ namespace Engine.FunctionalTests.DisplaySystem
 {
     public static class KeysData
     {
+        public static ConsoleKeyInfo Enter => new ConsoleKeyInfo(default, ConsoleKey.Enter, false, false, false);
+        public static ConsoleKeyInfo Escape => new ConsoleKeyInfo(default, ConsoleKey.Escape, false, false, false);
+        public static ConsoleKeyInfo Backspace => new ConsoleKeyInfo(default, ConsoleKey.Backspace, false, false, false);
+        public static ConsoleKeyInfo F1 => new ConsoleKeyInfo(default, ConsoleKey.F1, false, false, false);
+
         public static class NumPad
         {
             public static ConsoleKeyInfo NP0 => new ConsoleKeyInfo(default, ConsoleKey.NumPad0, false, false, false);

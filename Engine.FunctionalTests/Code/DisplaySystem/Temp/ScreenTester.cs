@@ -1,6 +1,6 @@
 ﻿namespace Engine.FunctionalTests.DisplaySystem
 {
-    public class ScreenTesting
+    public class ScreenTester
     {
         #region ReadonlyFields
         private readonly InputSystem _inputSystem;
@@ -8,7 +8,7 @@
         #endregion
 
         #region Constructors
-        public ScreenTesting(int panelsAmount)
+        public ScreenTester(int panelsAmount)
         {
             var panels = _panelsCreator.CreateRandomPanels(panelsAmount);
             var keyBindings = PanelsBindingsCreator.Create(panels);
