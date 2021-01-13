@@ -6,8 +6,13 @@ namespace Engine.FunctionalTests.DisplaySystem
 {
     public class Panel : IGraphicObject
     {
-        #region Fields
+        #region ReadonlyFields
         private readonly Texture _texture;
+        #endregion
+
+        #region Fields
+        private ConsoleKeyInfo _displayKey;
+        private ConsoleKeyInfo _hideKey;
         #endregion
 
         #region Constructors
@@ -21,6 +26,8 @@ namespace Engine.FunctionalTests.DisplaySystem
                 var pixel = new Pixel(filler.BackgroundColor, filler.Foreground.Color, name[i]);
                 _texture.AddOrReplace(position, pixel);
             }
+
+            InputSystem.Get.KeyPressed += OnKeyPressed;
         }
         #endregion
 
@@ -28,7 +35,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         public IReadOnlyTexture Texture => _texture;
         #endregion
 
-        #region PublicStaticMethods
+        #region StaticMethods
         public static Panel CreateRandomPanelIn(in Rectangle limiter, in Vector2Int minSize, in Pixel filler, string name)
         {
             var random = new Random(DateTime.Now.Millisecond);
@@ -38,6 +45,22 @@ namespace Engine.FunctionalTests.DisplaySystem
             var rectangle = new Rectangle(topLeftAngle, size);
 
             return new Panel(rectangle, filler, name);
+        }
+        #endregion
+
+        #region PublicMethods
+        public void SetDisplayKey(ConsoleKeyInfo displayKey) => _displayKey = displayKey;
+
+        public void SetHideKey(ConsoleKeyInfo hideKey) => _hideKey = hideKey;
+        #endregion
+
+        #region PrivateMethods
+        private void OnKeyPressed(ConsoleKeyInfo keyInfo)
+        {
+            if (KeysService.Equals(keyInfo, _displayKey))
+                Screen.Get.Display(this);
+            if (KeysService.Equals(keyInfo, _hideKey))
+                Screen.Get.Hide(this);
         }
         #endregion
     }

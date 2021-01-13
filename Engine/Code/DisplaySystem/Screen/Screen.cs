@@ -25,13 +25,15 @@ namespace Engine.DisplaySystem
         }
         #endregion
 
+        #region StaticProperties
+        public static Screen Get => _screen;
+        #endregion
+
         #region Properties
         public Rectangle Rectangle => _rectangle;
         #endregion
 
-        #region PublicStaticMethods
-        public static Screen Get() => _screen;
-
+        #region StaticMethods
         public static string GetDisplayTitle() => Console.Title;
         public static void SetDisplayTitle(string title) => Console.Title = title;
         #endregion

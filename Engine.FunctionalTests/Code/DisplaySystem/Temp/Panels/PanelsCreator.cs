@@ -7,30 +7,28 @@ namespace Engine.FunctionalTests.DisplaySystem
 {
     public class PanelsCreator
     {
-        #region ReadonlyFields
+        #region Fields
         private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        private readonly Vector2Int _minSize = Screen.Get().Rectangle.Size * PanelsData.MinPartFromScreenSize;
+        private readonly Vector2Int _minSize = Screen.Get.Rectangle.Size * PanelsData.MinPartFromScreenSize;
         private readonly List<Pixel> _usedPixels = new List<Pixel>(PanelsData.Fillers.Length);
         #endregion
 
         #region PublicMethods
-        public Panel[] CreateRandomPanels(int amount)
+        public void CreateRandomPanels(int amount)
         {
-            var panels = new Panel[amount];
-
             for (int i = 0; i < amount; i++)
             {
                 var name = $"{PanelsData.BaseName}{i}";
-                panels[i] = GetRandomPanelFitIntoScreen(name);
+                var panel = GetRandomPanelFitIntoScreen(name);
+                panel.SetDisplayKey(PanelsData.KeysFor.DisplayActions[i]);
+                panel.SetHideKey(PanelsData.KeysFor.HideActions[i]);
             }
-
-            return panels;
         }
         #endregion
 
         #region PrivateMethods
         private Panel GetRandomPanelFitIntoScreen(string panelName)
-            => Panel.CreateRandomPanelIn(Screen.Get().Rectangle, _minSize, GetRandomUnusedPixel(), panelName);
+            => Panel.CreateRandomPanelIn(Screen.Get.Rectangle, _minSize, GetRandomUnusedPixel(), panelName);
 
         private Pixel GetRandomUnusedPixel()
         {

@@ -2,22 +2,16 @@
 {
     public class ScreenTester
     {
-        #region ReadonlyFields
-        private readonly InputSystem _inputSystem;
+        #region Fields
         private readonly PanelsCreator _panelsCreator = new PanelsCreator();
         #endregion
 
         #region Constructors
-        public ScreenTester(int panelsAmount)
-        {
-            var panels = _panelsCreator.CreateRandomPanels(panelsAmount);
-            var keyBindings = PanelsBindingsCreator.Create(panels);
-            _inputSystem = new InputSystem(keyBindings);
-        }
+        public ScreenTester() => _panelsCreator.CreateRandomPanels(5);
         #endregion
 
-        #region PublicMethods
-        public void Run() => _inputSystem.Run();
+        #region Methods
+        public void Run() => InputSystem.Get.Run();
         #endregion
     }
 }
