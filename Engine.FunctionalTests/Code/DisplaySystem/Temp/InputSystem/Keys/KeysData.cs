@@ -4,65 +4,45 @@ namespace Engine.FunctionalTests.DisplaySystem
 {
     public static class KeysData
     {
-        public static ConsoleKeyInfo Enter => new ConsoleKeyInfo(default, ConsoleKey.Enter, false, false, false);
-        public static ConsoleKeyInfo Escape => new ConsoleKeyInfo(default, ConsoleKey.Escape, false, false, false);
-        public static ConsoleKeyInfo Backspace => new ConsoleKeyInfo(default, ConsoleKey.Backspace, false, false, false);
-        public static ConsoleKeyInfo F1 => new ConsoleKeyInfo(default, ConsoleKey.F1, false, false, false);
+        #region ConstantFields
+        private const int NumPad0 = 96;
+        #endregion
 
-        public static class NumPad
+        #region StaticProperties
+        public static ConsoleKeyInfo Backspace { get; } = new ConsoleKeyInfo(default, ConsoleKey.Backspace, false, false, false);
+        public static ConsoleKeyInfo Enter { get; } = new ConsoleKeyInfo(default, ConsoleKey.Enter, false, false, false);
+        public static ConsoleKeyInfo Escape { get; } = new ConsoleKeyInfo(default, ConsoleKey.Escape, false, false, false);
+        public static ConsoleKeyInfo F1 { get; } = new ConsoleKeyInfo(default, ConsoleKey.F1, false, false, false);
+        public static ConsoleKeyInfo[] NumPadKeys { get; } = GetNumPadKeys();
+        #endregion
+
+        #region PublicStaticMethods
+        public static ConsoleKeyInfo NumPadKey(int number) => new ConsoleKeyInfo(default, (ConsoleKey)(NumPad0 + number), false, false, false);
+
+        public static ConsoleKeyInfo[] ModifiersPlusNumPadKeys(ConsoleModifiers modifiers)
         {
-            public static ConsoleKeyInfo NP0 => new ConsoleKeyInfo(default, ConsoleKey.NumPad0, false, false, false);
-            public static ConsoleKeyInfo NP1 => new ConsoleKeyInfo(default, ConsoleKey.NumPad1, false, false, false);
-            public static ConsoleKeyInfo NP2 => new ConsoleKeyInfo(default, ConsoleKey.NumPad2, false, false, false);
-            public static ConsoleKeyInfo NP3 => new ConsoleKeyInfo(default, ConsoleKey.NumPad3, false, false, false);
-            public static ConsoleKeyInfo NP4 => new ConsoleKeyInfo(default, ConsoleKey.NumPad4, false, false, false);
-            public static ConsoleKeyInfo NP5 => new ConsoleKeyInfo(default, ConsoleKey.NumPad5, false, false, false);
-            public static ConsoleKeyInfo NP6 => new ConsoleKeyInfo(default, ConsoleKey.NumPad6, false, false, false);
-            public static ConsoleKeyInfo NP7 => new ConsoleKeyInfo(default, ConsoleKey.NumPad7, false, false, false);
-            public static ConsoleKeyInfo NP8 => new ConsoleKeyInfo(default, ConsoleKey.NumPad8, false, false, false);
-            public static ConsoleKeyInfo NP9 => new ConsoleKeyInfo(default, ConsoleKey.NumPad9, false, false, false);
+            var result = GetNumPadKeys();
 
-            public static class Shift
+            for (int i = 0; i < 10; i++)
             {
-                public static ConsoleKeyInfo NP0 => new ConsoleKeyInfo(default, ConsoleKey.NumPad0, true, false, false);
-                public static ConsoleKeyInfo NP1 => new ConsoleKeyInfo(default, ConsoleKey.NumPad1, true, false, false);
-                public static ConsoleKeyInfo NP2 => new ConsoleKeyInfo(default, ConsoleKey.NumPad2, true, false, false);
-                public static ConsoleKeyInfo NP3 => new ConsoleKeyInfo(default, ConsoleKey.NumPad3, true, false, false);
-                public static ConsoleKeyInfo NP4 => new ConsoleKeyInfo(default, ConsoleKey.NumPad4, true, false, false);
-                public static ConsoleKeyInfo NP5 => new ConsoleKeyInfo(default, ConsoleKey.NumPad5, true, false, false);
-                public static ConsoleKeyInfo NP6 => new ConsoleKeyInfo(default, ConsoleKey.NumPad6, true, false, false);
-                public static ConsoleKeyInfo NP7 => new ConsoleKeyInfo(default, ConsoleKey.NumPad7, true, false, false);
-                public static ConsoleKeyInfo NP8 => new ConsoleKeyInfo(default, ConsoleKey.NumPad8, true, false, false);
-                public static ConsoleKeyInfo NP9 => new ConsoleKeyInfo(default, ConsoleKey.NumPad9, true, false, false);
+                var keyInfo = result[i];
+                result[i] = KeysService.ModifiersPlusKeyInfo(modifiers, keyInfo);
             }
 
-            public static class Shift_Control
-            {
-                public static ConsoleKeyInfo NP0 => new ConsoleKeyInfo(default, ConsoleKey.NumPad0, true, false, true);
-                public static ConsoleKeyInfo NP1 => new ConsoleKeyInfo(default, ConsoleKey.NumPad1, true, false, true);
-                public static ConsoleKeyInfo NP2 => new ConsoleKeyInfo(default, ConsoleKey.NumPad2, true, false, true);
-                public static ConsoleKeyInfo NP3 => new ConsoleKeyInfo(default, ConsoleKey.NumPad3, true, false, true);
-                public static ConsoleKeyInfo NP4 => new ConsoleKeyInfo(default, ConsoleKey.NumPad4, true, false, true);
-                public static ConsoleKeyInfo NP5 => new ConsoleKeyInfo(default, ConsoleKey.NumPad5, true, false, true);
-                public static ConsoleKeyInfo NP6 => new ConsoleKeyInfo(default, ConsoleKey.NumPad6, true, false, true);
-                public static ConsoleKeyInfo NP7 => new ConsoleKeyInfo(default, ConsoleKey.NumPad7, true, false, true);
-                public static ConsoleKeyInfo NP8 => new ConsoleKeyInfo(default, ConsoleKey.NumPad8, true, false, true);
-                public static ConsoleKeyInfo NP9 => new ConsoleKeyInfo(default, ConsoleKey.NumPad9, true, false, true);
-            }
-
-            public static class Control
-            {
-                public static ConsoleKeyInfo NP0 => new ConsoleKeyInfo(default, ConsoleKey.NumPad0, false, false, true);
-                public static ConsoleKeyInfo NP1 => new ConsoleKeyInfo(default, ConsoleKey.NumPad1, false, false, true);
-                public static ConsoleKeyInfo NP2 => new ConsoleKeyInfo(default, ConsoleKey.NumPad2, false, false, true);
-                public static ConsoleKeyInfo NP3 => new ConsoleKeyInfo(default, ConsoleKey.NumPad3, false, false, true);
-                public static ConsoleKeyInfo NP4 => new ConsoleKeyInfo(default, ConsoleKey.NumPad4, false, false, true);
-                public static ConsoleKeyInfo NP5 => new ConsoleKeyInfo(default, ConsoleKey.NumPad5, false, false, true);
-                public static ConsoleKeyInfo NP6 => new ConsoleKeyInfo(default, ConsoleKey.NumPad6, false, false, true);
-                public static ConsoleKeyInfo NP7 => new ConsoleKeyInfo(default, ConsoleKey.NumPad7, false, false, true);
-                public static ConsoleKeyInfo NP8 => new ConsoleKeyInfo(default, ConsoleKey.NumPad8, false, false, true);
-                public static ConsoleKeyInfo NP9 => new ConsoleKeyInfo(default, ConsoleKey.NumPad9, false, false, true);
-            }
+            return result;
         }
+        #endregion
+
+        #region PrivateStaticMethods
+        private static ConsoleKeyInfo[] GetNumPadKeys()
+        {
+            var result = new ConsoleKeyInfo[10];
+
+            for (int i = 0; i < 10; i++)
+                result[i] = NumPadKey(i);
+
+            return result;
+        }
+        #endregion
     }
 }

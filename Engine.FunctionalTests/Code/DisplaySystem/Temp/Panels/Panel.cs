@@ -57,9 +57,9 @@ namespace Engine.FunctionalTests.DisplaySystem
         #region PrivateMethods
         private void OnKeyPressed(ConsoleKeyInfo keyInfo)
         {
-            if (KeysService.Equals(keyInfo, _displayKey))
+            if (KeysService.EqualsWithoutChar(keyInfo, _displayKey))
                 Screen.Get.Display(this);
-            if (KeysService.Equals(keyInfo, _hideKey))
+            if (KeysService.EqualsWithoutChar(keyInfo, _hideKey))
                 Screen.Get.Hide(this);
         }
         #endregion

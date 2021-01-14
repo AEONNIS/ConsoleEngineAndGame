@@ -2,122 +2,62 @@
 {
     public static class HelperData
     {
+        #region ConstantFields
+        public const int MinPanels = 1;
+        public const int MaxPanels = 10;
+        #endregion
+
+        #region StaticClasses
         public static class Messages
         {
+            #region StaticProperties
             public static Message Initial { get; } = new Message
             {
-                Coloring = ColoringsData.Request,
-                Text = "Введите количество панелей для теста (от 1 до 10): ",
+                Coloring = ColoringsData.GreenOnBlack,
+                Text = $"Введите количество панелей для теста (от {MinPanels} до {MaxPanels}): ",
             };
             public static Message WrongInput { get; } = new Message
             {
-                Coloring = ColoringsData.Wrong,
-                Text = "Неправильный ввод! Пожалуйста, повторите еще раз...",
+                Coloring = ColoringsData.RedOnBlack,
+                Text = "Неправильный ввод! Пожалуйста, повторите еще раз: ",
             };
             public static Message PlusSign { get; } = new Message
             {
-                Coloring = ColoringsData.Default,
+                Coloring = ColoringsData.GrayOnBlack,
                 Text = "+",
             };
             public static Message InputConfirmation { get; } = new Message
             {
-                Coloring = ColoringsData.Default,
+                Coloring = ColoringsData.GrayOnBlack,
                 Text = "Подтвердить ввод.",
             };
             public static Message DeleteChar { get; } = new Message
             {
-                Coloring = ColoringsData.Default,
+                Coloring = ColoringsData.GrayOnBlack,
                 Text = "Удалить символ.",
             };
+            #endregion
 
-            public static class Keys
+            #region StaticMethods
+            public static Message Empty(int length) => new Message
             {
-                public static Message Enter { get; } = new Message
-                {
-                    Coloring = ColoringsData.Keys,
-                    Text = "[Enter]",
-                };
-                public static Message Escape { get; } = new Message
-                {
-                    Coloring = ColoringsData.Keys,
-                    Text = "[Escape]",
-                };
-                public static Message Backspace { get; } = new Message
-                {
-                    Coloring = ColoringsData.Keys,
-                    Text = "[Backspace]",
-                };
-                public static Message F1 { get; } = new Message
-                {
-                    Coloring = ColoringsData.Keys,
-                    Text = "[F1]",
-                };
-                public static Message Shift { get; } = new Message
-                {
-                    Coloring = ColoringsData.Keys,
-                    Text = "[Shift]",
-                };
-                public static Message Control { get; } = new Message
-                {
-                    Coloring = ColoringsData.Keys,
-                    Text = "[Control]",
-                };
+                Coloring = ColoringsData.GrayOnBlack,
+                Text = new string(' ', length),
+            };
 
-                public static class NumPad
-                {
-                    public static Message NP0 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[0]",
-                    };
-                    public static Message NP1 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[1]",
-                    };
-                    public static Message NP2 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[2]",
-                    };
-                    public static Message NP3 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[3]",
-                    };
-                    public static Message NP4 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[4]",
-                    };
-                    public static Message NP5 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[5]",
-                    };
-                    public static Message NP6 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[6]",
-                    };
-                    public static Message NP7 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[7]",
-                    };
-                    public static Message NP8 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[8]",
-                    };
-                    public static Message NP9 { get; } = new Message
-                    {
-                        Coloring = ColoringsData.Keys,
-                        Text = "[9]",
-                    };
-                }
-            }
+            public static Message Key(string name) => new Message
+            {
+                Coloring = ColoringsData.BlackOnWhite,
+                Text = $"[{name}]",
+            };
+
+            public static Message NumPadKey(int number) => new Message
+            {
+                Coloring = ColoringsData.BlackOnWhite,
+                Text = $"[NumPad{number}]",
+            };
+            #endregion
         }
-
+        #endregion
     }
 }

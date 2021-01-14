@@ -6,8 +6,7 @@ namespace Engine.FunctionalTests
     {
         public static void Main(string[] args)
         {
-            ScreenTester screenTester = new ScreenTester();
-            screenTester.Run();
+            new ScreenTester().Run();
         }
     }
 }

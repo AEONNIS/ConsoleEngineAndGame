@@ -2,12 +2,8 @@
 {
     public class ScreenTester
     {
-        #region Fields
-        private readonly PanelsCreator _panelsCreator = new PanelsCreator();
-        #endregion
-
         #region Constructors
-        public ScreenTester() => _panelsCreator.CreateRandomPanels(5);
+        public ScreenTester() => new Helper().Run();
         #endregion
 
         #region Methods
