@@ -27,7 +27,7 @@ namespace Engine.FunctionalTests.DisplaySystem
                 _texture.AddOrReplace(position, pixel);
             }
 
-            InputSystem.Get.KeyPressed += OnKeyPressed;
+            InputSystem.Get.KeyPressedInTesting += OnKeyPressedInTesting;
         }
         #endregion
 
@@ -55,7 +55,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         #endregion
 
         #region PrivateMethods
-        private void OnKeyPressed(ConsoleKeyInfo keyInfo)
+        private void OnKeyPressedInTesting(ConsoleKeyInfo keyInfo)
         {
             if (KeysService.EqualsWithoutChar(keyInfo, _displayKey))
                 Screen.Get.Display(this);

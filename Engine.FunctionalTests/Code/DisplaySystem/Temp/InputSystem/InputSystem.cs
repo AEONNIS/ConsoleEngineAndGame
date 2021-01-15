@@ -13,11 +13,17 @@ namespace Engine.FunctionalTests.DisplaySystem
         #endregion
 
         #region Events
-        public event Action<ConsoleKeyInfo> KeyPressed;
+        public event Action<ConsoleKeyInfo> KeyPressedInInitial;
+        public event Action<ConsoleKeyInfo> KeyPressedInHelp;
+        public event Action<ConsoleKeyInfo> KeyPressedInTesting;
         #endregion
 
         #region StaticProperties
         public static InputSystem Get => _inputSystem;
+        #endregion
+
+        #region Properties
+        public State State { get; private set; } = State.Initial;
         #endregion
 
         #region Methods
@@ -26,9 +32,17 @@ namespace Engine.FunctionalTests.DisplaySystem
             while (true)
             {
                 var keyInfo = Console.ReadKey(true);
-                KeyPressed?.Invoke(keyInfo);
+
+                if (State == State.Initial)
+                    KeyPressedInInitial?.Invoke(keyInfo);
+                else if (State == State.Help)
+                    KeyPressedInHelp?.Invoke(keyInfo);
+                else
+                    KeyPressedInTesting?.Invoke(keyInfo);
             }
         }
+
+        public void SetState(State state) => State = state;
         #endregion
     }
 }

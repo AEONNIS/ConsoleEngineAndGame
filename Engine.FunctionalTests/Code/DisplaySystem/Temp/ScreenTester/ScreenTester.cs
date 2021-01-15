@@ -2,7 +2,7 @@
 
 namespace Engine.FunctionalTests.DisplaySystem
 {
-    public class Helper
+    public class ScreenTester
     {
         #region Methods
         public void Run()
@@ -20,21 +20,48 @@ namespace Engine.FunctionalTests.DisplaySystem
         private void DisplayInitialMessages()
         {
             DisplayHintsToConfirmInputAndDeleteChar();
-            HelperData.Messages.Initial.Write();
+            Data.Messages.Initial.Write();
         }
 
         private void DisplayHintsToConfirmInputAndDeleteChar()
         {
-            HelperData.Messages.Key("Enter").Write();
-            HelperData.Messages.InputConfirmation.Write(before: " - ", after: " ");
+            Data.Messages.Key("Enter").Write();
+            Data.Messages.InputConfirmation.Write(before: " - ", after: " ");
 
-            HelperData.Messages.Key("Backspace").Write();
-            HelperData.Messages.DeleteChar.WriteLine(before: " - ", after: "\n");
+            Data.Messages.Key("Backspace").Write();
+            Data.Messages.DeleteChar.Write(before: " - ", after: "\n\n");
         }
 
         private void DisplayControlHelp(int panelsNumber)
         {
+            Data.Messages.PanelsNumber(panelsNumber).Write(after: "\n\n");
 
+            for (int i = 0; i < panelsNumber; i++)
+            {
+                foreach (var message in Data.Messages.KeyInfo(PanelsData.KeysFor.DisplayActions[i]))
+                    message.Write();
+
+                Data.Messages.DisplayPanel(i).Write(after: "\n");
+            }
+
+            Data.Messages.Empty.Write(after: "\n");
+
+            for (int i = 0; i < panelsNumber; i++)
+            {
+                foreach (var message in Data.Messages.KeyInfo(PanelsData.KeysFor.HideActions[i]))
+                    message.Write();
+
+                Data.Messages.HidePanel(i).Write(after: "\n");
+            }
+
+            Data.Messages.Key("F1").Write(before: "\n");
+            Data.Messages.DisplayHelp.Write(before: " - ", after: "\n");
+
+            Data.Messages.Key("Enter").Write();
+            Data.Messages.StartTesting.Write(before: " - ", after: "\n");
+
+            Data.Messages.Key("Escape").Write();
+            Data.Messages.ProgramExit.Write(before: " - ", after: "\n");
         }
         #endregion
 
@@ -44,9 +71,9 @@ namespace Engine.FunctionalTests.DisplaySystem
             Console.CursorVisible = true;
             string input = Console.ReadLine();
 
-            if (CheckNumberInput(input, HelperData.MinPanels, HelperData.MaxPanels, out int panelsNumber) is false)
+            if (CheckNumberInput(input, Data.MinPanels, Data.MaxPanels, out int panelsNumber) is false)
             {
-                HelperData.Messages.WrongInput.Write();
+                Data.Messages.WrongInput.Write();
                 var cursorPosition = Console.GetCursorPosition();
 
                 do
@@ -55,7 +82,7 @@ namespace Engine.FunctionalTests.DisplaySystem
                     ClearLinePart(cursorPosition, length + 1);
                     input = Console.ReadLine();
                 }
-                while (CheckNumberInput(input, HelperData.MinPanels, HelperData.MaxPanels, out panelsNumber) is false);
+                while (CheckNumberInput(input, Data.MinPanels, Data.MaxPanels, out panelsNumber) is false);
             }
 
             Console.CursorVisible = false;
@@ -68,7 +95,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         private void ClearLinePart((int Left, int Top) startPosition, int length)
         {
             Console.SetCursorPosition(startPosition.Left, startPosition.Top);
-            HelperData.Messages.Empty(length).Write();
+            Data.Messages.Space(length).Write();
             Console.SetCursorPosition(startPosition.Left, startPosition.Top);
         }
 

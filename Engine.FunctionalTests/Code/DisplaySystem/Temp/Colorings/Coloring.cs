@@ -10,7 +10,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         #endregion
 
         #region PublicMethods
-        public readonly void SetColors()
+        public readonly void ApplyColors()
         {
             Console.BackgroundColor = BgColor;
             Console.ForegroundColor = FgColor;
