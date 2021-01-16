@@ -7,29 +7,28 @@ namespace Engine.FunctionalTests.DisplaySystem
         #region Methods
         public void Run()
         {
-            DisplayInitialMessages();
+            DisplayRequestPanelsNumber();
             var panelsNumber = RequestPanelsNumber();
-            new PanelsCreator().CreateRandomPanels(panelsNumber);
-            ClearConsole();
 
-            DisplayControlHelp(panelsNumber);
+            //new PanelsCreator().CreateRandomPanels(panelsNumber);
+            //InputSystem.Get.SetState(State.Testing);
+            //InputSystem.Get.Run();
+            //ClearConsole();
+
+            //DisplayControlHelp(panelsNumber);
         }
         #endregion
 
+        #region Properties
+        public State State { get; private set; } = State.Initial;
+        #endregion
+
         #region DisplayMessages
-        private void DisplayInitialMessages()
+        private void DisplayRequestPanelsNumber()
         {
-            DisplayHintsToConfirmInputAndDeleteChar();
-            Data.Messages.Initial.Write();
-        }
-
-        private void DisplayHintsToConfirmInputAndDeleteChar()
-        {
-            Data.Messages.Key("Enter").Write();
-            Data.Messages.InputConfirmation.Write(before: " - ", after: " ");
-
-            Data.Messages.Key("Backspace").Write();
-            Data.Messages.DeleteChar.Write(before: " - ", after: "\n\n");
+            Data.Messages.ConfirmInputHint.Write(after: "\n");
+            Data.Messages.DeleteCharHint.Write(after: "\n\n");
+            Data.Messages.RequestPanelsNumber.Write();
         }
 
         private void DisplayControlHelp(int panelsNumber)
@@ -38,7 +37,7 @@ namespace Engine.FunctionalTests.DisplaySystem
 
             for (int i = 0; i < panelsNumber; i++)
             {
-                foreach (var message in Data.Messages.KeyInfo(PanelsData.KeysFor.DisplayActions[i]))
+                foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.DisplayOnScreen[i]))
                     message.Write();
 
                 Data.Messages.DisplayPanel(i).Write(after: "\n");
@@ -48,20 +47,20 @@ namespace Engine.FunctionalTests.DisplaySystem
 
             for (int i = 0; i < panelsNumber; i++)
             {
-                foreach (var message in Data.Messages.KeyInfo(PanelsData.KeysFor.HideActions[i]))
+                foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.HideFromScreen[i]))
                     message.Write();
 
                 Data.Messages.HidePanel(i).Write(after: "\n");
             }
 
-            Data.Messages.Key("F1").Write(before: "\n");
-            Data.Messages.DisplayHelp.Write(before: " - ", after: "\n");
+            //Data.Messages.Key("F1").Write(before: "\n");
+            //Data.Messages.DisplayHelp.Write(before: " - ", after: "\n");
 
-            Data.Messages.Key("Enter").Write();
-            Data.Messages.StartTesting.Write(before: " - ", after: "\n");
+            //Data.Messages.Key("Enter").Write();
+            //Data.Messages.StartTesting.Write(before: " - ", after: "\n");
 
-            Data.Messages.Key("Escape").Write();
-            Data.Messages.ProgramExit.Write(before: " - ", after: "\n");
+            //Data.Messages.Key("Escape").Write();
+            //Data.Messages.ProgramExit.Write(before: " - ", after: "\n");
         }
         #endregion
 
@@ -71,38 +70,22 @@ namespace Engine.FunctionalTests.DisplaySystem
             Console.CursorVisible = true;
             string input = Console.ReadLine();
 
-            if (CheckNumberInput(input, Data.MinPanels, Data.MaxPanels, out int panelsNumber) is false)
+            if (Services.CheckNumberInput(input, Data.Panels.Min, Data.Panels.Max, out int panelsNumber) is false)
             {
                 Data.Messages.WrongInput.Write();
                 var cursorPosition = Console.GetCursorPosition();
 
                 do
                 {
-                    var length = input is not null ? input.Length : 2;
-                    ClearLinePart(cursorPosition, length + 1);
+                    var length = input is not null ? input.Length : 1;
+                    Services.InConsole.ClearLinePart(cursorPosition, length + 1);
                     input = Console.ReadLine();
                 }
-                while (CheckNumberInput(input, Data.MinPanels, Data.MaxPanels, out panelsNumber) is false);
+                while (Services.CheckNumberInput(input, Data.Panels.Min, Data.Panels.Max, out panelsNumber) is false);
             }
 
             Console.CursorVisible = false;
-
             return panelsNumber;
-        }
-
-        private bool CheckNumberInput(string input, int min, int max, out int result) => int.TryParse(input, out result) && min <= result && result <= max;
-
-        private void ClearLinePart((int Left, int Top) startPosition, int length)
-        {
-            Console.SetCursorPosition(startPosition.Left, startPosition.Top);
-            Data.Messages.Space(length).Write();
-            Console.SetCursorPosition(startPosition.Left, startPosition.Top);
-        }
-
-        private void ClearConsole()
-        {
-            Console.ResetColor();
-            Console.Clear();
         }
         #endregion
     }

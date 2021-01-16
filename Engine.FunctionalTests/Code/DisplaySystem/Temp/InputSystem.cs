@@ -8,12 +8,15 @@ namespace Engine.FunctionalTests.DisplaySystem
         private static readonly InputSystem _inputSystem = new InputSystem();
         #endregion
 
+        #region Fields
+        private ScreenTester _tester;
+        #endregion
+
         #region PrivateConstructor
         private InputSystem() { }
         #endregion
 
         #region Events
-        public event Action<ConsoleKeyInfo> KeyPressedInInitial;
         public event Action<ConsoleKeyInfo> KeyPressedInHelp;
         public event Action<ConsoleKeyInfo> KeyPressedInTesting;
         #endregion
@@ -22,27 +25,21 @@ namespace Engine.FunctionalTests.DisplaySystem
         public static InputSystem Get => _inputSystem;
         #endregion
 
-        #region Properties
-        public State State { get; private set; } = State.Initial;
-        #endregion
-
         #region Methods
-        public void Run()
+        public void Run(ScreenTester tester)
         {
+            _tester = tester;
+
             while (true)
             {
                 var keyInfo = Console.ReadKey(true);
 
-                if (State == State.Initial)
-                    KeyPressedInInitial?.Invoke(keyInfo);
-                else if (State == State.Help)
+                if (_tester.State == State.Help)
                     KeyPressedInHelp?.Invoke(keyInfo);
-                else
+                else if (_tester.State == State.Testing)
                     KeyPressedInTesting?.Invoke(keyInfo);
             }
         }
-
-        public void SetState(State state) => State = state;
         #endregion
     }
 }

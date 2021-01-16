@@ -1,23 +1,45 @@
-﻿using System;
+﻿using Engine.DisplaySystem;
+using System;
 
 namespace Engine.FunctionalTests.DisplaySystem
 {
     public static class Data
     {
-        #region ConstantFields
-        public const int MinPanels = 1;
-        public const int MaxPanels = 10;
-        #endregion
-
-        #region Fields
-        private static readonly ColoringBuilder _builder = new ColoringBuilder();
-        #endregion
-
         #region Classes
+        public static class Keys
+        {
+            #region ConstantFields
+            private const int NumPad0 = 96;
+            #endregion
+
+            #region Properties
+            public static ConsoleKeyInfo Backspace => new ConsoleKeyInfo(default, ConsoleKey.Backspace, false, false, false);
+            public static ConsoleKeyInfo Enter => new ConsoleKeyInfo(default, ConsoleKey.Enter, false, false, false);
+            public static ConsoleKeyInfo Escape => new ConsoleKeyInfo(default, ConsoleKey.Escape, false, false, false);
+            public static ConsoleKeyInfo F1 => new ConsoleKeyInfo(default, ConsoleKey.F1, false, false, false);
+            public static ConsoleKeyInfo[] NumPads
+            {
+                get
+                {
+                    var result = new ConsoleKeyInfo[10];
+
+                    for (int i = 0; i < 10; i++)
+                        result[i] = NumPad(i);
+
+                    return result;
+                }
+            }
+            #endregion
+
+            #region Methods
+            public static ConsoleKeyInfo NumPad(int number) => new ConsoleKeyInfo(default, (ConsoleKey)(NumPad0 + number), false, false, false);
+            #endregion
+        }
+
         public static class Texts
         {
             #region Properties
-            public static string Initial => $"Введите количество панелей для теста (от {MinPanels} до {MaxPanels}): ";
+            public static string RequestPanelsNumber => $"Введите количество панелей для теста (от {Panels.Min} до {Panels.Max}): ";
             public static string WrongInput => "Неправильный ввод! Пожалуйста, повторите еще раз: ";
             public static string ConfirmInput => ": Подтвердить ввод.";
             public static string DeleteChar => ": Удалить символ.";
@@ -37,82 +59,52 @@ namespace Engine.FunctionalTests.DisplaySystem
 
         public static class Colorings
         {
+            #region Fields
+            private static readonly ColoringBuilder _builder = new ColoringBuilder();
+            #endregion
+
+            #region Properties
             public static Coloring Default => _builder.Gray.On.Black.Build();
             public static Coloring Key => _builder.White.On.Blue.Build();
             public static Coloring Wrong => _builder.Red.On.Black.Build();
-            public static Coloring Green => _builder.Green.On.Black.Build();
+            public static Coloring BlueOnBlack => _builder.Blue.On.Black.Build();
+            public static Coloring CyanOnBlack => _builder.Cyan.On.Black.Build();
+            public static Coloring GreenOnBlack => _builder.Green.On.Black.Build();
+            #endregion
         }
 
         public static class Messages
         {
-            #region StaticProperties
-            public static SimpleMessage Empty { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "",
-            };
-            public static SimpleMessage Initial { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Green,
-                Text = $"Введите количество панелей для теста (от {MinPanels} до {MaxPanels}): ",
-            };
-            public static SimpleMessage WrongInput { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Wrong,
-                Text = "Неправильный ввод! Пожалуйста, повторите еще раз: ",
-            };
-            public static SimpleMessage InputConfirmation { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "Подтвердить ввод.",
-            };
-            public static SimpleMessage DeleteChar { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "Удалить символ.",
-            };
-            public static SimpleMessage DisplayHelp { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "Показать справку, которую вы сейчас видите.",
-            };
-            public static SimpleMessage StartTesting { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "Начать тестирование.",
-            };
-            public static SimpleMessage ProgramExit { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "Выйти из программы.",
-            };
-            public static SimpleMessage SeparatorPlus { get; } = new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = "+",
-            };
+            #region Properties
+            public static SimpleMessage RequestPanelsNumber => new SimpleMessage { Coloring = Colorings.GreenOnBlack, Text = Texts.RequestPanelsNumber };
+            public static SimpleMessage WrongInput => new SimpleMessage { Coloring = Colorings.Wrong, Text = Texts.WrongInput };
+            public static SimpleMessage ConfirmInput => new SimpleMessage { Coloring = Colorings.Default, Text = Texts.ConfirmInput };
+            public static CompositeMessage ConfirmInputHint => new CompositeMessage().Add(Key(Colorings.Key, "Enter")).Add(ConfirmInput);
+            public static SimpleMessage DeleteChar => new SimpleMessage { Coloring = Colorings.Default, Text = Texts.DeleteChar };
+            public static CompositeMessage DeleteCharHint => new CompositeMessage().Add(Key(Colorings.Key, "Backspace")).Add(DeleteChar);
+            public static SimpleMessage DisplayHelp => new SimpleMessage { Coloring = Colorings.Default, Text = Texts.DisplayHelp };
+
+
+            public static SimpleMessage Empty => new SimpleMessage { Coloring = Colorings.Default, Text = "" };
+            public static SimpleMessage StartTesting => new SimpleMessage { Coloring = Colorings.Default, Text = "Начать тестирование." };
+            public static SimpleMessage ProgramExit => new SimpleMessage { Coloring = Colorings.Default, Text = "Выйти из программы." };
+            public static SimpleMessage SeparatorPlus => new SimpleMessage { Coloring = Colorings.Default, Text = "+" };
             #endregion
 
             #region Methods
-            public static SimpleMessage Space(int length) => new SimpleMessage
-            {
-                Coloring = Colorings.Default,
-                Text = new string(' ', length),
-            };
+            public static SimpleMessage Message(Coloring coloring, string text) => new SimpleMessage { Coloring = coloring, Text = text };
+            public static SimpleMessage Space(Coloring coloring, int length) => new SimpleMessage { Coloring = coloring, Text = new string(' ', length) };
+            public static SimpleMessage Key(Coloring coloring, string name) => new SimpleMessage { Coloring = coloring, Text = Texts.Key(name) };
 
-            public static SimpleMessage Key(string name) => new SimpleMessage
-            {
-                Coloring = Colorings.Key,
-                Text = $"[{name}]",
-            };
+
 
             public static SimpleMessage[] KeyInfo(in ConsoleKeyInfo keyInfo)
             {
                 var messages = new SimpleMessage[7];
 
-                if (KeysService.ShiftPressed(keyInfo.Modifiers))
+                if (Services.Keys.ShiftPressed(keyInfo.Modifiers))
                 {
-                    messages[0] = Key("Shift");
+                    messages[0] = Key(Colorings.Key, "Shift");
                     messages[1] = SeparatorPlus;
                 }
                 else
@@ -121,9 +113,9 @@ namespace Engine.FunctionalTests.DisplaySystem
                     messages[1] = Empty;
                 }
 
-                if (KeysService.AltPressed(keyInfo.Modifiers))
+                if (Services.Keys.AltPressed(keyInfo.Modifiers))
                 {
-                    messages[2] = Key("Alt");
+                    messages[2] = Key(Colorings.Key, "Alt");
                     messages[3] = SeparatorPlus;
                 }
                 else
@@ -132,9 +124,9 @@ namespace Engine.FunctionalTests.DisplaySystem
                     messages[3] = Empty;
                 }
 
-                if (KeysService.ControlPressed(keyInfo.Modifiers))
+                if (Services.Keys.ControlPressed(keyInfo.Modifiers))
                 {
-                    messages[4] = Key("Control");
+                    messages[4] = Key(Colorings.Key, "Control");
                     messages[5] = SeparatorPlus;
                 }
                 else
@@ -143,7 +135,7 @@ namespace Engine.FunctionalTests.DisplaySystem
                     messages[5] = Empty;
                 }
 
-                messages[6] = Key($"{keyInfo.Key}");
+                messages[6] = Key(Colorings.Key, $"{keyInfo.Key}");
 
                 return messages;
             }
@@ -168,9 +160,55 @@ namespace Engine.FunctionalTests.DisplaySystem
 
             public static SimpleMessage PanelsNumber(int number) => new SimpleMessage
             {
-                Coloring = Colorings.Green,
+                Coloring = Colorings.GreenOnBlack,
                 Text = $"Создано {number} панелей. Управление для них показано ниже:",
             };
+            #endregion
+        }
+
+        public static class Panels
+        {
+            #region ConstantFields
+            public const int Min = 1;
+            public const int Max = 10;
+            public const string BaseName = "Panel_";
+            public const float MinPartFromScreenSize = 0.6f;
+            #endregion
+
+            #region Properties
+            public static char[] Symbols => new char[] { '\u2591', '\u2592', '\u2593', '\u25A0', '\u253C' };
+
+            public static Coloring[] Colorings => new Coloring[]
+            {
+            };
+
+            public static Pixel[] Fillers => new Pixel[]
+            {
+                new Pixel(ConsoleColor.Blue, ConsoleColor.Black, ' '),
+                new Pixel(ConsoleColor.Cyan, ConsoleColor.Black, '!'),
+                new Pixel(ConsoleColor.DarkBlue, ConsoleColor.White, '@'),
+                new Pixel(ConsoleColor.DarkCyan, ConsoleColor.White, '#'),
+                new Pixel(ConsoleColor.DarkGray, ConsoleColor.White, '$'),
+                new Pixel(ConsoleColor.DarkGreen, ConsoleColor.White, '%'),
+                new Pixel(ConsoleColor.DarkMagenta, ConsoleColor.White, '^'),
+                new Pixel(ConsoleColor.DarkRed, ConsoleColor.White, '&'),
+                new Pixel(ConsoleColor.DarkYellow, ConsoleColor.White, '*'),
+                new Pixel(ConsoleColor.Gray, ConsoleColor.Black, '-'),
+                new Pixel(ConsoleColor.Green, ConsoleColor.Black, '+'),
+                new Pixel(ConsoleColor.Magenta, ConsoleColor.Black, '='),
+                new Pixel(ConsoleColor.Red, ConsoleColor.Black, '~'),
+                new Pixel(ConsoleColor.White, ConsoleColor.Black, '/'),
+                new Pixel(ConsoleColor.Yellow, ConsoleColor.Black, '\\'),
+            };
+            #endregion
+
+            #region Classes
+            public static class KeysFor
+            {
+                public static ConsoleKeyInfo[] DisplayOnScreen => Keys.NumPads;
+
+                public static ConsoleKeyInfo[] HideFromScreen => Services.Keys.NumPadsPlusModifiers(ConsoleModifiers.Control);
+            }
             #endregion
         }
         #endregion

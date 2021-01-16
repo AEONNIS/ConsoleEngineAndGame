@@ -1,4 +1,5 @@
 ﻿using Engine.FunctionalTests.DisplaySystem;
+using System;
 
 namespace Engine.FunctionalTests
 {
@@ -6,7 +7,9 @@ namespace Engine.FunctionalTests
     {
         public static void Main(string[] args)
         {
-            new ScreenTester().Run();
+            Console.WriteLine(Data.Panels.Symbols);
+
+            //new ScreenTester().Run();
         }
     }
 }

@@ -9,8 +9,8 @@ namespace Engine.FunctionalTests.DisplaySystem
     {
         #region Fields
         private readonly Random _random = new Random(DateTime.Now.Millisecond);
-        private readonly Vector2Int _minSize = Screen.Get.Rectangle.Size * PanelsData.MinPartFromScreenSize;
-        private readonly List<Pixel> _usedPixels = new List<Pixel>(PanelsData.Fillers.Length);
+        private readonly Vector2Int _minSize = Screen.Get.Rectangle.Size * Data.Panels.MinPartFromScreenSize;
+        private readonly List<Pixel> _usedPixels = new List<Pixel>(Data.Panels.Fillers.Length);
         #endregion
 
         #region PublicMethods
@@ -18,10 +18,10 @@ namespace Engine.FunctionalTests.DisplaySystem
         {
             for (int i = 0; i < amount; i++)
             {
-                var name = $"{PanelsData.BaseName}{i}";
+                var name = $"{Data.Panels.BaseName}{i}";
                 var panel = GetRandomPanelFitIntoScreen(name);
-                panel.SetDisplayKey(PanelsData.KeysFor.DisplayActions[i]);
-                panel.SetHideKey(PanelsData.KeysFor.HideActions[i]);
+                panel.SetDisplayKey(Data.Panels.KeysFor.DisplayOnScreen[i]);
+                panel.SetHideKey(Data.Panels.KeysFor.HideFromScreen[i]);
             }
         }
         #endregion
@@ -36,14 +36,14 @@ namespace Engine.FunctionalTests.DisplaySystem
 
             do
                 pixel = GetRandomPixel();
-            while (_usedPixels.Contains(pixel) && _usedPixels.Count != PanelsData.Fillers.Length);
+            while (_usedPixels.Contains(pixel) && _usedPixels.Count != Data.Panels.Fillers.Length);
 
             _usedPixels.Add(pixel);
 
             return pixel;
         }
 
-        private Pixel GetRandomPixel() => PanelsData.Fillers[_random.Next(0, PanelsData.Fillers.Length)];
+        private Pixel GetRandomPixel() => Data.Panels.Fillers[_random.Next(0, Data.Panels.Fillers.Length)];
         #endregion
     }
 }
