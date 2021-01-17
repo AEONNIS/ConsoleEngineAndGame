@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.FunctionalTests.DisplaySystem
+namespace Engine.DisplaySystem
 {
     public class ColoringBuilder
     {
@@ -178,7 +178,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         #region PrivateMethods
         private ref ConsoleColor GetColor(bool foreground) => ref foreground ? ref _fgColor : ref _bgColor;
 
-        public void Reset()
+        private void Reset()
         {
             _foreground = true;
             _bgColor = ConsoleColor.Black;

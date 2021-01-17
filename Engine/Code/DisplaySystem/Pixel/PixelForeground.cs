@@ -82,8 +82,8 @@ namespace Engine.DisplaySystem
 
         public readonly override string ToString()
         {
-            string color = Color.HasValue ? Color.Value.ToString() : "Empty";
-            return $"FgC:{color}, Smb:'{Symbol}'";
+            string color = Color.HasValue ? Color.Value.ToString() : "Empty color";
+            return $"{color} '{Symbol}'";
         }
         #endregion
     }

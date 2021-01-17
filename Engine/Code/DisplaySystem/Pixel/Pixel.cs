@@ -5,6 +5,8 @@ namespace Engine.DisplaySystem
     public readonly struct Pixel : IEquatable<Pixel>
     {
         #region StaticFields
+        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
+
         private static readonly Pixel _emptySpace = new Pixel(null, PixelForeground.EmptySpace);
         private static readonly Pixel _blackSpace = new Pixel(ConsoleColor.Black, PixelForeground.BlackSpace);
         private static readonly Pixel _darkBlueSpace = new Pixel(ConsoleColor.DarkBlue, PixelForeground.DarkBlueSpace);
@@ -32,6 +34,9 @@ namespace Engine.DisplaySystem
         }
         public Pixel(ConsoleColor? backgroundColor, ConsoleColor? foregroundColor, char symbol) :
                this(backgroundColor, new PixelForeground(foregroundColor, symbol))
+        { }
+        public Pixel(in Coloring coloring, char Symbol) :
+               this(coloring.BgColor, new PixelForeground(coloring.FgColor, Symbol))
         { }
         #endregion
 
@@ -78,6 +83,16 @@ namespace Engine.DisplaySystem
         }
         #endregion
 
+        #region FactoryMethods
+        public static Pixel CreateRandomFrom(in Coloring[] colorings, char[] symbols)
+        {
+            var coloring = colorings[_random.Next(0, colorings.Length)];
+            var symbol = symbols[_random.Next(0, symbols.Length)];
+
+            return new Pixel(coloring, symbol);
+        }
+        #endregion
+
         #region Methods
         public readonly override bool Equals(object obj) => obj is Pixel pixel && Equals(pixel);
         public readonly bool Equals(Pixel other) => BackgroundColor == other.BackgroundColor && Foreground.Equals(other.Foreground);
@@ -86,8 +101,8 @@ namespace Engine.DisplaySystem
 
         public readonly override string ToString()
         {
-            string backgroundColor = BackgroundColor.HasValue ? BackgroundColor.Value.ToString() : "Empty";
-            return $"BgC:{backgroundColor}, {Foreground}";
+            string backgroundColor = BackgroundColor.HasValue ? BackgroundColor.Value.ToString() : "Empty color";
+            return $"{Foreground} on {backgroundColor}";
         }
         #endregion
     }

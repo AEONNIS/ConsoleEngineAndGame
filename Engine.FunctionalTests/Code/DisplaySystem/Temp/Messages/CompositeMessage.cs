@@ -5,11 +5,11 @@ namespace Engine.FunctionalTests.DisplaySystem
     public class CompositeMessage : IMessage
     {
         #region Fields
-        private readonly List<SimpleMessage> _messages = new List<SimpleMessage>();
+        private readonly List<IMessage> _messages = new List<IMessage>();
         #endregion
 
         #region Methods
-        public CompositeMessage Add(SimpleMessage message)
+        public CompositeMessage Add(IMessage message)
         {
             _messages.Add(message);
             return this;

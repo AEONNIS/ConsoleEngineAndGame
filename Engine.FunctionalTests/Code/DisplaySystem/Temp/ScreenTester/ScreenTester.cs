@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Engine.FunctionalTests.DisplaySystem
+﻿namespace Engine.FunctionalTests.DisplaySystem
 {
     public class ScreenTester
     {
@@ -9,8 +7,8 @@ namespace Engine.FunctionalTests.DisplaySystem
         {
             DisplayRequestPanelsNumber();
             var panelsNumber = RequestPanelsNumber();
+            new PanelsCreator().CreateRandomPanels(panelsNumber);
 
-            //new PanelsCreator().CreateRandomPanels(panelsNumber);
             //InputSystem.Get.SetState(State.Testing);
             //InputSystem.Get.Run();
             //ClearConsole();
@@ -31,62 +29,41 @@ namespace Engine.FunctionalTests.DisplaySystem
             Data.Messages.RequestPanelsNumber.Write();
         }
 
-        private void DisplayControlHelp(int panelsNumber)
-        {
-            Data.Messages.PanelsNumber(panelsNumber).Write(after: "\n\n");
+        //private void DisplayControlHelp(int panelsNumber)
+        //{
+        //    Data.Messages.PanelsNumber(panelsNumber).Write(after: "\n\n");
 
-            for (int i = 0; i < panelsNumber; i++)
-            {
-                foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.DisplayOnScreen[i]))
-                    message.Write();
+        //    for (int i = 0; i < panelsNumber; i++)
+        //    {
+        //        foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.DisplayOnScreen[i]))
+        //            message.Write();
 
-                Data.Messages.DisplayPanel(i).Write(after: "\n");
-            }
+        //        Data.Messages.DisplayPanel(i).Write(after: "\n");
+        //    }
 
-            Data.Messages.Empty.Write(after: "\n");
+        //    Data.Messages.Empty.Write(after: "\n");
 
-            for (int i = 0; i < panelsNumber; i++)
-            {
-                foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.HideFromScreen[i]))
-                    message.Write();
+        //    for (int i = 0; i < panelsNumber; i++)
+        //    {
+        //        foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.HideFromScreen[i]))
+        //            message.Write();
 
-                Data.Messages.HidePanel(i).Write(after: "\n");
-            }
+        //        Data.Messages.HidePanel(i).Write(after: "\n");
+        //    }
 
-            //Data.Messages.Key("F1").Write(before: "\n");
-            //Data.Messages.DisplayHelp.Write(before: " - ", after: "\n");
+        //Data.Messages.Key("F1").Write(before: "\n");
+        //Data.Messages.DisplayHelp.Write(before: " - ", after: "\n");
 
-            //Data.Messages.Key("Enter").Write();
-            //Data.Messages.StartTesting.Write(before: " - ", after: "\n");
+        //Data.Messages.Key("Enter").Write();
+        //Data.Messages.StartTesting.Write(before: " - ", after: "\n");
 
-            //Data.Messages.Key("Escape").Write();
-            //Data.Messages.ProgramExit.Write(before: " - ", after: "\n");
-        }
+        //Data.Messages.Key("Escape").Write();
+        //Data.Messages.ProgramExit.Write(before: " - ", after: "\n");
+        //}
         #endregion
 
         #region PrivateMethods
-        private int RequestPanelsNumber()
-        {
-            Console.CursorVisible = true;
-            string input = Console.ReadLine();
-
-            if (Services.CheckNumberInput(input, Data.Panels.Min, Data.Panels.Max, out int panelsNumber) is false)
-            {
-                Data.Messages.WrongInput.Write();
-                var cursorPosition = Console.GetCursorPosition();
-
-                do
-                {
-                    var length = input is not null ? input.Length : 1;
-                    Services.InConsole.ClearLinePart(cursorPosition, length + 1);
-                    input = Console.ReadLine();
-                }
-                while (Services.CheckNumberInput(input, Data.Panels.Min, Data.Panels.Max, out panelsNumber) is false);
-            }
-
-            Console.CursorVisible = false;
-            return panelsNumber;
-        }
+        private int RequestPanelsNumber() => Services.ForConsole.RequestNumber(Data.Panels.Min, Data.Panels.Max, Data.Messages.WrongInput, Data.Colorings.Default);
         #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Engine.DisplaySystem;
+using System;
 
 namespace Engine.FunctionalTests.DisplaySystem
 {
@@ -12,7 +13,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         #region Methods
         public void Write(string before = null, string after = null)
         {
-            Coloring.ApplyColors();
+            Coloring.SetInConsole();
             Console.Write($"{before}{Text}{after}");
         }
         #endregion
