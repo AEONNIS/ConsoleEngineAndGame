@@ -39,7 +39,7 @@ namespace Engine.DisplaySystem
         #endregion
 
         #region PublicStaticMethods
-        public static IReadOnlyCollection<Vector2Int> GetAllPointsFrom(IEnumerable<IReadOnlyTexture> textures)
+        public static IReadOnlyCollection<Vector2Int> GetAllUniquePointsFrom(IEnumerable<IReadOnlyTexture> textures)
         {
             List<Vector2Int> points = new List<Vector2Int>();
 

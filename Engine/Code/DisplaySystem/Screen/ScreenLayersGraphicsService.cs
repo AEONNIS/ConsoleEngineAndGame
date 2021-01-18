@@ -49,8 +49,8 @@ namespace Engine.DisplaySystem
 
         public static IReadOnlyTexture GetEmptyTextureFrom(IEnumerable<ScreenLayer> layers, in Pixel empty)
         {
-            var textures = layers.Select(layer => layer.Total);
-            var points = Texture.GetAllPointsFrom(textures);
+            var textures = layers.Select(layer => layer.UncoveredPart);
+            var points = Texture.GetAllUniquePointsFrom(textures);
             return new Texture(points, empty);
         }
         #endregion

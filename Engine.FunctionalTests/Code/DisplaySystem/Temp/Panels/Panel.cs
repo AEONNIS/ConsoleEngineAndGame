@@ -49,9 +49,11 @@ namespace Engine.FunctionalTests.DisplaySystem
         #endregion
 
         #region PublicMethods
-        public void SetDisplayKey(ConsoleKeyInfo displayKey) => _displayKey = displayKey;
+        public void SetDisplayKey(in ConsoleKeyInfo displayKey) => _displayKey = displayKey;
 
-        public void SetHideKey(ConsoleKeyInfo hideKey) => _hideKey = hideKey;
+        public void SetHideKey(in ConsoleKeyInfo hideKey) => _hideKey = hideKey;
+
+        public void UnsubscribeFromInputSystem() => InputSystem.Get.KeyPressedInTesting -= OnKeyPressedInTesting;
         #endregion
 
         #region PrivateMethods

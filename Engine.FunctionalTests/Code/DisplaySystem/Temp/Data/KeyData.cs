@@ -33,7 +33,7 @@ namespace Engine.FunctionalTests.DisplaySystem
             return result;
         }
 
-        public static class ForTester
+        public static class ScreenTester
         {
             public static ConsoleKeyInfo Backspace { get; } = KeyInfo(ConsoleKey.Backspace);
             public static ConsoleKeyInfo Enter { get; } = KeyInfo(ConsoleKey.Enter);
@@ -42,7 +42,7 @@ namespace Engine.FunctionalTests.DisplaySystem
             public static ConsoleKeyInfo F1 { get; } = KeyInfo(ConsoleKey.F1);
         }
 
-        public static class ForPanels
+        public static class Panels
         {
             public static ConsoleKeyInfo[] DisplayOnScreen { get; } = GetNumPads();
             public static ConsoleKeyInfo[] HideFromScreen { get; } = NumPadsPlusModifiers(ConsoleModifiers.Control);

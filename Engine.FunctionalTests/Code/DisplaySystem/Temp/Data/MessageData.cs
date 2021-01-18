@@ -3,7 +3,7 @@ using System;
 
 namespace Engine.FunctionalTests.DisplaySystem
 {
-    public static class MessageData
+    public static class MessageData // Может что-то вынести в сервис??
     {
         public static IMessage Space(in Coloring coloring, int length)
             => new SimpleMessage { Coloring = coloring, Text = TextData.Space(length) };
@@ -11,31 +11,31 @@ namespace Engine.FunctionalTests.DisplaySystem
         public static IMessage Message(in Coloring coloring, string text)
             => new SimpleMessage { Coloring = coloring, Text = text };
 
-        public static class ForKeys
+        public static class Keys
         {
             public static IMessage Key(in Coloring coloring, ConsoleKey key)
-                => new SimpleMessage { Coloring = coloring, Text = TextData.ForKeys.Key(key) };
+                => new SimpleMessage { Coloring = coloring, Text = TextData.Keys.Key(key) };
 
             public static IMessage Key(in Coloring coloring, string key)
-                => new SimpleMessage { Coloring = coloring, Text = TextData.ForKeys.Key(key) };
+                => new SimpleMessage { Coloring = coloring, Text = TextData.Keys.Key(key) };
 
             public static IMessage KeySeparator(in Coloring coloring)
-                => new SimpleMessage { Coloring = coloring, Text = TextData.ForKeys.Separator };
+                => new SimpleMessage { Coloring = coloring, Text = TextData.Keys.Separator };
 
             public static IMessage KeyInfo(in Coloring keyColoring, in Coloring separatorColoring, in ConsoleKeyInfo keyInfo)
             {
                 var message = new CompositeMessage();
 
                 if (KeyService.ShiftPressed(keyInfo.Modifiers))
-                    message.Add(Key(keyColoring, TextData.ForKeys.Shift))
+                    message.Add(Key(keyColoring, TextData.Keys.Shift))
                            .Add(KeySeparator(separatorColoring));
 
                 if (KeyService.AltPressed(keyInfo.Modifiers))
-                    message.Add(Key(keyColoring, TextData.ForKeys.Alt))
+                    message.Add(Key(keyColoring, TextData.Keys.Alt))
                            .Add(KeySeparator(separatorColoring));
 
                 if (KeyService.ControlPressed(keyInfo.Modifiers))
-                    message.Add(Key(keyColoring, TextData.ForKeys.Control))
+                    message.Add(Key(keyColoring, TextData.Keys.Control))
                            .Add(KeySeparator(separatorColoring));
 
                 message.Add(Key(keyColoring, keyInfo.Key));
@@ -44,60 +44,60 @@ namespace Engine.FunctionalTests.DisplaySystem
             }
         }
 
-        public static class ForNotifications
+        public static class Notifications
         {
             public static IMessage Control { get; }
-                = new SimpleMessage { Coloring = ColoringData.ForMessages.NotificationMessage, Text = TextData.ForNotifications.Control };
+                = new SimpleMessage { Coloring = ColoringData.Messages.NotificationMessage, Text = TextData.Notifications.Control };
 
             public static IMessage PanelsWillBeCreated { get; }
-                = new SimpleMessage { Coloring = ColoringData.ForMessages.NotificationMessage, Text = TextData.ForNotifications.PanelsWillBeCreated };
+                = new SimpleMessage { Coloring = ColoringData.Messages.NotificationMessage, Text = TextData.Notifications.PanelsWillBeCreated };
 
             public static IMessage PanelsCreated(int amount)
-                => new SimpleMessage { Coloring = ColoringData.ForMessages.NotificationMessage, Text = TextData.ForNotifications.PanelsCreated(amount) };
+                => new SimpleMessage { Coloring = ColoringData.Messages.NotificationMessage, Text = TextData.Notifications.PanelsCreated(amount) };
         }
 
-        public static class ForPrompts
+        public static class Prompts
         {
             public static IMessage ConfirmInput { get; } = new CompositeMessage()
-                .Add(ForKeys.Key(ColoringData.ForKeys.Key_1, KeyData.ForTester.Enter.Key))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.ConfirmInput });
+                .Add(Keys.Key(ColoringData.Keys.Enter, KeyData.ScreenTester.Enter.Key))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Enter, Text = TextData.Prompts.ConfirmInput });
 
             public static IMessage DeleteChar { get; } = new CompositeMessage()
-                .Add(ForKeys.Key(ColoringData.ForKeys.Key_1, KeyData.ForTester.Backspace.Key))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.DeleteChar });
+                .Add(Keys.Key(ColoringData.Keys.Backspace, KeyData.ScreenTester.Backspace.Key))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Backspace, Text = TextData.Prompts.DeleteChar });
 
             public static IMessage DisplayHelp { get; } = new CompositeMessage()
-                .Add(ForKeys.Key(ColoringData.ForKeys.Key_1, KeyData.ForTester.F1.Key))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.DisplayHelp });
+                .Add(Keys.Key(ColoringData.Keys.F1, KeyData.ScreenTester.F1.Key))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.F1, Text = TextData.Prompts.DisplayHelp });
 
             public static IMessage StartTesting { get; } = new CompositeMessage()
-                .Add(ForKeys.Key(ColoringData.ForKeys.Key_1, KeyData.ForTester.Enter.Key))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.StartTesting });
+                .Add(Keys.Key(ColoringData.Keys.Enter, KeyData.ScreenTester.Enter.Key))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Enter, Text = TextData.Prompts.StartTesting });
 
             public static IMessage StartOver { get; } = new CompositeMessage()
-                .Add(ForKeys.Key(ColoringData.ForKeys.Key_1, KeyData.ForTester.Spacebar.Key))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.StartOver });
+                .Add(Keys.Key(ColoringData.Keys.Spacebar, KeyData.ScreenTester.Spacebar.Key))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Spacebar, Text = TextData.Prompts.StartOver });
 
             public static IMessage Exit { get; } = new CompositeMessage()
-                .Add(ForKeys.Key(ColoringData.ForKeys.Key_1, KeyData.ForTester.Escape.Key))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.Exit });
+                .Add(Keys.Key(ColoringData.Keys.Escape, KeyData.ScreenTester.Escape.Key))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Escape, Text = TextData.Prompts.Exit });
 
             public static IMessage DisplayPanel(int number) => new CompositeMessage()
-                .Add(ForKeys.KeyInfo(ColoringData.ForKeys.Key_1, ColoringData.ForKeys.Separator, KeyData.ForPanels.DisplayOnScreen[number]))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.DisplayPanel(number) });
+                .Add(Keys.KeyInfo(ColoringData.Keys.Display, ColoringData.Keys.Separator, KeyData.Panels.DisplayOnScreen[number]))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Display, Text = TextData.Prompts.DisplayPanel(number) });
 
             public static IMessage HidePanel(int number) => new CompositeMessage()
-                .Add(ForKeys.KeyInfo(ColoringData.ForKeys.Key_1, ColoringData.ForKeys.Separator, KeyData.ForPanels.HideFromScreen[number]))
-                .Add(new SimpleMessage { Coloring = ColoringData.Default, Text = TextData.ForPrompts.HidePanel(number) });
+                .Add(Keys.KeyInfo(ColoringData.Keys.Hide, ColoringData.Keys.Separator, KeyData.Panels.HideFromScreen[number]))
+                .Add(new SimpleMessage { Coloring = ColoringData.Messages.Prompts.Hide, Text = TextData.Prompts.HidePanel(number) });
         }
 
-        public static class ForRequests
+        public static class Requests
         {
             public static IMessage PanelsNumber { get; }
-                = new SimpleMessage { Coloring = ColoringData.ForMessages.RequestMessage, Text = TextData.ForRequests.PanelsNumber };
+                = new SimpleMessage { Coloring = ColoringData.Messages.RequestMessage, Text = TextData.Requests.PanelsNumber };
 
             public static IMessage WrongInput { get; }
-                = new SimpleMessage { Coloring = ColoringData.ForMessages.WarningMessage, Text = TextData.ForRequests.WrongInput };
+                = new SimpleMessage { Coloring = ColoringData.Messages.WarningMessage, Text = TextData.Requests.WrongInput };
         }
     }
 }

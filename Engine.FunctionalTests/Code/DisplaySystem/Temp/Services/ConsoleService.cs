@@ -5,15 +5,15 @@ namespace Engine.FunctionalTests.DisplaySystem
 {
     public static class ConsoleService
     {
-        public static bool CheckNumberInString(string input, int min, int max, out int result)
+        public static bool ToCheckNumberInString(string input, int min, int max, out int result)
             => int.TryParse(input, out result) && min <= result && result <= max;
 
-        public static int RequestNumber(int min, int max, IMessage wrongInput, in Coloring defaultColoring)
+        public static int ToRequestAmount(int min, int max, IMessage wrongInput, in Coloring defaultColoring)
         {
             Console.CursorVisible = true;
             string input = Console.ReadLine();
 
-            if (CheckNumberInString(input, min, max, out int result) is false)
+            if (ToCheckNumberInString(input, min, max, out int result) is false)
             {
                 wrongInput.Write();
                 var cursorPosition = Console.GetCursorPosition();
@@ -24,7 +24,7 @@ namespace Engine.FunctionalTests.DisplaySystem
                     ClearLinePart(cursorPosition, defaultColoring, length + 1);
                     input = Console.ReadLine();
                 }
-                while (CheckNumberInString(input, min, max, out result) is false);
+                while (ToCheckNumberInString(input, min, max, out result) is false);
             }
 
             Console.CursorVisible = false;

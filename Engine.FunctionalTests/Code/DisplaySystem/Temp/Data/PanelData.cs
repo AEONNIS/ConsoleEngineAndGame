@@ -8,7 +8,7 @@ namespace Engine.FunctionalTests.DisplaySystem
         public const int Min = 1;
         public const int Max = 10;
         public const string BaseName = "Panel_";
-        public const float MinPartFromScreenSize = 0.6f;
+        public const float MinPartFromScreenSize = 0.5f;
 
         public static Vector2Int MinSize { get; } = Screen.Get.Rectangle.Size * MinPartFromScreenSize;
         public static char[] Symbols { get; } = new char[] { '\u2591', '\u2592', '\u2593', '\u25A0', '\u253C' };

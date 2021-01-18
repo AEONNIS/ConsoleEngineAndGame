@@ -3,22 +3,33 @@ using System.Collections.Generic;
 
 namespace Engine.FunctionalTests.DisplaySystem
 {
-    public class PanelsCreator
+    public class PanelsBuilder
     {
         #region Fields
         private readonly List<Pixel> _usedPixels = new List<Pixel>();
+        private readonly List<Panel> _panels = new List<Panel>();
         #endregion
 
         #region PublicMethods
-        public void CreateRandomPanels(int amount)
+        public void BuildRandomPanels(int amount)
         {
             for (int i = 0; i < amount; i++)
             {
                 var name = $"{PanelData.BaseName}{i}";
                 var panel = GetRandomPanelFitIntoScreen(name);
-                panel.SetDisplayKey(KeyData.ForPanels.DisplayOnScreen[i]);
-                panel.SetHideKey(KeyData.ForPanels.HideFromScreen[i]);
+                panel.SetDisplayKey(KeyData.Panels.DisplayOnScreen[i]);
+                panel.SetHideKey(KeyData.Panels.HideFromScreen[i]);
+                _panels.Add(panel);
             }
+        }
+
+        public void Reset()
+        {
+            foreach (var panel in _panels)
+                panel.UnsubscribeFromInputSystem();
+
+            _panels.Clear();
+            _usedPixels.Clear();
         }
         #endregion
 
