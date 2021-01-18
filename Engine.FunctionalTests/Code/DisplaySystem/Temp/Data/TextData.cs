@@ -8,16 +8,22 @@ namespace Engine.FunctionalTests.DisplaySystem
 
         public static class ForKeys
         {
+            public const string Shift = "Shift";
+            public const string Alt = "Alt";
+            public const string Control = "Control";
             public const string Separator = " + ";
 
             public static string Key(ConsoleKey key) => $"[{key}]";
+
             public static string Key(string key) => $"[{key}]";
-            public static string NumPadKey(int number) => $"[NumPad{number}]";
         }
 
         public static class ForNotifications
         {
-            public static string CreatedPanelsIn(int amount) => $"Создано {amount} панелей. Управление для них показано ниже:";
+            public const string Control = "Управление приложением показано ниже:";
+            public const string PanelsWillBeCreated = "Для теста будет создано указанное количество новых случаных (по размеру и расцветке) панелей.";
+
+            public static string PanelsCreated(int amount) => $"Создана(о) {amount} случайная(ых) (по размеру и расцветке) панель(ли/лей). Управление для нее(их) показано ниже:";
         }
 
         public static class ForPrompts
@@ -27,8 +33,10 @@ namespace Engine.FunctionalTests.DisplaySystem
             public const string DisplayHelp = ": Показать справку, которую вы сейчас видите.";
             public const string StartTesting = ": Начать тестирование.";
             public const string Exit = ": Выйти из программы.";
+            public const string StartOver = ": Начать сначала.";
 
             public static string DisplayPanel(int number) => $": Показать/поднять наверх панель {number}.";
+
             public static string HidePanel(int number) => $": Скрыть с экрана панель {number}.";
         }
 

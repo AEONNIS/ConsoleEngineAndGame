@@ -5,7 +5,8 @@ namespace Engine.FunctionalTests.DisplaySystem
 {
     public static class ConsoleService
     {
-        public static bool CheckNumberInString(string input, int min, int max, out int result) => int.TryParse(input, out result) && min <= result && result <= max;
+        public static bool CheckNumberInString(string input, int min, int max, out int result)
+            => int.TryParse(input, out result) && min <= result && result <= max;
 
         public static int RequestNumber(int min, int max, IMessage wrongInput, in Coloring defaultColoring)
         {
@@ -36,6 +37,7 @@ namespace Engine.FunctionalTests.DisplaySystem
             MessageData.Space(defaultColoring, length).Write();
             Console.SetCursorPosition(position.Left, position.Top);
         }
+
         public static void Clear(in Coloring deafultColoring)
         {
             deafultColoring.SetInConsole();

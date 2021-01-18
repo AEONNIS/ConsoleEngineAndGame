@@ -13,6 +13,7 @@ namespace Engine.FunctionalTests.DisplaySystem
             public static Coloring Key_1 { get; } = Builder.White.On.Blue.Build();
             public static Coloring Key_2 { get; } = Builder.White.On.Blue.Build();
             public static Coloring Key_3 { get; } = Builder.White.On.Blue.Build();
+            public static Coloring Separator { get; } = Builder.Gray.On.Black.Build();
         }
 
         public static class ForMessages

@@ -10,19 +10,9 @@ namespace Engine.FunctionalTests.DisplaySystem
 
         public static ConsoleKeyInfo NumPad(int number) => KeyInfo((ConsoleKey)(NumPad0 + number));
 
-        public static ConsoleKeyInfo[] NumPads()
-        {
-            var result = new ConsoleKeyInfo[10];
-
-            for (int i = 0; i < 10; i++)
-                result[i] = NumPad(i);
-
-            return result;
-        }
-
         public static ConsoleKeyInfo[] NumPadsPlusModifiers(ConsoleModifiers modifiers)
         {
-            var result = NumPads();
+            var result = GetNumPads();
 
             for (int i = 0; i < 10; i++)
             {
@@ -33,18 +23,28 @@ namespace Engine.FunctionalTests.DisplaySystem
             return result;
         }
 
+        private static ConsoleKeyInfo[] GetNumPads()
+        {
+            var result = new ConsoleKeyInfo[10];
+
+            for (int i = 0; i < 10; i++)
+                result[i] = NumPad(i);
+
+            return result;
+        }
+
         public static class ForTester
         {
             public static ConsoleKeyInfo Backspace { get; } = KeyInfo(ConsoleKey.Backspace);
             public static ConsoleKeyInfo Enter { get; } = KeyInfo(ConsoleKey.Enter);
             public static ConsoleKeyInfo Escape { get; } = KeyInfo(ConsoleKey.Escape);
+            public static ConsoleKeyInfo Spacebar { get; } = KeyInfo(ConsoleKey.Spacebar);
             public static ConsoleKeyInfo F1 { get; } = KeyInfo(ConsoleKey.F1);
         }
 
         public static class ForPanels
         {
-            public static ConsoleKeyInfo[] DisplayOnScreen { get; } = NumPads();
-
+            public static ConsoleKeyInfo[] DisplayOnScreen { get; } = GetNumPads();
             public static ConsoleKeyInfo[] HideFromScreen { get; } = NumPadsPlusModifiers(ConsoleModifiers.Control);
         }
     }

@@ -14,25 +14,25 @@ namespace Engine.FunctionalTests.DisplaySystem
         {
             for (int i = 0; i < amount; i++)
             {
-                var name = $"{Data.Panels.BaseName}{i}";
+                var name = $"{PanelData.BaseName}{i}";
                 var panel = GetRandomPanelFitIntoScreen(name);
-                panel.SetDisplayKey(Data.Panels.KeysFor.DisplayOnScreen[i]);
-                panel.SetHideKey(Data.Panels.KeysFor.HideFromScreen[i]);
+                panel.SetDisplayKey(KeyData.ForPanels.DisplayOnScreen[i]);
+                panel.SetHideKey(KeyData.ForPanels.HideFromScreen[i]);
             }
         }
         #endregion
 
         #region PrivateMethods
         private Panel GetRandomPanelFitIntoScreen(string panelName)
-            => Panel.CreateRandomPanelIn(Screen.Get.Rectangle, Data.Panels.MinSize, GetRandomUnusedPixel(), panelName);
+            => Panel.CreateRandomPanelIn(Screen.Get.Rectangle, PanelData.MinSize, GetRandomUnusedPixel(), panelName);
 
         private Pixel GetRandomUnusedPixel()
         {
             Pixel pixel;
 
             do
-                pixel = Pixel.CreateRandomFrom(Data.Panels.Colorings, Data.Panels.Symbols);
-            while (_usedPixels.Contains(pixel) && _usedPixels.Count != Data.Panels.Symbols.Length * Data.Panels.Colorings.Length);
+                pixel = Pixel.CreateRandomFrom(PanelData.Colorings, PanelData.Symbols);
+            while (_usedPixels.Contains(pixel) && _usedPixels.Count != PanelData.Symbols.Length * PanelData.Colorings.Length);
 
             _usedPixels.Add(pixel);
             return pixel;

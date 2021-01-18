@@ -1,69 +1,95 @@
-﻿namespace Engine.FunctionalTests.DisplaySystem
+﻿using System;
+
+namespace Engine.FunctionalTests.DisplaySystem
 {
     public class ScreenTester
     {
-        #region Methods
-        public void Run()
-        {
-            DisplayRequestPanelsNumber();
-            var panelsNumber = RequestPanelsNumber();
-            new PanelsCreator().CreateRandomPanels(panelsNumber);
-
-            //InputSystem.Get.SetState(State.Testing);
-            //InputSystem.Get.Run();
-            //ClearConsole();
-
-            //DisplayControlHelp(panelsNumber);
-        }
+        #region Fields
+        private int _panelsAmount;
         #endregion
 
         #region Properties
         public State State { get; private set; } = State.Initial;
         #endregion
 
+        #region Methods
+        public void Run()
+        {
+            DisplayRequestPanelsNumber();
+            _panelsAmount = RequestPanelsNumber();
+            new PanelsCreator().CreateRandomPanels(_panelsAmount);
+
+            DisplayControlHelp(_panelsAmount);
+            InputSystem.Get.KeyPressedInTesting += OnDisplayControlHelpKeyPressed;
+            InputSystem.Get.KeyPressedInTesting += OnExitKeyPressed;
+
+            InputSystem.Get.KeyPressedInHelp += OnStartTestingKeyPressed;
+            InputSystem.Get.KeyPressedInHelp += OnExitKeyPressed;
+            InputSystem.Get.Run(this);
+        }
+        #endregion
+
         #region DisplayMessages
         private void DisplayRequestPanelsNumber()
         {
-            Data.Messages.ConfirmInputHint.Write(after: "\n");
-            Data.Messages.DeleteCharHint.Write(after: "\n\n");
-            Data.Messages.RequestPanelsNumber.Write();
+            MessageData.ForPrompts.ConfirmInput.Write(after: "\n");
+            MessageData.ForPrompts.DeleteChar.Write(after: "\n\n");
+            MessageData.ForNotifications.PanelsWillBeCreated.Write(after: "\n");
+            MessageData.ForRequests.PanelsNumber.Write();
         }
 
-        //private void DisplayControlHelp(int panelsNumber)
-        //{
-        //    Data.Messages.PanelsNumber(panelsNumber).Write(after: "\n\n");
+        private void DisplayControlHelp(int panelsAmount)
+        {
+            ConsoleService.Clear(ColoringData.Default);
+            State = State.Help;
 
-        //    for (int i = 0; i < panelsNumber; i++)
-        //    {
-        //        foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.DisplayOnScreen[i]))
-        //            message.Write();
+            MessageData.ForNotifications.Control.Write(after: "\n\n");
+            MessageData.ForPrompts.DisplayHelp.Write(after: "\n");
+            MessageData.ForPrompts.StartTesting.Write(after: "\n");
+            MessageData.ForPrompts.StartOver.Write(after: " ");
+            MessageData.ForNotifications.PanelsWillBeCreated.Write(after: "\n");
+            MessageData.ForPrompts.Exit.Write(after: "\n\n");
+            MessageData.ForNotifications.PanelsCreated(panelsAmount).Write(after: "\n\n");
 
-        //        Data.Messages.DisplayPanel(i).Write(after: "\n");
-        //    }
+            for (int i = 0; i < panelsAmount; i++)
+                MessageData.ForPrompts.DisplayPanel(i).Write(after: "\n");
 
-        //    Data.Messages.Empty.Write(after: "\n");
+            MessageData.Message(ColoringData.Default, "\n").Write();
 
-        //    for (int i = 0; i < panelsNumber; i++)
-        //    {
-        //        foreach (var message in Data.Messages.KeyInfo(Data.Panels.KeysFor.HideFromScreen[i]))
-        //            message.Write();
-
-        //        Data.Messages.HidePanel(i).Write(after: "\n");
-        //    }
-
-        //Data.Messages.Key("F1").Write(before: "\n");
-        //Data.Messages.DisplayHelp.Write(before: " - ", after: "\n");
-
-        //Data.Messages.Key("Enter").Write();
-        //Data.Messages.StartTesting.Write(before: " - ", after: "\n");
-
-        //Data.Messages.Key("Escape").Write();
-        //Data.Messages.ProgramExit.Write(before: " - ", after: "\n");
-        //}
+            for (int i = 0; i < panelsAmount; i++)
+                MessageData.ForPrompts.HidePanel(i).Write(after: "\n");
+        }
         #endregion
 
         #region PrivateMethods
-        private int RequestPanelsNumber() => Services.ForConsole.RequestNumber(Data.Panels.Min, Data.Panels.Max, Data.Messages.WrongInput, Data.Colorings.Default);
+        private int RequestPanelsNumber() => ConsoleService.RequestNumber(PanelData.Min, PanelData.Max, MessageData.ForRequests.WrongInput, ColoringData.Default);
+
+        private void OnStartTestingKeyPressed(ConsoleKeyInfo keyInfo)
+        {
+            if (KeyService.EqualsWithoutChar(keyInfo, KeyData.ForTester.Enter))
+            {
+                ConsoleService.Clear(ColoringData.Default);
+                State = State.Testing;
+            }
+        }
+
+        private void OnDisplayControlHelpKeyPressed(ConsoleKeyInfo keyInfo)
+        {
+            if (KeyService.EqualsWithoutChar(keyInfo, KeyData.ForTester.F1))
+                DisplayControlHelp(_panelsAmount);
+        }
+
+        private void OnStartOverKeyPressed(ConsoleKeyInfo keyInfo)
+        {
+            if (KeyService.EqualsWithoutChar(keyInfo, KeyData.ForTester.Spacebar))
+                ; //Dummy
+        }
+
+        private void OnExitKeyPressed(ConsoleKeyInfo keyInfo)
+        {
+            if (KeyService.EqualsWithoutChar(keyInfo, KeyData.ForTester.Escape))
+                Environment.Exit(0);
+        }
         #endregion
     }
 }
