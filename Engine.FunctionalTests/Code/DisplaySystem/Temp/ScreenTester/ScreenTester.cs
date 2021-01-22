@@ -55,6 +55,7 @@ namespace Engine.FunctionalTests.DisplaySystem
             _panelsBuilder.Reset();
             _panelsAmount = 0;
             Screen.Get.Clear();
+            GC.Collect();
         }
 
         private void StartOver()
