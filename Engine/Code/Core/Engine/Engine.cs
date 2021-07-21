@@ -11,7 +11,6 @@ namespace Engine.Core
         private readonly Editor _editor;
         private Mode _currentMode;
 
-        #region Base
         public Engine()
         {
             _editor = new Editor(this);
@@ -35,7 +34,6 @@ namespace Engine.Core
         {
             Environment.Exit(0);
         }
-        #endregion
 
         public void SetMode(Mode mode)
         {
