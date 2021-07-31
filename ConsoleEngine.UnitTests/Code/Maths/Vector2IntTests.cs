@@ -1,7 +1,7 @@
-﻿using Engine.Maths;
+﻿using ConsoleEngine.Maths;
 using NUnit.Framework;
 
-namespace Engine.UnitTests.Maths
+namespace ConsoleEngine.UnitTests.Maths
 {
     [TestFixture]
     public class Vector2IntTests

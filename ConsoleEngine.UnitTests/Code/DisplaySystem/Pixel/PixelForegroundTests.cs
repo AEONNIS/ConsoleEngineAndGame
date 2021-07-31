@@ -1,8 +1,8 @@
-using Engine.DisplaySystem;
+using ConsoleEngine.DisplaySystem;
 using NUnit.Framework;
 using System;
 
-namespace Engine.UnitTests.DisplaySystem
+namespace ConsoleEngine.UnitTests.DisplaySystem
 {
     [TestFixture]
     public class PixelForegroundTests

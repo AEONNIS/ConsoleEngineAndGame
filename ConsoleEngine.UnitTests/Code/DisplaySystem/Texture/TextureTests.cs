@@ -1,9 +1,9 @@
-﻿using Engine.DisplaySystem;
-using Engine.Maths;
+﻿using ConsoleEngine.DisplaySystem;
+using ConsoleEngine.Maths;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace Engine.UnitTests.DisplaySystem
+namespace ConsoleEngine.UnitTests.DisplaySystem
 {
     [TestFixture]
     public class TextureTests
@@ -60,15 +60,15 @@ namespace Engine.UnitTests.DisplaySystem
         #endregion
 
         #region StaticMethodsTests
-        [TestCaseSource(nameof(GetAllPointsFrom_Cases))]
-        public void GetAllPointsFrom_SomeTextures_ReturnsAllUniquePoints(IEnumerable<IReadOnlyTexture> textures, IEnumerable<Vector2Int> allUniquePoints)
+        [TestCaseSource(nameof(GetAllUniquePointsFrom_Cases))]
+        public void GetAllUniquePointsFrom_SomeTextures_ReturnsAllUniquePoints(IEnumerable<IReadOnlyTexture> textures, IEnumerable<Vector2Int> allUniquePoints)
         {
-            var actualAllUniquePoints = Texture.GetAllPointsFrom(textures);
+            var actualAllUniquePoints = Texture.GetAllUniquePointsFrom(textures);
 
             Assert.That(allUniquePoints, Is.EquivalentTo(actualAllUniquePoints));
         }
 
-        private static object[] GetAllPointsFrom_Cases()
+        private static object[] GetAllUniquePointsFrom_Cases()
         {
             var texture_1 = new Texture(new Vector2Int[]
             {

@@ -1,9 +1,9 @@
-﻿using Engine.DisplaySystem;
-using Engine.Maths;
+﻿using ConsoleEngine.DisplaySystem;
+using ConsoleEngine.Maths;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace Engine.UnitTests.DisplaySystem
+namespace ConsoleEngine.UnitTests.DisplaySystem
 {
     [TestFixture]
     public class ScreenLayersOrderTests
@@ -17,7 +17,7 @@ namespace Engine.UnitTests.DisplaySystem
 
         #region MethodsTests
         [TestCaseSource(nameof(SelectLayersTopToBottomAbove_Cases))]
-        public void SelectLayersTopToBottomAbove_LayersOrderAndGraphics_ReturnsLayersTopToBottomAboveGraphics(ScreenLayersOrder layersOrder, IGraphicObject graphics,
+        public void SelectLayersTopToBottomAbove_LayersOrderAndGraphics_ReturnsLayersTopToBottomAboveGraphics(ScreenLayersOrder layersOrder, IGraphics graphics,
                                                                                                               IEnumerable<ScreenLayer> layersTopToBottomAbove)
         {
             var actualLayersTopToBottomAbove = layersOrder.SelectLayersTopToBottomAbove(graphics);
@@ -38,7 +38,7 @@ namespace Engine.UnitTests.DisplaySystem
         }
 
         [TestCaseSource(nameof(SelectLayersTopToBottomBelow_Cases))]
-        public void SelectLayersTopToBottomBelow_LayersOrderAndGraphics_ReturnsLayersTopToBottomBelowGraphics(ScreenLayersOrder layersOrder, IGraphicObject graphics,
+        public void SelectLayersTopToBottomBelow_LayersOrderAndGraphics_ReturnsLayersTopToBottomBelowGraphics(ScreenLayersOrder layersOrder, IGraphics graphics,
                                                                                                               IEnumerable<ScreenLayer> layersTopToBottomBelow)
         {
             var actualLayersTopToBottomBelow = layersOrder.SelectLayersTopToBottomBelow(graphics);
@@ -70,7 +70,7 @@ namespace Engine.UnitTests.DisplaySystem
             return result;
         }
 
-        private static ScreenLayer[] GetLayers(IGraphicObject[] graphicsSet)
+        private static ScreenLayer[] GetLayers(IGraphics[] graphicsSet)
         {
             var result = new ScreenLayer[graphicsSet.Length];
 
@@ -80,9 +80,9 @@ namespace Engine.UnitTests.DisplaySystem
             return result;
         }
 
-        private static IGraphicObject[] GetGraphicsSet(Texture[] textures)
+        private static IGraphics[] GetGraphicsSet(Texture[] textures)
         {
-            var result = new IGraphicObject[textures.Length];
+            var result = new IGraphics[textures.Length];
 
             for (int i = 0; i < result.Length; i++)
                 result[i] = new TestGraphics(textures[i]);
@@ -102,7 +102,7 @@ namespace Engine.UnitTests.DisplaySystem
         #endregion
 
         #region InterfacesImplementation
-        private class TestGraphics : IGraphicObject
+        private class TestGraphics : IGraphics
         {
             private readonly Texture _texture;
 
