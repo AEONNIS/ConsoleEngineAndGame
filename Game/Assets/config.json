@@ -1,0 +1,45 @@
+{
+  "FilePaths": {
+    "AssetsAbsolutePath": "d:/Work/Dev/AEONNIS/ConsoleEngineAndGame/Game/Assets/",
+    "TilesetRelativePath": "",
+    "TilesetName": "tileset.json"
+  },
+  "BindingKeys": [
+    {
+      "CommandId": "up",
+      "KeyInfo": {
+        "Key": "upArrow",
+        "Shift": false,
+        "Alt": false,
+        "Control": false
+      }
+    },
+    {
+      "CommandId": "down",
+      "KeyInfo": {
+        "Key": "downArrow",
+        "Shift": false,
+        "Alt": false,
+        "Control": false
+      }
+    },
+    {
+      "CommandId": "left",
+      "KeyInfo": {
+        "Key": "leftArrow",
+        "Shift": false,
+        "Alt": false,
+        "Control": false
+      }
+    },
+    {
+      "CommandId": "right",
+      "KeyInfo": {
+        "Key": "rightArrow",
+        "Shift": false,
+        "Alt": false,
+        "Control": false
+      }
+    }
+  ]
+}
