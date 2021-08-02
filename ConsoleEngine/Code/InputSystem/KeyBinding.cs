@@ -2,7 +2,7 @@
 {
     public class KeyBinding
     {
-        public CommandId CommandId { get; init; }
-        public KeyInfo   KeyInfo   { get; init; }
+        public KeyInfo  KeyInfo { get; init; }
+        public ICommand Command { get; init; }
     }
 }

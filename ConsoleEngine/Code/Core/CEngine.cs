@@ -1,30 +1,31 @@
 ﻿using System;
 
-using ConsoleEngine.DisplaySystem;
+using ConsoleEngine.InputSystem;
+using ConsoleEngine.UpdateSystem;
 
 namespace ConsoleEngine.Core
 {
-    public class CEngine
+    public sealed class CEngine
     {
-        private readonly IGameEngine _gameEngine = null;
-        private readonly Screen      _screen     = null;
+        private readonly UpdateHandler _updateHandler = null;
 
-        public CEngine(IGameEngine gameEngine)
+        public CEngine()
         {
-            _gameEngine = gameEngine;
+            InputHandler = new InputHandler(this);
+            _updateHandler = new UpdateHandler();
         }
+
+        public InputHandler InputHandler { get; } = null;
+
+        public void AddCommandToCurrentFrame(ICommand command) => _updateHandler.AddCommandToCurrentFrame(command);
 
         public void Start()
         {
-            _gameEngine.Start();
-
             MainLoop();
         }
 
         public void Close()
         {
-            _gameEngine.Close();
-
             Exit();
         }
 
@@ -38,19 +39,12 @@ namespace ConsoleEngine.Core
             }
         }
 
-        private void Input()
-        {
-            _gameEngine.Input();
-        }
+        private void Input() => InputHandler.ProcessInput();
 
-        private void Update()
-        {
-            _gameEngine.Update();
-        }
+        private void Update() => _updateHandler.ProcessUpdate();
 
         private void Render()
         {
-            _gameEngine.Render();
         }
 
         private void Exit() => Environment.Exit(0);

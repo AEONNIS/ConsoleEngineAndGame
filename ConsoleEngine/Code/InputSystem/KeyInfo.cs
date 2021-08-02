@@ -9,7 +9,6 @@ namespace ConsoleEngine.InputSystem
 
         [JsonConstructor]
         public KeyInfo(ConsoleKey key, bool shift, bool alt, bool control) => _consoleKeyInfo = new ConsoleKeyInfo(default, key, shift, alt, control);
-        public KeyInfo(ConsoleKeyInfo consoleKeyInfo)                      => _consoleKeyInfo = consoleKeyInfo;
 
         public ConsoleKey Key     => _consoleKeyInfo.Key;
         public bool       Shift   => (_consoleKeyInfo.Modifiers & ConsoleModifiers.Shift)   != 0;
@@ -19,10 +18,13 @@ namespace ConsoleEngine.InputSystem
         public static bool operator ==(KeyInfo left, KeyInfo right) =>  left.Equals(right);
         public static bool operator !=(KeyInfo left, KeyInfo right) => !left.Equals(right);
 
-        public override bool Equals(object obj)    => obj is KeyInfo info && Equals(info);
-        public          bool Equals(KeyInfo other) =>
+        public override bool Equals(object obj)                    => obj is KeyInfo keyInfo && Equals(keyInfo);
+        public          bool Equals(KeyInfo other)                 =>
             _consoleKeyInfo.Key       == other._consoleKeyInfo.Key &&
             _consoleKeyInfo.Modifiers == other._consoleKeyInfo.Modifiers;
+        public          bool Equals(ConsoleKeyInfo consoleKeyInfo) =>
+            _consoleKeyInfo.Key       == consoleKeyInfo.Key &&
+            _consoleKeyInfo.Modifiers == consoleKeyInfo.Modifiers;
 
         public override int GetHashCode() => HashCode.Combine(_consoleKeyInfo.Key, _consoleKeyInfo.Modifiers);
     }
