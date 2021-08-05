@@ -1,0 +1,3 @@
+[submodule "ConsoleEngine/Code/EcsLite"]
+	path = ConsoleEngine/Code/EcsLite
+	url = https://github.com/Leopotam/ecslite

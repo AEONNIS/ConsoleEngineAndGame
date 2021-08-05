@@ -1,0 +1,46 @@
+﻿{
+  "Tiles": [
+    {
+      "Symbol": "·",
+      "Name": "ground",
+      "Passability": true,
+      "LightTransmission": true
+    },
+    {
+      "Symbol": "█",
+      "Name": "wall",
+      "Passability": false,
+      "LightTransmission": false
+    },
+    {
+      "Symbol": "▓",
+      "Name": "closedWallDoor",
+      "Passability": false,
+      "LightTransmission": false
+    },
+    {
+      "Symbol": "░",
+      "Name": "openedWallDoor",
+      "Passability": true,
+      "LightTransmission": true
+    },
+    {
+      "Symbol": "#",
+      "Name": "grid",
+      "Passability": false,
+      "LightTransmission": true
+    },
+    {
+      "Symbol": "+",
+      "Name": "closedGridDoor",
+      "Passability": false,
+      "LightTransmission": true
+    },
+    {
+      "Symbol": ":",
+      "Name": "openedGridDoor",
+      "Passability": true,
+      "LightTransmission": true
+    }
+  ]
+}
